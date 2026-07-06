@@ -14,6 +14,10 @@ window.MULTISERVICIOS_CONFIG = {
   tiktok: "",
   certificadosApiUrl: "/api",
   certificadosAdminApiUrl: "/api",
+  githubOwner: "MULTISERVICIOSSAS",
+  githubRepo: ".com",
+  githubBranch: "main",
+  githubCertificatePaths: ["data/certificados.json", "public/data/certificados.json"],
   horario: "Atención por WhatsApp y agenda comercial",
   mensajeWhatsApp:
     "Hola, quiero información sobre el certificado de manipulación de alimentos con Multiservicios."
