@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curso de Manipulación de Alimentos - Multiservicios</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="../../js/config.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .primary-blue { color: #2563eb; }
+        .bg-primary-blue { background-color: #2563eb; }
+        .border-primary-blue { border-color: #2563eb; }
+        video {
+            width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            background-color: #000;
+        }
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            background-color: #000;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            border-radius: 0.5rem;
+        }
+        .video-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 0.85rem;
+            padding: 0.9rem 1rem;
+            border: 1px solid #dbeafe;
+            border-radius: 0.75rem;
+            background: #eff6ff;
+        }
+        .video-actions a {
+            color: #1d4ed8;
+            font-weight: 700;
+            text-decoration: none;
+        }
+        .video-actions a:hover {
+            text-decoration: underline;
+        }
+        .certificate-bg {
+            background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
+            border: 10px solid #2563eb;
+            position: relative;
+        }
+        .certificate-border {
+            border: 2px solid #fbbf24;
+            margin: 5px;
+            height: calc(100% - 10px);
+        }
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #certificate, #certificate * {
+                visibility: visible;
+            }
+            #certificate {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                margin: 0;
+                padding: 0;
+                box-shadow: none;
+                border: none;
+            }
+            .certificate-bg {
+                 border: 5px solid #2563eb !important;
+                 -webkit-print-color-adjust: exact;
+                 print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body class="text-gray-800 min-h-screen flex flex-col">
+    <!-- Navigation -->
+    <nav class="bg-blue-600 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3 bg-white rounded-md px-3 py-1">
+                <img src="../../assets/logos/logo-horizontal.png" alt="Multiservicios" class="h-10 w-auto object-contain">
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="../../cursos.html" class="text-sm hidden md:inline-flex font-medium underline">Volver al ecosistema</a>
+                <div class="text-sm hidden md:block font-medium">Curso de Manipulación de Alimentos</div>
+            </div>
+        </div>
+    </nav>
+    <!-- Main Content Area -->
+    <main id="app" class="flex-grow container mx-auto px-4 py-8 max-w-4xl">
+    </main>
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-400 py-6 text-center text-sm">
+        <p>&copy; 2026 Multiservicios. Todos los derechos reservados.</p>
+    </footer>
+    <script>
+        const courseData = {
+            modules: [
+                {
+                    id: 1,
+                    title: "Introducción a la Inocuidad Alimentaria",
+                    description: "Conceptos básicos sobre por qué es vital mantener los alimentos seguros.",
+                    videoFile: "videos/1.mp4",
+                    youtubeId: "2pPngyT1XAg",
+                    quiz: {
+                        question: "¿Qué significa inocuidad alimentaria?",
+                        options: ["Que la comida sabe rico", "Que los alimentos no causarán daño al consumidor", "Que es comida barata", "Que tiene mucha sal"],
+                        correct: 1
+                    }
+                },
+                {
+                    id: 2,
+                    title: "Los Peligros en los Alimentos",
+                    description: "Identificación de peligros biológicos, químicos y físicos.",
+                    videoFile: "videos/2.mp4",
+                    youtubeId: "7a0YuFDcmnU",
+                    quiz: {
+                        question: "¿Cuál es un ejemplo de peligro físico?",
+                        options: ["Bacterias", "Un trozo de vidrio", "Cloro", "Moho"],
+                        correct: 1
+                    }
+                },
+                {
+                    id: 3,
+                    title: "Higiene Personal Básica",
+                    description: "Normas generales de aseo para el manipulador.",
+                    videoFile: "videos/3.mp4",
+                    youtubeId: "DGmlQw5E-as",
+                    quiz: {
+                        question: "¿Con qué frecuencia debe ducharse un manipulador de alimentos?",
+                        options: ["Diariamente antes de ir a trabajar", "Una vez a la semana", "Solo los domingos", "Cuando se sienta sucio"],
+                        correct: 0
+                    }
+                },
+                {
+                    id: 4,
+                    title: "Lavado de Manos: Cuándo hacerlo",
+                    description: "Momentos críticos en los que el lavado de manos es obligatorio.",
+                    videoFile: "videos/4.mp4",
+                    youtubeId: "MeBq9METwb0",
+                    quiz: {
+                        question: "¿Se deben lavar las manos después de usar el celular?",
+                        options: ["No, el celular está limpio", "Sí, siempre", "Solo si el celular tenía grasa", "No hace falta"],
+                        correct: 1
+                    }
+                },
+                {
+                    id: 5,
+                    title: "Lavado de Manos: La Técnica Correcta",
+                    description: "Paso a paso para un lavado de manos efectivo.",
+                    videoFile: "videos/5.mp4",
+                    youtubeId: "vO-Dxu1bVpc",
+                    quiz: {
+                        question: "¿Cuál es el tiempo mínimo de frotado con jabón recomendado?",
+                        options: ["5 segundos", "10 segundos", "20 segundos", "1 minuto"],
+                        correct: 2
+                    }
+                },
+                {
+                    id: 6,
+                    title: "Uso Correcto del Uniforme",
+                    description: "Importancia de la ropa de trabajo limpia y exclusiva.",
+                    videoFile: "videos/6.mp4",
+                    youtubeId: "SQ8PeknvuC8",
+                    quiz: {
+                        question: "¿El uniforme de trabajo debe usarse en la calle?",
+                        options: ["Sí, para ahorrar tiempo", "No, debe ser exclusivo para el área de trabajo", "Solo si hace frío", "Depende del color"],
+                        correct: 1
+                    }
+                },
+                {
+                    id: 7,
+                    title: "Estado de Salud y Heridas",
+                    description: "Qué hacer si estás enfermo o tienes cortes en las manos.",
+                    videoFile: "videos/7.mp4",
+                    youtubeId: "3BTskm_V0Qc",
+                    quiz: {
+                        question: "¿Qué debes hacer si tienes una herida en la mano?",
+                        options: ["No trabajar", "Cubrirla con una curita impermeable y guante", "Ponerle solo una venda de tela", "Ignorarla"],
+                        correct: 1
+                    }
+                },
+                {
+                    id: 8,
+                    title: "Contaminación Cruzada Directa",
+                    description: "Cuando un alimento contaminado toca a otro.",
+                    videoFile: "videos/8.mp4",
+                    youtubeId: "BSpycWpPPhs",
+                    quiz: {
+                        question: "¿Qué pasa si la sangre de la carne cruda gotea sobre una ensalada?",
+                        options: ["Le da sabor", "Ocurre contaminación cruzada directa", "No pasa nada si se lava", "Se cocina la ensalada"],
+                        correct: 1
+                    }
+                },
+                {
+                    id: 9,
+                    title: "Contaminación Cruzada Indirecta",
+                    description: "Transferencia de bacterias a través de utensilios o manos.",
+                    videoFile: "videos/9.mp4",
+                    youtubeId: "4t9jS_NJsTU",
+                    quiz: {
+                        question: "¿Es seguro usar el mismo cuchillo para pollo crudo y pan sin lavarlo?",
+                        options: ["Sí", "No, causa contaminación cruzada indirecta", "Solo si se limpia con un trapo seco", "Depende del cuchillo"],
+                        correct: 1
+                    }
+                },
+                {
+                    id: 10,
+                    title: "Tablas de Cortar y Códigos de Color",
+                    description: "Uso de diferentes tablas para diferentes grupos de alimentos.",
+                    videoFile: "videos/10.mp4",
+                    youtubeId: "nrWFC-3z7r8",
+                    quiz: {
+                        question: "Generalmente, ¿qué color de tabla se usa para vegetales y frutas?",
+                        options: ["Roja", "Verde", "Amarilla", "Azul"],
+                        correct: 1
+                    }
+                },
+                {
+                    id: 11,
+                    title: "Zona de Peligro de Temperatura",
+                    description: "El rango de temperatura donde las bacterias crecen rápido.",
+                    videoFile: "videos/11.mp4",
+                    youtubeId: "2Y3pW_zeAUs",
+                    quiz: {
+                        question: "¿Cuál es el rango de la Zona de Peligro?",
+                        options: ["0°C a 100°C", "5°C a 60°C", "-18°C a 0°C", "80°C a 90°C"],
+                        correct: 1
+                    }
+                },
+                {
+                    id: 12,
+                    title: "Uso del Termómetro",
+                    description: "Cómo medir la temperatura interna de los alimentos.",
+                    videoFile: "videos/12.mp4",
+                    youtubeId: "PtM5wgbolOM",
+                    quiz: {
+                        question: "¿Dónde se debe insertar el termómetro?",
+                        options: ["En la superficie", "En la parte más gruesa del alimento", "En el hueso", "En el agua de cocción"],
+                        correct: 1
+                    }
+                },
+                {
+                    id: 13,
+                    title: "Recepción de Materias Primas",
+                    description: "Qué revisar al recibir mercadería.",
+                    videoFile: "videos/13.mp4",
+                    youtubeId: "k1_kf6uAGZQ",
+                    quiz: {
+                        question: "¿Qué se debe rechazar en una entrega?",
+                        options: ["Envases rotos o abollados", "Productos con fecha vigente", "Alimentos a temperatura correcta", "Cajas limpias"],
+                        correct: 0
+                    }
+                },
+                {
+                    id: 14,
+                    title: "Almacenamiento en Seco",
+                    description: "Correcto guardado de granos, latas y productos secos.",
+                    videoFile: "videos/14.mp4",
+                    youtubeId: "GZJK7iJ2w3I",
+                    quiz: {
+                        question: "¿Los alimentos deben almacenarse directamente en el piso?",
+                        options: ["Sí", "No, deben estar sobre tarimas o estantes", "Solo las latas", "Solo el arroz"],
+                        correct: 1
+                    }
+                },
+                {
+                    id: 15,
+                    title: "Almacenamiento en Refrigeración",
+                    description: "Orden en la nevera para evitar contaminación.",
+                    videoFile: "videos/15.mp4",
+                    youtubeId: "KNBiImOStQ8",
+                    quiz: {
+                        question: "¿Dónde deben ir los alimentos cocinados en la nevera?",
+                        options: ["Debajo de la carne cruda", "Encima de los alimentos crudos", "Junto a los huevos sucios", "En la puerta"],
+                        correct: 1
+                    }
+                },
+                {
+                    id: 16,
+                    title: "Métodos de Descongelación",
+                    description: "Formas seguras de descongelar alimentos.",
+                    videoFile: "videos/16.mp4",
+                    youtubeId: "UNZnaDKPeyY",
+                    quiz: {
+                        question: "¿Es seguro descongelar a temperatura ambiente sobre el mesón?",
+                        options: ["Sí, es más rápido", "No, las bacterias se multiplican", "Solo en invierno", "Sí, si está tapado"],
+                        correct: 1
+                    }
+                },
+                {
+                    id: 17,
+                    title: "Cocción Segura: Aves",
+                    description: "Temperatura interna para pollo y pavo.",
+                    videoFile: "videos/17.mp4",
+                    youtubeId: "9rHrro1U9jk",
+                    quiz: {
+                        question: "¿Cuál es la temperatura segura para cocinar pollo?",
+                        options: ["60°C", "74°C o más", "50°C", "100°C"],
+                        correct: 1
+                    }
+                },
+                {
+                    id: 18,
+                    title: "Cocción Segura: Carnes Rojas",
+                    description: "Temperaturas para res y cerdo.",
+                    videoFile: "videos/18.mp4",
+                    youtubeId: "Sv44_HjpKHA",
+                    quiz: {
+                        question: "¿Por qué es importante cocinar bien la carne molida?",
+                        options: ["Para que sepa mejor", "Porque las bacterias están mezcladas en todo el producto", "Para que cambie de color", "Para que pierda agua"],
+                        correct: 1
+                    }
+                },
+                {
+                    id: 19,
+                    title: "Mantenimiento en Caliente",
+                    description: "Cómo mantener la comida lista para servir.",
+                    videoFile: "videos/19.mp4",
+                    youtubeId: "QKjspnzCNWA",
+                    quiz: {
+                        question: "¿A qué temperatura mínima se deben mantener los alimentos calientes?",
+                        options: ["30°C", "60°C", "40°C", "25°C"],
+                        correct: 1
+                    }
+                },
+                {
+                    id: 20,
+                    title: "Enfriamiento Rápido",
+                    description: "Técnicas para enfriar comida cocinada antes de refrigerar.",
+                    videoFile: "videos/20.mp4",
+                    youtubeId: "TNuHwchLAV8",
+                    quiz: {
+                        question: "¿Se debe meter una olla gigante de sopa hirviendo directo al refri?",
+                        options: ["Sí", "No, se debe dividir en recipientes pequeños para enfriar rápido", "Solo si se tapa", "Sí, para ahorrar tiempo"],
+                        correct: 1
+                    }
+                },
+                {
+                    id: 21,
+                    title: "Recalentamiento de Alimentos",
+                    description: "Temperaturas para sobras y alimentos preparados.",
+                    videoFile: "videos/21.mp4",
+                    youtubeId: "9rxA7Bvix10",
+                    quiz: {
+                        question: "¿A qué temperatura se debe recalentar la comida?",
+                        options: ["50°C", "74°C", "Cualquiera", "Tibia"],
+                        correct: 1
+                    }
+                },
+                {
+                    id: 22,
+                    title: "Limpieza vs Desinfección",
+                    description: "Diferencia clave entre estos dos procesos.",
+                    videoFile: "videos/22.mp4",
+                    youtubeId: "fYLfYlIr_rU",
+                    quiz: {
+                        question: "¿Limpiar es lo mismo que desinfectar?",
+                        options: ["Sí", "No, limpiar quita suciedad, desinfectar mata bacterias", "Casi lo mismo", "Desinfectar es usar agua"],
+                        correct: 1
+                    }
+                },
+                {
+                    id: 23,
+                    title: "Manejo de Productos Químicos",
+                    description: "Almacenamiento y uso seguro de detergentes.",
+                    videoFile: "videos/23.mp4",
+                    youtubeId: "5eCvbxjxeCs",
+                    quiz: {
+                        question: "¿Se pueden guardar químicos en envases de comida vacíos?",
+                        options: ["Sí, si se etiquetan", "Nunca, es muy peligroso", "Solo si es jabón", "Si el envase es transparente"],
+                        correct: 1
+                    }
+                },
+                {
+                    id: 24,
+                    title: "Control de Plagas: Prevención",
+                    description: "Cómo evitar que entren insectos y roedores.",
+                    videoFile: "videos/24.mp4",
+                    youtubeId: "HWGkShvfxWo",
+                    quiz: {
+                        question: "¿Cuál es la mejor forma de controlar plagas?",
+                        options: ["Usar mucho veneno", "La prevención y limpieza (negar acceso y comida)", "Tener gatos", "Ignorarlas"],
+                        correct: 1
+                    }
+                },
+                {
+                    id: 25,
+                    title: "Manejo de Basuras",
+                    description: "Disposición correcta de residuos.",
+                    videoFile: "videos/25.mp4",
+                    youtubeId: "0tRovMdT2ho",
+                    quiz: {
+                        question: "¿Los basureros de cocina deben tener tapa?",
+                        options: ["No es necesario", "Sí, para evitar plagas y olores", "Solo los de afuera", "Depende del tamaño"],
+                        correct: 1
+                    }
+                },
+                {
+                    id: 26,
+                    title: "Alérgenos Alimentarios",
+                    description: "Los principales alimentos que causan alergias.",
+                    videoFile: "videos/26.mp4",
+                    youtubeId: "fshbPNp7prw",
+                    quiz: {
+                        question: "¿Cuál es un alérgeno común?",
+                        options: ["Arroz", "Maní (cacahuate)", "Lechuga", "Agua"],
+                        correct: 1
+                    }
+                },
+                {
+                    id: 27,
+                    title: "Cultura de Inocuidad",
+                    description: "El compromiso de todos con la seguridad.",
+                    videoFile: "videos/27.mp4",
+                    youtubeId: "_HbuVATks0Q",
+                    quiz: {
+                        question: "¿De quién es responsabilidad la inocuidad alimentaria?",
+                        options: ["Del jefe", "Del gobierno", "De todos los que manipulan alimentos", "De los clientes"],
+                        correct: 2
+                    }
+                }
+            ],
+            finalExam: [
+                { q: "¿Cuál es el primer paso para lavarse las manos?", options: ["Aplicar jabón", "Mojarse las manos", "Secarse", "Ponerse gel"], a: 1 },
+                { q: "¿Cuánto tiempo debe durar el frotado de manos con jabón?", options: ["5 seg", "10 seg", "Al menos 20 seg", "1 min"], a: 2 },
+                { q: "La Zona de Peligro de temperatura es:", options: ["0-5°C", "5-60°C", "60-100°C", "-18-0°C"], a: 1 },
+                { q: "¿Qué tabla de picar se recomienda para carnes crudas?", options: ["Verde", "Roja", "Blanca", "Azul"], a: 1 },
+                { q: "La temperatura interna segura para pollo es:", options: ["60°C", "65°C", "74°C", "50°C"], a: 2 },
+                { q: "¿Qué es contaminación cruzada?", options: ["Transferencia de patógenos de un alimento a otro", "Cocinar mucho la comida", "Congelar alimentos", "Lavar vegetales"], a: 0 },
+                { q: "¿Dónde se debe guardar la carne cruda en el refrigerador?", options: ["Arriba de todo", "En la parte inferior", "En la puerta", "Junto a las verduras"], a: 1 },
+                { q: "Si estás enfermo con vómito o diarrea, debes:", options: ["Trabajar con cuidado", "Usar doble guante", "Reportarlo y no manipular alimentos", "Tomar agua y seguir"], a: 2 },
+                { q: "¿El uso de guantes sustituye el lavado de manos?", options: ["Sí", "No", "A veces", "Solo si son de látex"], a: 1 },
+                { q: "¿Cuál es la mejor manera de descongelar pollo?", options: ["Al sol", "En agua caliente", "En el refrigerador", "Sobre el mesón"], a: 2 },
+                { q: "¿Qué significa FIFO (PEPS)?", options: ["Lo primero que entra es lo primero que sale", "Lo último que entra es lo primero que sale", "Frío intenso", "Fritura profunda"], a: 0 },
+                { q: "Los químicos de limpieza deben guardarse:", options: ["Junto a la comida", "Lejos y separados de los alimentos", "En la cocina", "Encima de las mesas"], a: 1 },
+                { q: "¿A qué temperatura se deben mantener los alimentos calientes para servir?", options: ["Mínimo 60°C", "Mínimo 40°C", "Ambiente", "Hirviendo"], a: 0 },
+                { q: "¿Cuál es un peligro físico?", options: ["Virus", "Pelo o vidrio", "Cloro", "Bacteria"], a: 1 },
+                { q: "Al recalentar sobras, la temperatura debe llegar a:", options: ["60°C", "74°C", "50°C", "80°C"], a: 1 },
+                { q: "¿Qué se debe hacer con una lata abollada?", options: ["Usarla rápido", "Hervirla", "Rechazarla o desecharla", "Enderezarla"], a: 2 },
+                { q: "El agua utilizada para cocinar debe ser:", options: ["De río", "Potable", "De lluvia", "Cualquiera"], a: 1 },
+                { q: "¿Las plagas buscan principalmente?", options: ["Luz", "Ruido", "Agua, comida y refugio", "Frio"], a: 2 },
+                { q: "¿Cuándo se debe cambiar el uniforme?", options: ["Cada semana", "Diariamente o cuando esté sucio", "Cada mes", "Nunca"], a: 1 },
+                { q: "La desinfección reduce:", options: ["La suciedad visible", "Los microorganismos a nivel seguro", "El sabor", "El color"], a: 1 }
+            ]
+        };
+
+        // State Management
+        const state = {
+            screen: 'intro',
+            currentModuleIndex: 0,
+            score: 0,
+            userName: '',
+            userDocument: '',
+            userEmail: '',
+            userPhone: '',
+            answers: []
+        };
+
+        const app = document.getElementById('app');
+
+        // Helper: robust embedded video with direct fallback link.
+        function getVideoHTML(module) {
+            if (module.youtubeId) {
+                const embedUrl = `https://www.youtube-nocookie.com/embed/${module.youtubeId}?rel=0&modestbranding=1&playsinline=1`;
+                const watchUrl = `https://www.youtube.com/watch?v=${module.youtubeId}`;
+                return `
+                    <div class="video-container" data-video-id="${module.youtubeId}">
+                        <iframe 
+                            src="${embedUrl}" 
+                            title="${module.title}"
+                            loading="lazy"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <div class="video-actions">
+                        <span class="text-sm text-blue-900">Video integrado del modulo ${module.id}</span>
+                        <a href="${watchUrl}" target="_blank" rel="noopener">
+                            <i class="fab fa-youtube mr-1"></i> Abrir video en YouTube
+                        </a>
+                    </div>
+                `;
+            } else {
+                return `
+                    <video controls class="w-full rounded-lg shadow-lg bg-black">
+                        <source src="${module.videoFile}" type="video/mp4">
+                        <div class="p-10 text-center text-white">
+                            <i class="fas fa-exclamation-triangle text-4xl mb-4 text-yellow-500"></i>
+                            <p class="text-xl">Tu navegador no soporta la reproducción de video.</p>
+                            <p class="mt-2 text-gray-400">Asegúrate de que el archivo <strong>${module.videoFile}</strong> existe en la carpeta correcta.</p>
+                        </div>
+                    </video>
+                `;
+            }
+        }
+
+        // Render Functions
+        function render() {
+            app.innerHTML = '';
+            window.scrollTo(0, 0);
+            
+            switch(state.screen) {
+                case 'intro': renderIntro(); break;
+                case 'module': renderModule(); break;
+                case 'module-quiz': renderModuleQuiz(); break;
+                case 'exam-intro': renderExamIntro(); break;
+                case 'exam': renderExam(); break;
+                case 'result': renderResult(); break;
+            }
+        }
+
+        function renderIntro() {
+            const div = document.createElement('div');
+            div.className = 'fade-in bg-white p-8 rounded-xl shadow-md text-center';
+            div.innerHTML = `
+                <div class="mb-6">
+                    <div class="inline-block p-4 rounded-full bg-blue-100 mb-4">
+                        <i class="fas fa-graduation-cap text-5xl text-blue-600"></i>
+                    </div>
+                    <h1 class="text-4xl font-bold text-gray-800 mb-2">Bienvenido al Curso</h1>
+                    <h2 class="text-2xl text-blue-600 font-semibold">Manipulación de Alimentos Multiservicios</h2>
+                </div>
+                <p class="text-gray-600 mb-8 text-lg max-w-2xl mx-auto">
+                    Capacítate con 27 módulos en video y obtén tu certificado verificable.
+                    Aprenderás desde la higiene básica hasta el control de plagas y temperaturas.
+                </p>
+                
+                <div class="max-w-2xl mx-auto text-left mb-8 bg-blue-50 p-6 rounded-lg border border-blue-100 grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-blue-800 text-sm font-bold mb-2" for="username">
+                            Ingresa tu nombre completo para el certificado:
+                        </label>
+                        <input class="shadow-sm appearance-none border border-blue-200 rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition" 
+                            id="username" type="text" placeholder="Ej: Juan Pérez">
+                    </div>
+                    <div>
+                        <label class="block text-blue-800 text-sm font-bold mb-2" for="userdocument">
+                            Documento:
+                        </label>
+                        <input class="shadow-sm appearance-none border border-blue-200 rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition" 
+                            id="userdocument" type="text" placeholder="Ej: 1234567890">
+                    </div>
+                    <div>
+                        <label class="block text-blue-800 text-sm font-bold mb-2" for="useremail">
+                            Correo:
+                        </label>
+                        <input class="shadow-sm appearance-none border border-blue-200 rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition" 
+                            id="useremail" type="email" placeholder="correo@ejemplo.com">
+                    </div>
+                    <div>
+                        <label class="block text-blue-800 text-sm font-bold mb-2" for="userphone">
+                            Teléfono / WhatsApp:
+                        </label>
+                        <input class="shadow-sm appearance-none border border-blue-200 rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition" 
+                            id="userphone" type="tel" placeholder="300 000 0000">
+                    </div>
+                </div>
+                
+                <div class="flex flex-col md:flex-row justify-center gap-4">
+                    <button onclick="startCourse()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-10 rounded-full text-lg transition duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center">
+                        <span>Comenzar Curso</span>
+                        <i class="fas fa-play-circle ml-3 text-xl"></i>
+                    </button>
+                    
+                    <button onclick="skipToExam()" class="bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-bold py-4 px-10 rounded-full text-lg transition duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center">
+                        <span>Presentar Examen Directo</span>
+                        <i class="fas fa-forward ml-3 text-xl"></i>
+                    </button>
+                </div>
+                <p class="mt-6 text-sm text-gray-500">
+                    Nota: Si eliges presentar el examen directo, se asumirá que ya conoces el contenido.
+                </p>
+            `;
+            app.appendChild(div);
+        }
+
+        function renderModule() {
+            const module = courseData.modules[state.currentModuleIndex];
+            const videoHTML = getVideoHTML(module);
+            
+            // Determine the source badge
+            const sourceBadge = '<span class="inline-flex items-center bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full ml-3"><i class="fas fa-play-circle mr-1"></i> Video integrado</span>';
+            
+            const div = document.createElement('div');
+            div.className = 'fade-in';
+            div.innerHTML = `
+                <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+                    <h2 class="text-2xl font-bold text-gray-800 flex items-center flex-wrap">
+                        <span class="bg-blue-600 text-white w-10 h-10 rounded-full flex items-center justify-center mr-3 text-lg shadow-md flex-shrink-0">${state.currentModuleIndex + 1}</span>
+                        ${module.title}
+                        ${sourceBadge}
+                    </h2>
+                    <span class="bg-blue-100 text-blue-800 text-sm font-bold px-4 py-2 rounded-full flex-shrink-0">
+                        Módulo ${state.currentModuleIndex + 1} de ${courseData.modules.length}
+                    </span>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg mb-6 border-t-4 border-blue-600">
+                    <!-- Video Container -->
+                    <div class="mb-4">
+                        ${videoHTML}
+                    </div>
+                    
+                    <div class="prose max-w-none">
+                        <p class="text-gray-700 mb-4 font-medium text-lg leading-relaxed">${module.description}</p>
+                    </div>
+                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-6 rounded-r">
+                        <p class="text-sm text-yellow-800 flex items-center">
+                            <i class="fas fa-lightbulb text-yellow-500 text-xl mr-3"></i>
+                            <span>Presta atención al video, tendrás que responder una pregunta clave para avanzar al siguiente tema.</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <button onclick="goToQuiz()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow-md transition duration-200 flex items-center ml-auto">
+                        <span>Responder Pregunta</span>
+                        <i class="fas fa-question-circle ml-2"></i>
+                    </button>
+                </div>
+            `;
+            app.appendChild(div);
+        }
+
+        function renderModuleQuiz() {
+            const module = courseData.modules[state.currentModuleIndex];
+            const div = document.createElement('div');
+            div.className = 'fade-in bg-white p-8 rounded-xl shadow-md max-w-3xl mx-auto border-t-4 border-blue-600';
+            
+            let optionsHtml = '';
+            module.quiz.options.forEach((opt, idx) => {
+                optionsHtml += `
+                    <button onclick="checkModuleAnswer(${idx})" class="w-full text-left p-5 border border-gray-200 rounded-xl mb-4 hover:bg-blue-50 hover:border-blue-400 transition duration-200 group shadow-sm relative overflow-hidden">
+                        <div class="flex items-center">
+                            <span class="flex-shrink-0 w-10 h-10 bg-gray-100 text-gray-600 rounded-full flex items-center justify-center mr-4 group-hover:bg-blue-600 group-hover:text-white font-bold transition-colors">${String.fromCharCode(65+idx)}</span>
+                            <span class="text-lg text-gray-700 font-medium group-hover:text-blue-900">${opt}</span>
+                        </div>
+                    </button>
+                `;
+            });
+
+            div.innerHTML = `
+                <div class="text-center mb-8">
+                    <span class="text-blue-600 font-bold tracking-wider uppercase text-sm">Evaluación del Módulo</span>
+                    <h2 class="text-2xl font-bold text-gray-800 mt-2">Pregunta de Repaso</h2>
+                </div>
+                
+                <p class="text-xl text-gray-800 mb-8 font-medium text-center">${module.quiz.question}</p>
+                
+                <div class="space-y-2">
+                    ${optionsHtml}
+                </div>
+                
+                <div id="feedback" class="mt-6 hidden animate-fade-in-up"></div>
+            `;
+            app.appendChild(div);
+        }
+
+        function renderExamIntro() {
+            const div = document.createElement('div');
+            div.className = 'fade-in bg-white p-10 rounded-xl shadow-lg text-center max-w-2xl mx-auto border-t-4 border-purple-600';
+            div.innerHTML = `
+                <div class="mb-6 inline-block p-6 rounded-full bg-purple-50">
+                    <i class="fas fa-clipboard-list text-6xl text-purple-600"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Examen Final</h2>
+                <p class="text-gray-600 mb-8 text-lg leading-relaxed">
+                    ¡Felicidades! Has completado los 27 módulos de aprendizaje. 
+                    Ahora deberás aprobar el examen final para obtener tu certificado oficial de Multiservicios.
+                </p>
+                <div class="bg-gray-50 p-6 rounded-xl text-left mb-8 text-gray-700 border border-gray-200 shadow-inner">
+                    <h3 class="font-bold mb-3 text-purple-800 flex items-center"><i class="fas fa-info-circle mr-2"></i> Detalles del Examen:</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i> Total de preguntas: <strong>${courseData.finalExam.length}</strong></li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i> Nota mínima: <strong>70% (14 correctas)</strong></li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i> Intentos ilimitados</li>
+                    </ul>
+                </div>
+                <button onclick="startExam()" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-12 rounded-full shadow-lg transition transform hover:scale-105 flex items-center mx-auto text-lg">
+                    <span>Comenzar Examen</span>
+                    <i class="fas fa-arrow-right ml-3"></i>
+                </button>
+            `;
+            app.appendChild(div);
+        }
+
+        function renderExam() {
+            const div = document.createElement('div');
+            div.className = 'fade-in max-w-4xl mx-auto';
+            
+            let questionsHtml = '';
+            courseData.finalExam.forEach((q, qIdx) => {
+                let optionsHtml = '';
+                q.options.forEach((opt, oIdx) => {
+                    optionsHtml += `
+                        <label class="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-blue-50 hover:border-blue-300 transition duration-150 mb-2">
+                            <input type="radio" name="q${qIdx}" value="${oIdx}" class="form-radio h-5 w-5 text-blue-600 border-gray-300 focus:ring-blue-500 mr-4">
+                            <span class="text-gray-700">${opt}</span>
+                        </label>
+                    `;
+                });
+                questionsHtml += `
+                    <div class="bg-white p-8 rounded-xl shadow-md mb-8 border-l-4 border-blue-600 relative">
+                        <span class="absolute top-4 right-4 text-gray-300 text-3xl font-bold opacity-20">#${qIdx + 1}</span>
+                        <p class="font-bold text-gray-800 mb-6 text-lg flex items-start">
+                            <span class="text-blue-600 mr-3 text-xl">${qIdx + 1}.</span> 
+                            ${q.q}
+                        </p>
+                        <div class="space-y-1 pl-4 md:pl-8">
+                            ${optionsHtml}
+                        </div>
+                    </div>
+                `;
+            });
+
+            div.innerHTML = `
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-gray-800">Evaluación Final</h2>
+                    <p class="text-gray-500 mt-2">Responde todas las preguntas cuidadosamente.</p>
+                </div>
+                <form id="examForm" onsubmit="submitExam(event)">
+                    ${questionsHtml}
+                    <div class="text-center mt-12 mb-12">
+                        <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-16 rounded-full shadow-xl text-xl transition transform hover:scale-105 flex items-center mx-auto">
+                            <i class="fas fa-check-circle mr-3"></i> Enviar Respuestas
+                        </button>
+                    </div>
+                </form>
+            `;
+            app.appendChild(div);
+        }
+
+        function renderResult() {
+            const passingScore = Math.ceil(courseData.finalExam.length * 0.7);
+            const passed = state.score >= passingScore;
+            const percentage = Math.round((state.score / courseData.finalExam.length) * 100);
+            
+            const div = document.createElement('div');
+            div.className = 'fade-in text-center max-w-5xl mx-auto';
+
+            if (passed) {
+                const date = new Date().toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
+                div.innerHTML = `
+                    <div class="bg-green-100 text-green-800 p-8 rounded-xl mb-10 shadow-md border border-green-200">
+                        <div class="flex justify-center mb-4">
+                            <div class="bg-green-200 rounded-full p-3">
+                                <i class="fas fa-trophy text-4xl text-green-700"></i>
+                            </div>
+                        </div>
+                        <h2 class="text-3xl font-bold mb-3">¡Felicidades, ${state.userName}!</h2>
+                        <p class="text-xl">Has aprobado el curso satisfactoriamente.</p>
+                        <div class="mt-4 flex justify-center gap-6 text-green-900 font-semibold">
+                            <span><i class="fas fa-check mr-2"></i>Aciertos: ${state.score}/${courseData.finalExam.length}</span>
+                            <span><i class="fas fa-chart-pie mr-2"></i>Nota: ${percentage}%</span>
+                        </div>
+                    </div>
+                    <!-- Certificate Area -->
+                    <div class="certificate-bg p-10 text-center text-gray-800 shadow-2xl mx-auto mb-10 max-w-4xl" id="certificate">
+                        <div class="certificate-border p-10 flex flex-col items-center justify-center">
+                            <div class="mb-8 flex justify-center">
+                                <img src="../../assets/logos/logo-horizontal.png" alt="Multiservicios" class="h-20 w-auto object-contain">
+                            </div>
+                            <h1 class="text-5xl font-serif font-bold mb-4 text-blue-900 uppercase tracking-wider">Certificado de Aprobación</h1>
+                            <p class="text-xl italic mb-8 text-gray-600">Por medio del presente se certifica que</p>
+                            
+                            <h2 class="text-4xl font-bold border-b-4 border-blue-900 pb-4 px-12 mb-8 inline-block font-serif">${state.userName}</h2>
+                            
+                            <p class="text-xl mb-4 text-gray-700">Ha completado y aprobado con éxito el programa de capacitación en:</p>
+                            <h3 class="text-3xl font-bold text-blue-800 mb-12 uppercase tracking-wide">Manipulación Higiénica de Alimentos</h3>
+                            
+                            <div class="flex justify-around w-full mt-12">
+                                <div class="text-center">
+                                    <p class="font-bold text-xl text-gray-800">${date}</p>
+                                    <div class="w-48 h-0.5 bg-gray-800 mx-auto mt-2"></div>
+                                    <p class="text-sm text-gray-500 mt-2 font-semibold uppercase">Fecha de Emisión</p>
+                                </div>
+                                <div class="text-center">
+                                    <div class="font-bold text-xl text-blue-900 italic font-serif">Multiservicios</div>
+                                    <div class="w-48 h-0.5 bg-gray-800 mx-auto mt-2"></div>
+                                    <p class="text-sm text-gray-500 mt-2 font-semibold uppercase">Entidad Certificadora</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-center gap-4 mb-12 no-print">
+                        <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition flex items-center">
+                            <i class="fas fa-print mr-3"></i> Imprimir / Guardar PDF
+                        </button>
+                        <button onclick="sendToWhatsApp()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition flex items-center">
+                            <i class="fab fa-whatsapp mr-3 text-xl"></i> Enviar Resultado a RRHH
+                        </button>
+                        <button onclick="restartCourse()" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition flex items-center">
+                            <i class="fas fa-redo mr-3"></i> Reiniciar Curso
+                        </button>
+                    </div>
+                    
+                    <div class="text-center text-gray-400 text-sm no-print mb-8">
+                        <p>Resultado guardado en el registro administrativo central.</p>
+                    </div>
+                `;
+            } else {
+                div.innerHTML = `
+                    <div class="bg-white p-10 rounded-xl shadow-lg max-w-2xl mx-auto text-center border-t-4 border-red-500">
+                        <div class="mb-6 inline-block p-6 rounded-full bg-red-50">
+                            <i class="fas fa-times-circle text-6xl text-red-500"></i>
+                        </div>
+                        <h2 class="text-3xl font-bold text-gray-800 mb-4">No has aprobado</h2>
+                        <div class="bg-red-50 p-6 rounded-lg mb-8">
+                            <p class="text-gray-800 mb-2 text-xl font-semibold">Tu resultado: <span class="text-red-600">${percentage}%</span></p>
+                            <p class="text-gray-600">Necesitas un mínimo de 70% para obtener el certificado.</p>
+                            <p class="text-sm text-gray-500 mt-2">Respuestas correctas: ${state.score} / ${courseData.finalExam.length}</p>
+                        </div>
+                        
+                        <button onclick="retryExam()" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-4 px-10 rounded-full shadow-lg transition transform hover:scale-105 flex items-center mx-auto text-lg">
+                            <i class="fas fa-undo mr-3"></i> Intentar Examen Nuevamente
+                        </button>
+                        
+                        <div class="mt-8 pt-6 border-t border-gray-100">
+                            <p class="text-gray-500 mb-4">¿Sientes que necesitas repasar los videos?</p>
+                            <button onclick="restartCourse()" class="text-blue-600 hover:text-blue-800 font-semibold hover:underline">
+                                Volver al inicio del curso
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+            app.appendChild(div);
+        }
+
+        // Logic Functions
+        function collectUserData() {
+            const nameInput = document.getElementById('username');
+            const documentInput = document.getElementById('userdocument');
+            const emailInput = document.getElementById('useremail');
+            const phoneInput = document.getElementById('userphone');
+            if (!nameInput.value.trim()) {
+                alert('Por favor ingresa tu nombre completo para continuar.');
+                nameInput.focus();
+                return false;
+            }
+            if (!documentInput.value.trim()) {
+                alert('Por favor ingresa tu documento para registrar el resultado.');
+                documentInput.focus();
+                return false;
+            }
+            if (!phoneInput.value.trim()) {
+                alert('Por favor ingresa tu teléfono o WhatsApp.');
+                phoneInput.focus();
+                return false;
+            }
+            state.userName = nameInput.value.trim();
+            state.userDocument = documentInput.value.trim();
+            state.userEmail = emailInput.value.trim();
+            state.userPhone = phoneInput.value.trim();
+            return true;
+        }
+
+        function saveCourseResult() {
+            const percentage = Math.round((state.score / courseData.finalExam.length) * 100);
+            const passed = state.score >= Math.ceil(courseData.finalExam.length * 0.7);
+            const record = {
+                nombre: state.userName,
+                documento: state.userDocument,
+                correo: state.userEmail,
+                telefono: state.userPhone,
+                curso: 'Manipulación de Alimentos',
+                puntaje: state.score,
+                total: courseData.finalExam.length,
+                porcentaje: percentage,
+                estado: passed ? 'Aprobado' : 'No aprobado',
+                fecha: new Date().toISOString()
+            };
+            const current = JSON.parse(localStorage.getItem('msCourseResults') || '[]');
+            current.unshift(record);
+            localStorage.setItem('msCourseResults', JSON.stringify(current.slice(0, 100)));
+            publishCourseResultToApi(record);
+        }
+
+        function publishCourseResultToApi(record) {
+            const cfg = window.MULTISERVICIOS_CONFIG || {};
+            const base = String(cfg.certificadosAdminApiUrl || cfg.certificadosApiUrl || '').replace(/\/$/, '');
+            if (!base) return;
+            fetch(base + '/admin/resultados', {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(record)
+            }).catch(function (error) {
+                console.warn('No se pudo enviar el resultado del curso a la API', error);
+            });
+        }
+
+        function startCourse() {
+            if (!collectUserData()) return;
+            state.screen = 'module';
+            render();
+        }
+
+        function goToQuiz() {
+            state.screen = 'module-quiz';
+            render();
+        }
+
+        function checkModuleAnswer(selectedIndex) {
+            const module = courseData.modules[state.currentModuleIndex];
+            const feedback = document.getElementById('feedback');
+            feedback.classList.remove('hidden');
+            
+            if (selectedIndex === module.quiz.correct) {
+                feedback.innerHTML = `
+                    <div class="bg-green-100 border-l-4 border-green-500 text-green-800 p-4 rounded shadow-sm mb-4" role="alert">
+                        <p class="font-bold text-lg"><i class="fas fa-check-circle mr-2"></i>¡Correcto!</p>
+                        <p>Has asimilado bien el concepto.</p>
+                    </div>
+                    <button onclick="nextModule()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow transition w-full flex justify-center items-center text-lg">
+                        <span>Siguiente Módulo</span>
+                        <i class="fas fa-arrow-right ml-3"></i>
+                    </button>
+                `;
+            } else {
+                feedback.innerHTML = `
+                    <div class="bg-red-100 border-l-4 border-red-500 text-red-800 p-4 rounded shadow-sm" role="alert">
+                        <p class="font-bold text-lg"><i class="fas fa-exclamation-circle mr-2"></i>Incorrecto</p>
+                        <p>Intenta recordar lo visto en el video y selecciona otra opción.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function nextModule() {
+            if (state.currentModuleIndex < courseData.modules.length - 1) {
+                state.currentModuleIndex++;
+                state.screen = 'module';
+            } else {
+                state.screen = 'exam-intro';
+            }
+            render();
+        }
+
+        function startExam() {
+            state.screen = 'exam';
+            render();
+        }
+
+        function submitExam(e) {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            let score = 0;
+            let answeredCount = 0;
+            for (let pair of formData.entries()) {
+                answeredCount++;
+                const qIdx = parseInt(pair[0].replace('q', ''));
+                const answer = parseInt(pair[1]);
+                if (courseData.finalExam[qIdx].a === answer) {
+                    score++;
+                }
+            }
+            if (answeredCount < courseData.finalExam.length) {
+                alert(`Has respondido ${answeredCount} de ${courseData.finalExam.length} preguntas. Por favor responde todas antes de enviar.`);
+                return;
+            }
+            if (confirm("¿Estás seguro de que deseas enviar tus respuestas para calificación?")) {
+                state.score = score;
+                saveCourseResult();
+                state.screen = 'result';
+                render();
+            }
+        }
+
+        function retryExam() {
+            state.score = 0;
+            state.screen = 'exam';
+            render();
+        }
+
+        function skipToExam() {
+            if (!collectUserData()) return;
+            if(confirm("¿Estás seguro? Irás directamente a la evaluación final sin ver los videos de repaso.")) {
+                state.screen = 'exam-intro';
+                render();
+            }
+        }
+
+        function sendToWhatsApp() {
+            const cfg = window.MULTISERVICIOS_CONFIG || {};
+            const rawPhone = String(cfg.whatsapp || "3222166831").replace(/\D/g, "");
+            const phoneNumber = rawPhone.startsWith("57") ? rawPhone : `57${rawPhone}`;
+            const message = `Hola, soy *${state.userName}*. He completado el Curso de Manipulación de Alimentos Multiservicios.\n\nDocumento: ${state.userDocument}\nCorreo: ${state.userEmail}\nTeléfono: ${state.userPhone}\nResultado: APROBADO\nNota: ${state.score}/${courseData.finalExam.length}\nFecha: ${new Date().toLocaleDateString()}`;
+            const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        function restartCourse() {
+            if(confirm("¿Estás seguro de que quieres reiniciar todo el curso? Se perderá tu progreso actual.")){
+                state.currentModuleIndex = 0;
+                state.score = 0;
+                state.screen = 'intro';
+                render();
+            }
+        }
+
+        // Init
+        render();
+    </script>
+</body>
+</html>

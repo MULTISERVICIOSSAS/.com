@@ -1,0 +1,24 @@
+[
+  {
+    "codigo": "MS-2026-0001",
+    "nombre": "Nombre del estudiante",
+    "documento_parcial": "****1234",
+    "curso": "Manipulacion de Alimentos",
+    "fecha_emision": "2026-03-21",
+    "fecha_vencimiento": "2027-03-21",
+    "estado": "Activo",
+    "url_pdf": "",
+    "qr": ""
+  },
+  {
+    "codigo": "MS-2026-ANULADO",
+    "nombre": "Registro de prueba anulado",
+    "documento_parcial": "****0000",
+    "curso": "Manipulacion de Alimentos",
+    "fecha_emision": "2026-03-21",
+    "fecha_vencimiento": "2027-03-21",
+    "estado": "Anulado",
+    "url_pdf": "",
+    "qr": ""
+  }
+]

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mi Certificado | Multiservicios</title>
+  <meta name="description" content="Consulta el estado y link de validacion de tu certificado emitido por Multiservicios." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <div id="site-header"></div>
+  <main>
+    <section class="hero hero-compact" style="--hero-image:url('assets/images/capacitacion-alimentos-certificado.jpg')">
+      <div class="container hero-grid"><div class="hero-copy"><span class="section-kicker">Consulta</span><h1>Mi certificado</h1><p>Ingresa el codigo unico para consultar estado, QR y pagina publica de validacion.</p></div></div>
+    </section>
+    <section class="section">
+      <div class="container split">
+        <form class="admin-tile" data-certificate-lookup>
+          <h2 class="section-title">Buscar certificado</h2>
+          <div class="field"><label>Codigo unico</label><input name="codigo" placeholder="Ej: MS-2026-0001" required /></div>
+          <button class="button success" type="submit"><i data-lucide="search-check"></i> Ver estado</button>
+        </form>
+        <div class="notice secure"><strong>Descarga:</strong> por seguridad, los PDFs privados se entregan desde el panel administrativo o por canal autorizado. La pagina publica valida autenticidad sin exponer datos sensibles.</div>
+      </div>
+    </section>
+  </main>
+  <div id="site-footer"></div>
+  <a class="whatsapp-float" data-whatsapp-link href="#" aria-label="WhatsApp"><i data-lucide="message-circle"></i></a>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/config.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/solicitudes.js"></script>
+</body>
+</html>

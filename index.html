@@ -1,1228 +1,195 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
-    <title>Multiservicios - Expertos en Seguridad Industrial y Saneamiento | Certificados Legales</title>
-    <meta content="Empresa líder en Colombia especializada en fumigación, lavado de tanques, capacitación de manipulación de alimentos, certificados médicos y planes de saneamiento. Cumplimiento normativo garantizado." name="description"/>
-    <meta content="fumigación, control de plagas, lavado de tanques, manipulación de alimentos, certificado médico ocupacional, plan de saneamiento, seguridad industrial, salud ocupacional, Colombia" name="keywords"/>
-    <meta content="Multiservicios S.A.S" name="author"/>
-    <meta content="index, follow" name="robots"/>
-    <meta content="Spanish" name="language"/>
-    <meta content="7 days" name="revisit-after"/>
-    
-    <!-- Open Graph / Facebook -->
-    <meta content="website" property="og:type"/>
-    <meta content="https://multiservicios.com/" property="og:url"/>
-    <meta content="Multiservicios - Seguridad Industrial y Saneamiento Ambiental" property="og:title"/>
-    <meta content="Soluciones integrales certificadas para el cumplimiento normativo de su empresa. Más de 12 años de experiencia." property="og:description"/>
-    <meta content="assets/images/social-share.jpg" property="og:image"/>
-    
-    <!-- Twitter -->
-    <meta content="summary_large_image" property="twitter:card"/>
-    <meta content="https://multiservicios.com/" property="twitter:url"/>
-    <meta content="Multiservicios - Seguridad y Saneamiento" property="twitter:title"/>
-    <meta content="Expertos certificados en control de plagas, saneamiento y seguridad industrial" property="twitter:description"/>
-    <meta content="assets/images/social-share.jpg" property="twitter:image"/>
-    
-    <!-- Favicon -->
-    <link href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>" rel="icon" sizes="32x32" type="image/png"/>
-    
-    <!-- Fuentes y Estilos -->
-    <link href="https://fonts.googleapis.com" rel="preconnect"/>
-    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
-    
-    <!-- Schema.org JSON-LD -->
-    <script type="application/ld+json"> 
-    {
-        "@context": "https://schema.org",
-        "@type": "LocalBusiness",
-        "name": "Multiservicios S.A.S",
-        "image": "assets/images/hero-principal.jpg",
-        "@id": "https://multiservicios.com",
-        "url": "https://multiservicios.com",
-        "telephone": "+573222166831",
-        "address": {
-            "@type": "PostalAddress",
-            "streetAddress": "Calle Principal",
-            "addressLocality": "Bogotá",
-            "addressCountry": "CO"
-        },
-        "geo": {
-            "@type": "GeoCoordinates",
-            "latitude": 4.7110,
-            "longitude": -74.0721
-        },
-        "openingHoursSpecification": {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday", "Saturday", "Sunday"],
-            "opens": "00:00",
-            "closes": "23:59"
-        },
-        "sameAs": [
-            "https://www.facebook.com/multiservicios",
-            "https://www.instagram.com/multiservicios",
-            "https://www.linkedin.com/company/multiservicios"
-        ]
-    } 
-    </script>
-
-    <style> 
-        :root {
-            --primary-color: #2563eb;
-            --secondary-color: #1e40af;
-            --accent-color: #0ea5e9;
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
-            --danger-color: #ef4444;
-        }
-        body {font-family: 'Manrope', sans-serif;}
-        
-        .bg-gradient-hero {background: linear-gradient(160deg, #f0f9ff 0%, #e0f2fe 50%, #ffffff 100%);}
-        .bg-gradient-blue {background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);}
-        .bg-gradient-urgent {background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);}
-        
-        .service-card {transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);}
-        .service-card:hover {transform: translateY(-8px);box-shadow: 0 20px 40px -5px rgba(30, 64, 175, 0.15);}
-        
-        .check-list li {position: relative;padding-left: 1.5rem;}
-        .check-list li::before {content: '\f00c';font-family: 'Font Awesome 6 Free';font-weight: 900;position: absolute;left: 0;top: 2px;color: var(--primary-color);font-size: 0.875rem;}
-        
-        /* Animaciones */
-        @keyframes pulse-border {0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }70% { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); }100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }}
-        .badge-pulse {animation: pulse-border 2s infinite;}
-        
-        @keyframes fadeInUp {from {opacity: 0;transform: translateY(30px);}to {opacity: 1;transform: translateY(0);}}
-        .animate-fadeIn {animation: fadeInUp 0.8s ease-out forwards;opacity: 0;}
-        
-        @keyframes slideInLeft {from {opacity: 0;transform: translateX(-50px);}to {opacity: 1;transform: translateX(0);}}
-        .animate-slideInLeft {animation: slideInLeft 0.8s ease-out forwards;opacity: 0;}
-        
-        @keyframes blob {0% { transform: translate(0px, 0px) scale(1); }33% { transform: translate(30px, -50px) scale(1.1); }66% { transform: translate(-20px, 20px) scale(0.9); }100% { transform: translate(0px, 0px) scale(1); }}
-        .animate-blob {animation: blob 7s infinite;}
-        .animation-delay-2000 {animation-delay: 2s;}
-        .animation-delay-4000 {animation-delay: 4s;}
-        
-        /* Efecto de carga */
-        .skeleton {background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);background-size: 200% 100%;animation: loading 1.5s infinite;}
-        @keyframes loading {0% { background-position: 200% 0; }100% { background-position: -200% 0; }}
-        
-        /* Modal */
-        .modal {display: none;position: fixed;z-index: 9999;left: 0;top: 0;width: 100%;height: 100%;overflow: auto;background-color: rgba(0,0,0,0.5);backdrop-filter: blur(5px);animation: fadeIn 0.3s ease-out;}
-        .modal.active {display: flex;align-items: center;justify-content: center;}
-        .modal-content {background-color: white;margin: auto;padding: 0;border-radius: 1rem;width: 90%;max-width: 500px;box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);animation: slideInUp 0.3s ease-out;}
-        @keyframes slideInUp {from {transform: translateY(100px);opacity: 0;}to {transform: translateY(0);opacity: 1;}}
-        
-        /* Toast */
-        .toast {position: fixed;bottom: -100px;right: 20px;background: white;padding: 1rem 1.5rem;border-radius: 0.75rem;box-shadow: 0 10px 25px rgba(0,0,0,0.15);z-index: 10000;transition: bottom 0.4s ease-out;border-left: 4px solid var(--success-color);}
-        .toast.show {bottom: 20px;}
-        
-        /* Progress Bar */
-        .progress-bar {position: fixed;top: 0;left: 0;height: 3px;background: linear-gradient(90deg, var(--primary-color), var(--accent-color));z-index: 9999;transition: width 0.1s ease;}
-        
-        /* Galería */
-        .gallery-item {position: relative;overflow: hidden;border-radius: 1rem;cursor: pointer;}
-        .gallery-item img {transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);}
-        .gallery-item:hover img {transform: scale(1.1);}
-        .gallery-overlay {position: absolute;inset: 0;background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);opacity: 0;transition: opacity 0.3s ease;display: flex;align-items: flex-end;padding: 1.5rem;}
-        .gallery-item:hover .gallery-overlay {opacity: 1;}
-        
-        /* Inputs */
-        input:focus, textarea:focus, select:focus {outline: none;border-color: var(--primary-color);box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);}
-        
-        /* Utility */
-        .clip-diagonal {clip-path: polygon(15% 0%, 100% 0, 100% 100%, 0% 100%);}
-        .trust-badge {transition: all 0.3s ease;}
-        .trust-badge:hover {transform: translateY(-3px);box-shadow: 0 10px 25px rgba(0,0,0,0.1);}
-        *:focus-visible {outline: 2px solid var(--primary-color);outline-offset: 2px;}
-        
-        @media (max-width: 768px) {.chat-widget {width: calc(100vw - 40px);bottom: 80px;}}
-        html {scroll-behavior: smooth;}
-        ::selection {background: var(--primary-color);color: white;}
-        
-        /* Placeholder styling for images to guide user */
-        img[src$=".jpg"]:not([src^="http"]), img[src$=".png"]:not([src^="http"]) {
-            background-color: #f1f5f9;
-            position: relative;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Multiservicios | Certificación de Manipulación de Alimentos y Servicios Empresariales</title>
+  <meta name="description" content="Multiservicios ofrece certificación en manipulación de alimentos, cursos digitales, certificados verificables, servicios de extintores y apoyo empresarial en Colombia." />
+  <meta property="og:title" content="Multiservicios | Formación, certificación y soluciones empresariales" />
+  <meta property="og:description" content="Proceso digital, rápido y acompañado para certificados de manipulación de alimentos y servicios empresariales." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="assets/images/equipo-multiservicios.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Multiservicios",
+    "description": "Formación, certificación y soluciones empresariales digitales y presenciales.",
+    "areaServed": "Colombia",
+    "telephone": "3222166831",
+    "url": "https://multiserviciossas.github.io/.com/"
+  }
+  </script>
 </head>
+<body>
+  <div id="site-header"></div>
 
-<body class="bg-white text-slate-800 antialiased">
-
-    <!-- Progress Bar -->
-    <div class="progress-bar" id="progressBar" style="width: 0%"></div>
-
-    <!-- Toast Notification -->
-    <div class="toast" id="toast">
-        <div class="flex items-center gap-3">
-            <i class="fa-solid fa-check-circle text-green-500 text-xl"></i>
-            <div>
-                <p class="font-bold text-slate-900" id="toastTitle">Éxito</p>
-                <p class="text-sm text-slate-600" id="toastMessage">Mensaje enviado correctamente</p>
-            </div>
+  <main>
+    <section class="hero" style="--hero-image:url('assets/images/equipo-multiservicios.jpg')">
+      <div class="container hero-content">
+        <span class="eyebrow"><i data-lucide="shield-check"></i> Certificados verificables y proceso acompañado</span>
+        <h1>Multiservicios</h1>
+        <p>Formación, certificación y soluciones empresariales digitales y presenciales, con enfoque principal en la certificación en manipulación de alimentos.</p>
+        <div class="hero-actions">
+          <a class="button success" href="registro.html"><i data-lucide="badge-check"></i> Obtener certificado</a>
+          <a class="button ghost" href="cursos.html"><i data-lucide="book-open-check"></i> Ver curso</a>
+          <a class="button ghost" href="validar-certificado.html"><i data-lucide="search-check"></i> Validar certificado</a>
         </div>
-    </div>
-
-    <!-- BANNER DE URGENCIA -->
-    <div class="bg-gradient-urgent text-white text-center py-2.5 px-4 text-sm font-medium relative overflow-hidden" id="urgencyBanner">
-        <div class="relative z-10 flex items-center justify-center gap-2 flex-wrap">
-            <i class="fa-solid fa-triangle-exclamation animate-pulse text-yellow-300"></i>
-            <span>⚡ <strong>URGENCIAS 24 HORAS</strong> - ¿Visita sanitaria próxima? Certificación express garantizada</span>
-            <a class="underline hover:no-underline ml-2 font-bold text-yellow-300" href="#contacto">Solicitar Ahora →</a>
-        </div>
-        <button aria-label="Cerrar banner" class="absolute right-4 top-1/2 -translate-y-1/2 hover:bg-white/20 rounded p-1 cursor-pointer" onclick="closeBanner()">
-            <i class="fa-solid fa-xmark"></i>
-        </button>
-    </div>
-
-    <!-- TOP BAR -->
-    <div class="bg-slate-900 text-slate-300 text-xs py-2.5 hidden md:block">
-        <div class="container mx-auto px-6 flex justify-between items-center">
-            <div class="flex items-center gap-6">
-                <!-- Enlace al Número Principal (WhatsApp y Llamadas) -->
-                <a class="flex items-center gap-2 hover:text-blue-400 transition-colors" href="tel:+573222166831">
-                    <i class="fa-solid fa-phone text-blue-500"></i> +57 322 216 6831
-                </a>
-                
-                <!-- Número Secundario (Solo Visual) -->
-                <span class="flex items-center gap-2 text-slate-400 cursor-default" title="Línea administrativa">
-                    <i class="fa-solid fa-headset text-slate-500"></i> Soporte: 305 700 2164
-                </span>
-
-                <a class="flex items-center gap-2 hover:text-blue-400 transition-colors" href="mailto:info@multiservicios.com">
-                    <i class="fa-solid fa-envelope text-blue-500"></i> info@multiservicios.com
-                </a>
-            </div>
-            <div class="flex items-center gap-4">
-                <a aria-label="Facebook" class="hover:text-white transition-colors" href="https://facebook.com" rel="noopener noreferrer" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
-                <a aria-label="Instagram" class="hover:text-white transition-colors" href="https://instagram.com" rel="noopener noreferrer" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-                <a aria-label="LinkedIn" class="hover:text-white transition-colors" href="https://linkedin.com" rel="noopener noreferrer" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Header -->
-    <header class="sticky top-0 w-full bg-white/95 backdrop-blur-md shadow-sm z-50 transition-all duration-300 border-b border-slate-100" id="header">
-        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <!-- LOGO: Configurado para imagen local horizontal -->
-            <a class="flex items-center" href="#inicio">
-                <img src="assets/images/logo-horizontal.png" alt="Multiservicios Logo" class="h-12 w-auto object-contain" onerror="this.onerror=null; this.src='https://placehold.co/200x60/2563eb/ffffff?text=LOGO+AQU%C3%8D';"/>
-            </a>
-
-            <nav class="hidden lg:flex space-x-8 items-center">
-                <a class="text-slate-600 hover:text-blue-600 font-semibold transition-colors text-sm uppercase tracking-wide" href="#inicio">Inicio</a>
-                <a class="text-slate-600 hover:text-blue-600 font-semibold transition-colors text-sm uppercase tracking-wide" href="#nosotros">Nosotros</a>
-                <a class="text-slate-600 hover:text-blue-600 font-semibold transition-colors text-sm uppercase tracking-wide" href="#servicios">Servicios</a>
-                <a class="text-slate-600 hover:text-blue-600 font-semibold transition-colors text-sm uppercase tracking-wide" href="#procesos">Proceso</a>
-                <a class="text-slate-600 hover:text-blue-600 font-semibold transition-colors text-sm uppercase tracking-wide" href="#proyectos">Proyectos</a>
-                <a class="text-slate-600 hover:text-blue-600 font-semibold transition-colors text-sm uppercase tracking-wide" href="#testimonios">Clientes</a>
-                <a class="bg-blue-600 text-white px-6 py-2.5 rounded-full font-semibold hover:bg-blue-700 transition-all transform hover:scale-105 shadow-lg shadow-blue-500/30 flex items-center gap-2" href="#contacto">
-                    <i class="fa-regular fa-paper-plane"></i> Cotizar Ahora
-                </a>
-            </nav>
-            <button aria-expanded="false" aria-label="Menú de navegación" class="lg:hidden text-slate-800 focus:outline-none p-2 rounded-md hover:bg-slate-100" id="menu-btn">
-                <i class="fa-solid fa-bars text-2xl transition-transform duration-300"></i>
-            </button>
-        </div>
-        <!-- Mobile Menu -->
-        <div class="hidden lg:hidden bg-white border-t border-slate-100 absolute w-full shadow-xl h-screen top-full left-0 z-40" id="mobile-menu">
-            <div class="flex flex-col px-6 py-8 space-y-6 text-center">
-                <a class="text-lg text-slate-700 font-bold hover:text-blue-600 p-2" href="#inicio">Inicio</a>
-                <a class="text-lg text-slate-700 font-bold hover:text-blue-600 p-2" href="#nosotros">Nosotros</a>
-                <a class="text-lg text-slate-700 font-bold hover:text-blue-600 p-2" href="#servicios">Servicios</a>
-                <a class="text-lg text-slate-700 font-bold hover:text-blue-600 p-2" href="#procesos">Proceso</a>
-                <a class="text-lg text-slate-700 font-bold hover:text-blue-600 p-2" href="#proyectos">Proyectos</a>
-                <a class="text-lg text-slate-700 font-bold hover:text-blue-600 p-2" href="#testimonios">Testimonios</a>
-                <a class="text-white bg-blue-600 py-4 rounded-xl font-bold shadow-lg mx-4 mt-4" href="#contacto">Solicitar Cotización</a>
-            </div>
-        </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="relative pt-20 pb-28 lg:pt-32 lg:pb-40 overflow-hidden bg-gradient-hero" id="inicio">
-        <div class="container mx-auto px-6 relative z-10">
-            <div class="flex flex-col lg:flex-row items-center gap-16">
-                <div class="lg:w-1/2">
-                    <div class="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-8 border border-blue-200 badge-pulse shadow-sm">
-                        <i class="fa-solid fa-shield-check"></i> Certificación Garantizada - ISO 9001
-                    </div>
-                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-[1.15] mb-6">
-                        Seguridad y Bienestar Integral para su <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">Empresa</span>
-                    </h1>
-                    <p class="text-lg md:text-xl text-slate-600 mb-10 leading-relaxed max-w-xl">
-                        Evite sanciones de hasta <strong class="text-slate-900">$50 millones</strong>. Expertos en normativa sanitaria, seguridad industrial y salud ocupacional con certificación legal garantizada.
-                    </p>
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <a class="bg-blue-600 text-white px-8 py-4 rounded-xl font-bold hover:bg-blue-700 transition-all shadow-xl shadow-blue-500/20 text-center flex items-center justify-center gap-2 transform hover:-translate-y-1" href="#contacto">
-                            Agendar Visita Técnica Gratis <i class="fa-solid fa-arrow-right"></i>
-                        </a>
-                        <a class="bg-white text-slate-700 border border-slate-200 px-8 py-4 rounded-xl font-bold hover:bg-slate-50 hover:text-blue-600 hover:border-blue-200 transition-all text-center flex items-center justify-center gap-2" href="#servicios">
-                            <i class="fa-solid fa-play-circle"></i> Ver Portafolio
-                        </a>
-                    </div>
-                    
-                    <div class="mt-12 pt-8 border-t border-slate-200 grid grid-cols-2 md:grid-cols-4 gap-6">
-                        <div class="flex flex-col"><p class="text-3xl font-bold text-slate-900"><span class="counter" data-target="12">0</span>+</p><p class="text-sm text-slate-500 font-medium">Años de Trayectoria</p></div>
-                        <div class="flex flex-col"><p class="text-3xl font-bold text-slate-900"><span class="counter" data-target="100">0</span>%</p><p class="text-sm text-slate-500 font-medium">Concepto Favorable</p></div>
-                        <div class="flex flex-col"><p class="text-3xl font-bold text-slate-900"><span class="counter" data-target="800">0</span>+</p><p class="text-sm text-slate-500 font-medium">Empresas Atendidas</p></div>
-                        <div class="flex flex-col"><p class="text-3xl font-bold text-slate-900">24/7</p><p class="text-sm text-slate-500 font-medium">Atención Inmediata</p></div>
-                    </div>
-                </div>
-                
-                <div class="lg:w-1/2 relative">
-                    <div class="absolute top-10 right-10 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
-                    <div class="absolute -bottom-10 -left-10 w-72 h-72 bg-cyan-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
-                    <div class="absolute top-1/2 left-1/2 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
-                    
-                    <div class="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white group">
-                        <!-- IMAGEN PRINCIPAL: Usamos archivo local o Unsplash como fallback seguro -->
-                        <img alt="Inspector de seguridad industrial validando normas" class="w-full h-[600px] object-cover group-hover:scale-105 transition-transform duration-700" loading="eager" src="assets/images/hero-principal.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1200';"/>
-                        
-                        <div class="absolute bottom-8 left-8 bg-white/95 backdrop-blur-md p-5 rounded-2xl shadow-lg border border-white/50 max-w-xs transform transition-transform group-hover:translate-y-[-5px]">
-                            <div class="flex items-start gap-4">
-                                <div class="bg-green-100 p-3 rounded-full text-green-600"><i class="fa-solid fa-file-circle-check text-xl"></i></div>
-                                <div>
-                                    <p class="font-bold text-slate-900 text-lg">Documentación al Día</p>
-                                    <p class="text-xs text-slate-500 mt-1">Cumplimiento 100% normatividad vigente</p>
-                                    <div class="flex gap-1 mt-2">
-                                        <span class="text-yellow-400"><i class="fa-solid fa-star text-xs"></i></span>
-                                        <span class="text-yellow-400"><i class="fa-solid fa-star text-xs"></i></span>
-                                        <span class="text-yellow-400"><i class="fa-solid fa-star text-xs"></i></span>
-                                        <span class="text-yellow-400"><i class="fa-solid fa-star text-xs"></i></span>
-                                        <span class="text-yellow-400"><i class="fa-solid fa-star text-xs"></i></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+      </div>
+      <div class="hero-strip">
+        <div><strong>Curso digital</strong><span>Capacitación clara y sencilla.</span></div>
+        <div><strong>Examen en línea</strong><span>Evaluación con resultado inmediato.</span></div>
+        <div><strong>Certificado PDF</strong><span>Registro con código de validación.</span></div>
+        <div><strong>WhatsApp</strong><span>Acompañamiento durante el proceso.</span></div>
+      </div>
     </section>
 
-    <!-- Badges Section -->
-    <div class="bg-white border-y border-slate-100 py-12">
-        <div class="container mx-auto px-6">
-            <p class="text-center text-slate-400 text-sm font-semibold uppercase tracking-widest mb-10">Certificados y Autorizados por</p>
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-8 items-center">
-                <div class="trust-badge flex flex-col items-center gap-3 p-6 bg-slate-50 rounded-xl hover:bg-blue-50 transition-all group cursor-pointer">
-                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
-                        <i class="fa-solid fa-building-columns text-3xl text-blue-600"></i>
-                    </div>
-                    <div class="text-center"><p class="font-bold text-slate-800 text-sm">INVIMA</p><p class="text-xs text-slate-500">Reg. Sanitario</p></div>
-                </div>
-                <div class="trust-badge flex flex-col items-center gap-3 p-6 bg-slate-50 rounded-xl hover:bg-blue-50 transition-all group cursor-pointer">
-                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
-                        <i class="fa-solid fa-heart-pulse text-3xl text-red-600"></i>
-                    </div>
-                    <div class="text-center"><p class="font-bold text-slate-800 text-sm">SEC. SALUD</p><p class="text-xs text-slate-500">Autorizado</p></div>
-                </div>
-                <div class="trust-badge flex flex-col items-center gap-3 p-6 bg-slate-50 rounded-xl hover:bg-blue-50 transition-all group cursor-pointer">
-                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
-                        <i class="fa-solid fa-fire-extinguisher text-3xl text-orange-600"></i>
-                    </div>
-                    <div class="text-center"><p class="font-bold text-slate-800 text-sm">BOMBEROS</p><p class="text-xs text-slate-500">Certificado</p></div>
-                </div>
-                <div class="trust-badge flex flex-col items-center gap-3 p-6 bg-slate-50 rounded-xl hover:bg-blue-50 transition-all group cursor-pointer">
-                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
-                        <i class="fa-solid fa-briefcase text-3xl text-green-600"></i>
-                    </div>
-                    <div class="text-center"><p class="font-bold text-slate-800 text-sm">MINTRABAJO</p><p class="text-xs text-slate-500">Habilitado</p></div>
-                </div>
-                <div class="trust-badge flex flex-col items-center gap-3 p-6 bg-slate-50 rounded-xl hover:bg-blue-50 transition-all group cursor-pointer">
-                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
-                        <i class="fa-solid fa-shield-halved text-3xl text-purple-600"></i>
-                    </div>
-                    <div class="text-center"><p class="font-bold text-slate-800 text-sm">ARL</p><p class="text-xs text-slate-500">Aval Técnico</p></div>
-                </div>
-            </div>
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">Servicio principal</span>
+            <h2 class="section-title">Certificación en Manipulación de Alimentos</h2>
+            <p class="section-lead">Un flujo simple para personas, restaurantes, emprendimientos y empresas que necesitan capacitarse, presentar examen y recibir un certificado verificable.</p>
+          </div>
+          <a class="button secondary" href="cursos.html"><i data-lucide="arrow-right"></i> Conocer el proceso</a>
         </div>
-    </div>
 
-    <!-- Nosotros Section -->
-    <section class="py-24 bg-slate-50 scroll-mt-20" id="nosotros">
-        <div class="container mx-auto px-6">
-            <div class="flex flex-col lg:flex-row gap-16 items-start">
-                <div class="lg:w-1/2 lg:sticky lg:top-24">
-                    <div class="relative group">
-                        <div class="absolute inset-0 bg-blue-600 rounded-2xl rotate-3 group-hover:rotate-6 transition-transform opacity-20"></div>
-                        <!-- IMAGEN NOSOTROS: Fallback seguro -->
-                        <img alt="Equipo profesional de Multiservicios" class="relative rounded-2xl shadow-xl w-full object-cover h-[500px]" loading="lazy" src="assets/images/nosotros-equipo.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1584634731339-252c581abfc5?w=800';"/>
-                        <div class="absolute -bottom-6 -right-6 bg-blue-600 text-white p-8 rounded-2xl shadow-xl hidden md:block transform group-hover:scale-105 transition-transform">
-                            <p class="text-4xl font-bold mb-1">ISO 9001</p>
-                            <p class="text-blue-100">Calidad Certificada</p>
-                        </div>
-                        <div class="absolute -top-6 -left-6 bg-green-600 text-white p-6 rounded-2xl shadow-xl hidden md:block">
-                            <p class="text-2xl font-bold mb-1"><i class="fa-solid fa-leaf"></i></p>
-                            <p class="text-green-100 text-sm">Eco-Friendly</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="lg:w-1/2">
-                    <h2 class="text-blue-600 font-bold tracking-wide uppercase text-sm mb-4 flex items-center gap-2"><span class="w-8 h-0.5 bg-blue-600"></span> Nuestra Empresa</h2>
-                    <h3 class="text-3xl md:text-4xl font-bold text-slate-900 mb-8">Más que cumplimiento, tu tranquilidad es nuestra prioridad</h3>
-                    
-                    <div class="prose prose-lg mb-10">
-                        <p class="mb-6 leading-relaxed text-black font-medium text-lg">
-                            En MULTISERVICIOS, entendemos que mantener tu empresa en cumplimiento normativo no solo evita sanciones millonarias, sino que protege la salud de tu equipo y la reputación de tu negocio. Por eso, desde hace más de 12 años, nos especializamos en ofrecer soluciones integrales que van más allá del simple papeleo.
-                            <br><br>
-                            Nuestro equipo de profesionales certificados por el SENA y avalados por las principales entidades regulatorias del país, trabaja bajo los más altos estándares internacionales. Cada servicio que prestamos incluye documentación legal completa, seguimiento personalizado y garantía de cumplimiento 100% verificable ante cualquier auditoría.
-                        </p>
-                    </div>
-                    
-                    <div class="grid sm:grid-cols-2 gap-6 mb-10">
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:border-blue-200 transition-all hover:shadow-md group">
-                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 mb-4 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                                <i class="fa-solid fa-bullseye text-xl"></i>
-                            </div>
-                            <h4 class="font-bold text-slate-900 text-lg mb-2">Misión</h4>
-                            <p class="text-slate-500 text-sm">Proporcionar ambientes seguros y saludables mediante servicios técnicos especializados, certificados y socialmente responsables.</p>
-                        </div>
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:border-blue-200 transition-all hover:shadow-md group">
-                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 mb-4 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                                <i class="fa-regular fa-eye text-xl"></i>
-                            </div>
-                            <h4 class="font-bold text-slate-900 text-lg mb-2">Visión</h4>
-                            <p class="text-slate-500 text-sm">Ser reconocidos a nivel nacional como la empresa líder en gestión integral de riesgos sanitarios y seguridad laboral.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-gradient-blue text-white p-8 rounded-2xl">
-                        <h4 class="text-xl font-bold mb-6 flex items-center gap-2"><i class="fa-solid fa-trophy"></i> Nuestros Logros</h4>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="text-center p-4 bg-white/10 rounded-lg backdrop-blur-sm"><p class="text-3xl font-bold mb-1">12,000+</p><p class="text-sm text-blue-100">Certificados Emitidos</p></div>
-                            <div class="text-center p-4 bg-white/10 rounded-lg backdrop-blur-sm"><p class="text-3xl font-bold mb-1">0</p><p class="text-sm text-blue-100">Conceptos Desfavorables</p></div>
-                            <div class="text-center p-4 bg-white/10 rounded-lg backdrop-blur-sm"><p class="text-3xl font-bold mb-1">98%</p><p class="text-sm text-blue-100">Clientes Recurrentes</p></div>
-                            <div class="text-center p-4 bg-white/10 rounded-lg backdrop-blur-sm"><p class="text-3xl font-bold mb-1">5★</p><p class="text-sm text-blue-100">Calificación Google</p></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="grid four">
+          <article class="feature">
+            <span class="feature-icon"><i data-lucide="messages-square"></i></span>
+            <h3>1. Solicitud</h3>
+            <p>El cliente registra la solicitud en la plataforma y recibe orientacion por WhatsApp.</p>
+          </article>
+          <article class="feature">
+            <span class="feature-icon"><i data-lucide="monitor-play"></i></span>
+            <h3>2. Curso</h3>
+            <p>Acceso a módulos digitales de manipulación higiénica de alimentos.</p>
+          </article>
+          <article class="feature">
+            <span class="feature-icon"><i data-lucide="clipboard-check"></i></span>
+            <h3>3. Examen</h3>
+            <p>Evaluacion final con resultado guardado en la base central para revision administrativa.</p>
+          </article>
+          <article class="feature">
+            <span class="feature-icon"><i data-lucide="file-badge"></i></span>
+            <h3>4. Certificado</h3>
+            <p>Generación de PDF y validación por código en línea.</p>
+          </article>
         </div>
+      </div>
     </section>
 
-    <!-- Servicios Section -->
-    <section class="py-24 bg-white relative overflow-hidden scroll-mt-20" id="servicios">
-        <div class="absolute top-0 left-0 w-full h-[500px] bg-slate-50 -z-10 skew-y-3 origin-top-left"></div>
-        <div class="container mx-auto px-6">
-            <div class="text-center max-w-3xl mx-auto mb-20">
-                <h2 class="text-blue-600 font-bold tracking-wide uppercase text-sm mb-4">Nuestros Servicios</h2>
-                <h3 class="text-3xl md:text-4xl font-bold text-slate-900 mb-6">Soluciones Integrales con Respaldo Legal</h3>
-                <p class="text-slate-600 text-lg">Cada servicio incluye certificación oficial, registro fotográfico, actas técnicas y soporte documental completo para auditorías.</p>
-            </div>
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                
-                <!-- Servicio 1 -->
-                <div class="service-card bg-white border border-slate-100 rounded-2xl p-8 hover:border-blue-200 group relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-bl-xl">MÁS SOLICITADO</div>
-                    <div class="absolute top-0 left-0 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-br-lg z-10 animate-pulse">¡CURSO GRATIS!</div>
-                    <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 text-3xl mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                        <i class="fa-solid fa-users-viewfinder"></i>
-                    </div>
-                    <h4 class="text-xl font-bold text-slate-900 mb-3">Capacitación Manipulación de Alimentos</h4>
-                    <p class="text-slate-600 mb-6 text-sm leading-relaxed">Formación certificada según Resolución 2674 de 2013. Incluye carnet plastificado con fotografía y validez de 1 año.</p>
-                    <div class="mb-6">
-                        <div class="flex items-center justify-between mb-2"><span class="text-sm font-medium text-slate-700">Desde</span><span class="text-2xl font-bold text-blue-600">$25.000</span></div>
-                        <p class="text-xs text-green-600 font-bold">¡Solo cobramos el certificado!</p>
-                    </div>
-                    <ul class="check-list text-sm text-slate-500 space-y-3 bg-slate-50 p-4 rounded-lg mb-6">
-                        <li>Certificado válido por 1 año</li>
-                        <li>Cumplimiento Resolución 2674</li>
-                        <li>Material didáctico incluido</li>
-                        <li>Carnet plastificado con foto</li>
-                    </ul>
-                    <button class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all flex items-center justify-center gap-2" onclick="abrirModalServicio('Capacitación Manipulación de Alimentos')">
-                        <i class="fa-solid fa-calendar-check"></i> Agendar Capacitación
-                    </button>
-                </div>
-
-                <!-- Servicio 2 -->
-                <div class="service-card bg-white border border-slate-100 rounded-2xl p-8 hover:border-blue-200 group relative">
-                    <div class="absolute top-0 left-0 bg-blue-500 text-white text-[10px] font-bold px-2 py-1 rounded-br-lg z-10">25% OFF RENOVACIÓN</div>
-                    <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 text-3xl mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                        <i class="fa-solid fa-bug-slash"></i>
-                    </div>
-                    <h4 class="text-xl font-bold text-slate-900 mb-3">Fumigación Profesional</h4>
-                    <p class="text-slate-600 mb-6 text-sm leading-relaxed">Control integrado de plagas con productos biodegradables de última generación. Servicio con garantía extendida.</p>
-                    <div class="mb-6">
-                        <div class="flex items-center justify-between mb-2"><span class="text-sm font-medium text-slate-700">Desde</span><span class="text-2xl font-bold text-blue-600">$80.000</span></div>
-                        <p class="text-xs text-slate-500">Según metraje / Visita técnica gratuita</p>
-                    </div>
-                    <ul class="check-list text-sm text-slate-500 space-y-3 bg-slate-50 p-4 rounded-lg mb-6">
-                        <li>Desinsectación y Desratización</li>
-                        <li>Productos registro INVIMA</li>
-                        <li>Certificado y Ficha Técnica</li>
-                        <li>Garantía de 30 días</li>
-                    </ul>
-                    <button class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all flex items-center justify-center gap-2" onclick="abrirModalServicio('Fumigación Profesional')">
-                        <i class="fa-solid fa-calendar-check"></i> Solicitar Cotización
-                    </button>
-                </div>
-
-                <!-- Servicio 3 -->
-                <div class="service-card bg-white border border-slate-100 rounded-2xl p-8 hover:border-blue-200 group relative">
-                    <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 text-3xl mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                        <i class="fa-solid fa-user-doctor"></i>
-                    </div>
-                    <h4 class="text-xl font-bold text-slate-900 mb-3">Exámenes Médicos Ocupacionales</h4>
-                    <p class="text-slate-600 mb-6 text-sm leading-relaxed">Evaluaciones médicas según resolución 2346 de 2007. Médico especialista en salud ocupacional.</p>
-                    <div class="mb-6">
-                        <div class="flex items-center justify-between mb-2"><span class="text-sm font-medium text-slate-700">Desde</span><span class="text-2xl font-bold text-blue-600">$45.000</span></div>
-                        <p class="text-xs text-slate-500">Según tipo de examen / Jornadas empresariales</p>
-                    </div>
-                    <ul class="check-list text-sm text-slate-500 space-y-3 bg-slate-50 p-4 rounded-lg mb-6">
-                        <li>Examen de ingreso y retiro</li>
-                        <li>Examen periódico anual</li>
-                        <li>Énfasis osteomuscular</li>
-                        <li>Visiometría y audiometría</li>
-                    </ul>
-                    <button class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all flex items-center justify-center gap-2" onclick="abrirModalServicio('Exámenes Médicos')">
-                        <i class="fa-solid fa-calendar-check"></i> Agendar Examen
-                    </button>
-                </div>
-
-                <!-- Servicio 4 -->
-                <div class="service-card bg-white border border-slate-100 rounded-2xl p-8 hover:border-blue-200 group relative">
-                    <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 text-3xl mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                        <i class="fa-solid fa-faucet-drip"></i>
-                    </div>
-                    <h4 class="text-xl font-bold text-slate-900 mb-3">Lavado y Desinfección de Tanques</h4>
-                    <p class="text-slate-600 mb-6 text-sm leading-relaxed">Limpieza profunda cada 6 meses según Resolución 2115. Incluye análisis fisicoquímico del agua.</p>
-                    <div class="mb-6">
-                        <div class="flex items-center justify-between mb-2"><span class="text-sm font-medium text-slate-700">Desde</span><span class="text-2xl font-bold text-blue-600">$120.000</span></div>
-                        <p class="text-xs text-slate-500">Según capacidad / Tanques aéreos y subterráneos</p>
-                    </div>
-                    <ul class="check-list text-sm text-slate-500 space-y-3 bg-slate-50 p-4 rounded-lg mb-6">
-                        <li>Eliminación de sedimentos</li>
-                        <li>Desinfección total del sistema</li>
-                        <li>Registro fotográfico antes/después</li>
-                        <li>Certificado oficial</li>
-                    </ul>
-                    <button class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all flex items-center justify-center gap-2" onclick="abrirModalServicio('Lavado de Tanques')">
-                        <i class="fa-solid fa-calendar-check"></i> Programar Servicio
-                    </button>
-                </div>
-
-                <!-- Servicio 5 -->
-                <div class="service-card bg-white border border-slate-100 rounded-2xl p-8 hover:border-blue-200 group relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-purple-100 text-purple-700 text-xs font-bold px-3 py-1 rounded-bl-xl">PAQUETE INTEGRAL</div>
-                     <div class="absolute top-0 left-0 bg-blue-500 text-white text-[10px] font-bold px-2 py-1 rounded-br-lg z-10">25% OFF RENOVACIÓN</div>
-                    <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 text-3xl mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                        <i class="fa-solid fa-clipboard-check"></i>
-                    </div>
-                    <h4 class="text-xl font-bold text-slate-900 mb-3">Plan de Saneamiento Básico</h4>
-                    <p class="text-slate-600 mb-6 text-sm leading-relaxed">Elaboración completa de los 4 programas obligatorios. Documento personalizado según su actividad económica.</p>
-                    <div class="mb-6">
-                        <div class="flex items-center justify-between mb-2"><span class="text-sm font-medium text-slate-700">Desde</span><span class="text-2xl font-bold text-blue-600">$350.000</span></div>
-                        <p class="text-xs text-slate-500">Todo incluido / Actualización anual gratuita</p>
-                    </div>
-                    <ul class="check-list text-sm text-slate-500 space-y-3 bg-slate-50 p-4 rounded-lg mb-6">
-                        <li>Programa de Limpieza y Desinfección</li>
-                        <li>Control Integrado de Plagas</li>
-                        <li>Manejo de Residuos Sólidos</li>
-                        <li>Abastecimiento de Agua Potable</li>
-                    </ul>
-                    <button class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all flex items-center justify-center gap-2" onclick="abrirModalServicio('Plan de Saneamiento')">
-                        <i class="fa-solid fa-calendar-check"></i> Solicitar Asesoría
-                    </button>
-                </div>
-
-                <!-- Servicio 6 -->
-                <div class="service-card bg-white border border-slate-100 rounded-2xl p-8 hover:border-blue-200 group relative">
-                    <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 text-3xl mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                        <i class="fa-solid fa-fire-extinguisher"></i>
-                    </div>
-                    <h4 class="text-xl font-bold text-slate-900 mb-3">Recarga y Mantenimiento de Extintores</h4>
-                    <p class="text-slate-600 mb-6 text-sm leading-relaxed">Servicio certificado según NTC 2885. Incluye prueba hidrostática y tarjeta de inspección mensual.</p>
-                    <div class="mb-6">
-                        <div class="flex items-center justify-between mb-2"><span class="text-sm font-medium text-slate-700">Desde</span><span class="text-2xl font-bold text-blue-600">$35.000</span></div>
-                        <p class="text-xs text-slate-500">Por extintor / Servicio a domicilio sin costo</p>
-                    </div>
-                    <ul class="check-list text-sm text-slate-500 space-y-3 bg-slate-50 p-4 rounded-lg mb-6">
-                        <li>Recarga CO2, PQS, Solkaflam</li>
-                        <li>Prueba hidrostática cada 5 años</li>
-                        <li>Préstamo de equipos</li>
-                        <li>Etiqueta y anillo de seguridad</li>
-                    </ul>
-                    <button class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all flex items-center justify-center gap-2" onclick="abrirModalServicio('Recarga de Extintores')">
-                        <i class="fa-solid fa-calendar-check"></i> Agendar Recarga
-                    </button>
-                </div>
-
-            </div>
-
-            <div class="mt-16 bg-gradient-blue text-white rounded-2xl p-12 text-center">
-                <h3 class="text-3xl font-bold mb-4">¿Necesitas una solución personalizada?</h3>
-                <p class="text-blue-100 mb-8 max-w-2xl mx-auto text-lg">Diseñamos paquetes integrales adaptados a las necesidades específicas de tu empresa. Cotización sin compromiso en 24 horas.</p>
-                <div class="flex flex-wrap gap-4 justify-center">
-                    <!-- Botón Principal al nuevo número 322... -->
-                    <a class="bg-white text-blue-600 px-8 py-4 rounded-xl font-bold hover:bg-blue-50 transition-all inline-flex items-center gap-2" href="#contacto"><i class="fa-solid fa-phone"></i> Hablar con un Asesor</a>
-                    
-                    <!-- Botón WhatsApp al nuevo número 322... -->
-                    <a class="bg-green-500 text-white px-8 py-4 rounded-xl font-bold hover:bg-green-600 transition-all inline-flex items-center gap-2" href="https://wa.me/573222166831?text=Hola%2C%20necesito%20una%20cotización%20personalizada" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp Directo</a>
-                </div>
-            </div>
+    <section class="section alt">
+      <div class="container split">
+        <div>
+          <span class="section-kicker">Confianza operativa</span>
+          <h2 class="section-title">Una plataforma organizada, no archivos sueltos</h2>
+          <p class="section-lead">El sitio conecta la web comercial, el curso, el examen, el volante digital, la validación y el área administrativa en una experiencia coherente.</p>
+          <ul class="check-list">
+            <li><i data-lucide="check"></i> Requisitos claros, proceso documentado y soporte por WhatsApp.</li>
+            <li><i data-lucide="check"></i> Validación pública sin exponer PDFs ni documentos completos.</li>
+            <li><i data-lucide="check"></i> Datos de contacto centralizados en un solo archivo editable.</li>
+            <li><i data-lucide="check"></i> Base pública exportable para mantener certificados verificables.</li>
+          </ul>
+          <div class="section-actions" style="margin-top:24px">
+            <a class="button" href="certificados.html"><i data-lucide="file-check-2"></i> Ver certificados</a>
+            <a class="button secondary" href="servicios.html"><i data-lucide="briefcase-business"></i> Servicios</a>
+          </div>
         </div>
+        <div class="media-frame">
+          <img src="assets/images/evidencia-principal.jpg" alt="Evidencia de servicios y trabajo empresarial de Multiservicios" loading="lazy" />
+        </div>
+      </div>
     </section>
 
-    <!-- Procesos Section -->
-    <section class="py-24 bg-slate-50 scroll-mt-20" id="procesos">
-        <div class="container mx-auto px-6">
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <h2 class="text-blue-600 font-bold tracking-wide uppercase text-sm mb-4">Nuestro Proceso</h2>
-                <h3 class="text-3xl md:text-4xl font-bold text-slate-900 mb-6">4 Pasos hacia el Cumplimiento Total</h3>
-                <p class="text-slate-600 text-lg">Un proceso transparente y eficiente que garantiza resultados desde el primer contacto.</p>
-            </div>
-            <div class="relative">
-                <div class="hidden lg:block absolute top-1/2 left-0 right-0 h-1 bg-blue-200 -translate-y-1/2 z-0"></div>
-                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
-                    <div class="bg-white p-8 rounded-2xl shadow-lg border-2 border-blue-100 hover:border-blue-300 transition-all transform hover:-translate-y-2 text-center">
-                        <div class="w-20 h-20 bg-blue-600 text-white rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-6 shadow-lg">1</div>
-                        <div class="w-16 h-16 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 text-3xl mx-auto mb-4"><i class="fa-solid fa-headset"></i></div>
-                        <h4 class="text-xl font-bold text-slate-900 mb-3">Contacto Inicial</h4>
-                        <p class="text-slate-600 text-sm">Nos cuentas tus necesidades por WhatsApp, teléfono o formulario. Respuesta inmediata en horario laboral.</p>
-                    </div>
-                    <div class="bg-white p-8 rounded-2xl shadow-lg border-2 border-blue-100 hover:border-blue-300 transition-all transform hover:-translate-y-2 text-center">
-                        <div class="w-20 h-20 bg-blue-600 text-white rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-6 shadow-lg">2</div>
-                        <div class="w-16 h-16 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 text-3xl mx-auto mb-4"><i class="fa-solid fa-clipboard-list"></i></div>
-                        <h4 class="text-xl font-bold text-slate-900 mb-3">Diagnóstico Técnico</h4>
-                        <p class="text-slate-600 text-sm">Visita gratuita para evaluar tus instalaciones y definir el alcance del servicio. Cotización detallada.</p>
-                    </div>
-                    <div class="bg-white p-8 rounded-2xl shadow-lg border-2 border-blue-100 hover:border-blue-300 transition-all transform hover:-translate-y-2 text-center">
-                        <div class="w-20 h-20 bg-blue-600 text-white rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-6 shadow-lg">3</div>
-                        <div class="w-16 h-16 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 text-3xl mx-auto mb-4"><i class="fa-solid fa-tools"></i></div>
-                        <h4 class="text-xl font-bold text-slate-900 mb-3">Ejecución del Servicio</h4>
-                        <p class="text-slate-600 text-sm">Nuestro equipo certificado ejecuta el servicio en la fecha acordada, con mínima interrupción de tus operaciones.</p>
-                    </div>
-                    <div class="bg-white p-8 rounded-2xl shadow-lg border-2 border-blue-100 hover:border-blue-300 transition-all transform hover:-translate-y-2 text-center">
-                        <div class="w-20 h-20 bg-blue-600 text-white rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-6 shadow-lg">4</div>
-                        <div class="w-16 h-16 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 text-3xl mx-auto mb-4"><i class="fa-solid fa-certificate"></i></div>
-                        <h4 class="text-xl font-bold text-slate-900 mb-3">Entrega de Certificados</h4>
-                        <p class="text-slate-600 text-sm">Recibes toda la documentación legal inmediatamente. Seguimiento y recordatorios de renovación incluidos.</p>
-                    </div>
-                </div>
-            </div>
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">Crecimiento</span>
+            <h2 class="section-title">Servicios digitales y presenciales para empresas</h2>
+          </div>
+          <a class="button secondary" href="servicios.html"><i data-lucide="layout-grid"></i> Ver portafolio</a>
         </div>
+        <div class="grid three">
+          <article class="service-tile primary">
+            <span class="service-icon"><i data-lucide="graduation-cap"></i></span>
+            <h3>Cursos y certificados</h3>
+            <p>Manipulación de alimentos, evaluación digital y certificados para personas o equipos de trabajo.</p>
+          </article>
+          <article class="service-tile extinguisher">
+            <span class="service-icon"><i data-lucide="flame"></i></span>
+            <h3>Extintores</h3>
+            <p>Solicitud de cotización para venta, revisión, recarga o servicios relacionados según disponibilidad.</p>
+          </article>
+          <article class="service-tile">
+            <span class="service-icon"><i data-lucide="building-2"></i></span>
+            <h3>Apoyo empresarial</h3>
+            <p>Capacitaciones, asesoría para negocios y soluciones digitales que pueden integrarse al ecosistema.</p>
+          </article>
+        </div>
+      </div>
     </section>
 
-    <!-- Garantía Section -->
-    <div class="bg-blue-600 py-20 relative overflow-hidden">
-        <div class="absolute top-0 right-0 opacity-10"><i class="fa-solid fa-shield-halved text-[400px] text-white transform translate-x-1/3 -translate-y-1/4"></i></div>
-        <div class="absolute bottom-0 left-0 opacity-10"><i class="fa-solid fa-certificate text-[300px] text-white transform -translate-x-1/3 translate-y-1/4"></i></div>
-        <div class="container mx-auto px-6 relative z-10">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-bold text-white mb-6">Garantía de Cumplimiento 100%</h2>
-                <p class="text-blue-100 max-w-3xl mx-auto text-lg leading-relaxed">Todos nuestros servicios incluyen la documentación técnica y legal exigida por la Secretaría de Salud, Bomberos, INVIMA y demás entes de control. Si tienes una visita de inspección, nuestros certificados te respaldan completamente. <strong class="text-white">Si no apruebas por nuestro servicio, te devolvemos el 100% de tu dinero.</strong></p>
-            </div>
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
-                <div class="bg-white/10 backdrop-blur-sm px-6 py-5 rounded-xl text-white flex flex-col items-center gap-3 border border-white/20 hover:bg-white/20 transition-all transform hover:scale-105">
-                    <i class="fa-solid fa-check-circle text-green-400 text-3xl"></i><span class="font-bold text-center">Concepto Técnico Favorable Garantizado</span>
-                </div>
-                <div class="bg-white/10 backdrop-blur-sm px-6 py-5 rounded-xl text-white flex flex-col items-center gap-3 border border-white/20 hover:bg-white/20 transition-all transform hover:scale-105">
-                    <i class="fa-solid fa-check-circle text-green-400 text-3xl"></i><span class="font-bold text-center">Personal Certificado SENA y MinSalud</span>
-                </div>
-                <div class="bg-white/10 backdrop-blur-sm px-6 py-5 rounded-xl text-white flex flex-col items-center gap-3 border border-white/20 hover:bg-white/20 transition-all transform hover:scale-105">
-                    <i class="fa-solid fa-check-circle text-green-400 text-3xl"></i><span class="font-bold text-center">Productos Biodegradables Registrados</span>
-                </div>
-                <div class="bg-white/10 backdrop-blur-sm px-6 py-5 rounded-xl text-white flex flex-col items-center gap-3 border border-white/20 hover:bg-white/20 transition-all transform hover:scale-105">
-                    <i class="fa-solid fa-check-circle text-green-400 text-3xl"></i><span class="font-bold text-center">Póliza de Responsabilidad Civil</span>
-                </div>
-            </div>
-            <div class="text-center mt-12">
-                <a class="inline-flex items-center gap-2 bg-white text-blue-600 px-10 py-5 rounded-xl font-bold hover:bg-blue-50 transition-all shadow-2xl text-lg" href="#contacto">
-                    <i class="fa-solid fa-award"></i> Solicitar Servicio Garantizado
-                </a>
-            </div>
+    <section class="section alt" id="preguntas">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">Confianza</span>
+            <h2 class="section-title">Preguntas frecuentes</h2>
+            <p class="section-lead">Respuestas claras para que el usuario entienda el servicio, la validación y los límites de la plataforma.</p>
+          </div>
         </div>
-    </div>
-
-    <!-- Proyectos Section (GALERÍA LOCAL) -->
-    <section class="py-24 bg-white scroll-mt-20" id="proyectos">
-        <div class="container mx-auto px-6">
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <h2 class="text-blue-600 font-bold tracking-wide uppercase text-sm mb-4">Proyectos Realizados</h2>
-                <h3 class="text-3xl md:text-4xl font-bold text-slate-900 mb-6">Casos de Éxito que Nos Respaldan</h3>
-                <p class="text-slate-600 text-lg">Empresas de todos los sectores confían en nuestra experiencia y profesionalismo.</p>
-            </div>
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-                
-                <div class="gallery-item group">
-                    <img alt="Fumigación en restaurante" class="w-full h-64 object-cover rounded-xl" loading="lazy" src="assets/images/proyecto-1.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600';"/>
-                    <div class="gallery-overlay rounded-xl">
-                        <div class="text-white">
-                            <h4 class="font-bold text-lg mb-1">Restaurante Gourmet</h4>
-                            <p class="text-sm text-slate-200">Fumigación integral + Plan de saneamiento</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="gallery-item group">
-                    <img alt="Edificio corporativo" class="w-full h-64 object-cover rounded-xl" loading="lazy" src="assets/images/proyecto-2.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600';"/>
-                    <div class="gallery-overlay rounded-xl">
-                        <div class="text-white">
-                            <h4 class="font-bold text-lg mb-1">Edificio Corporativo</h4>
-                            <p class="text-sm text-slate-200">Lavado de tanques + Recarga extintores</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="gallery-item group">
-                    <img alt="Hotel boutique" class="w-full h-64 object-cover rounded-xl" loading="lazy" src="assets/images/proyecto-3.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=600';"/>
-                    <div class="gallery-overlay rounded-xl">
-                        <div class="text-white">
-                            <h4 class="font-bold text-lg mb-1">Hotel Boutique</h4>
-                            <p class="text-sm text-slate-200">Capacitación manipuladores + Certificados médicos</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="gallery-item group">
-                    <img alt="Oficinas modernas" class="w-full h-64 object-cover rounded-xl" loading="lazy" src="assets/images/proyecto-4.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1497366216548-37526070297c?w=600';"/>
-                    <div class="gallery-overlay rounded-xl">
-                        <div class="text-white">
-                            <h4 class="font-bold text-lg mb-1">Oficinas StartUp</h4>
-                            <p class="text-sm text-slate-200">Plan SG-SST + Exámenes ocupacionales</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="gallery-item group">
-                    <img alt="Planta industrial" class="w-full h-64 object-cover rounded-xl" loading="lazy" src="assets/images/proyecto-5.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=600';"/>
-                    <div class="gallery-overlay rounded-xl">
-                        <div class="text-white">
-                            <h4 class="font-bold text-lg mb-1">Planta Industrial</h4>
-                            <p class="text-sm text-slate-200">Control plagas industrial + Capacitaciones</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="gallery-item group">
-                    <img alt="Conjunto residencial" class="w-full h-64 object-cover rounded-xl" loading="lazy" src="assets/images/proyecto-6.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=600';"/>
-                    <div class="gallery-overlay rounded-xl">
-                        <div class="text-white">
-                            <h4 class="font-bold text-lg mb-1">Conjunto Residencial</h4>
-                            <p class="text-sm text-slate-200">Fumigación preventiva + Limpieza tanques</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-slate-50 rounded-2xl p-10">
-                <h4 class="text-2xl font-bold text-slate-900 text-center mb-8">Sectores que Atendemos</h4>
-                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-                    <div class="text-center"><div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-2xl mx-auto mb-3"><i class="fa-solid fa-utensils"></i></div><p class="text-sm font-medium text-slate-700">Restaurantes</p></div>
-                    <div class="text-center"><div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-2xl mx-auto mb-3"><i class="fa-solid fa-hotel"></i></div><p class="text-sm font-medium text-slate-700">Hoteles</p></div>
-                    <div class="text-center"><div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-2xl mx-auto mb-3"><i class="fa-solid fa-building"></i></div><p class="text-sm font-medium text-slate-700">Oficinas</p></div>
-                    <div class="text-center"><div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-2xl mx-auto mb-3"><i class="fa-solid fa-industry"></i></div><p class="text-sm font-medium text-slate-700">Industrias</p></div>
-                    <div class="text-center"><div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-2xl mx-auto mb-3"><i class="fa-solid fa-hospital"></i></div><p class="text-sm font-medium text-slate-700">Clínicas</p></div>
-                    <div class="text-center"><div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-2xl mx-auto mb-3"><i class="fa-solid fa-school"></i></div><p class="text-sm font-medium text-slate-700">Colegios</p></div>
-                </div>
-            </div>
+        <div class="grid two">
+          <article class="card"><h3>¿El curso es digital?</h3><p>Sí. La experiencia está preparada con módulos digitales, evaluación final y acompañamiento comercial por WhatsApp.</p></article>
+          <article class="card"><h3>¿Cómo recibo el certificado?</h3><p>Después de completar el proceso, el área administrativa genera el certificado PDF con código único y datos del titular.</p></article>
+          <article class="card"><h3>¿Cómo se valida un certificado?</h3><p>La página de validación permite consultar por código único o documento parcial, sin exponer documentos completos.</p></article>
+          <article class="card"><h3>¿Cómo se publica un certificado nuevo?</h3><p>El administrador genera el certificado y exporta la base pública para que el código quede disponible en la validación.</p></article>
         </div>
+      </div>
     </section>
 
-    <!-- Why Us Section -->
-    <section class="py-24 bg-slate-900 text-white">
-        <div class="container mx-auto px-6">
-            <div class="flex flex-col md:flex-row gap-16 items-center">
-                <div class="md:w-1/2">
-                    <h2 class="text-blue-400 font-bold tracking-wide uppercase text-sm mb-4">¿Por qué elegirnos?</h2>
-                    <h3 class="text-3xl md:text-4xl font-bold mb-6">Excelencia, confianza y resultados medibles</h3>
-                    <p class="text-slate-400 text-lg mb-8 leading-relaxed">No solo cumplimos con la norma, vamos más allá para garantizar tu tranquilidad. Cada servicio está respaldado por tecnología, experiencia y un equipo humano comprometido con tu éxito.</p>
-                    <div class="space-y-8">
-                        <div class="flex gap-5 group">
-                            <div class="w-14 h-14 rounded-full bg-blue-600/20 text-blue-400 flex items-center justify-center text-xl font-bold shrink-0 border border-blue-600/30 group-hover:bg-blue-600 group-hover:text-white transition-all"><i class="fa-solid fa-file-contract"></i></div>
-                            <div><h4 class="font-bold text-xl mb-2">Documentación Legal Inmediata</h4><p class="text-slate-400 text-sm leading-relaxed">Entrega de certificados, actas y registros fotográficos el mismo día del servicio. Formato digital y físico incluido.</p></div>
-                        </div>
-                        <div class="flex gap-5 group">
-                            <div class="w-14 h-14 rounded-full bg-blue-600/20 text-blue-400 flex items-center justify-center text-xl font-bold shrink-0 border border-blue-600/30 group-hover:bg-blue-600 group-hover:text-white transition-all"><i class="fa-solid fa-clock"></i></div>
-                            <div><h4 class="font-bold text-xl mb-2">Disponibilidad Flexible 24/7</h4><p class="text-slate-400 text-sm leading-relaxed">Atención de urgencias las 24 horas. Servicios programados en horarios nocturnos y fines de semana sin recargo.</p></div>
-                        </div>
-                        <div class="flex gap-5 group">
-                            <div class="w-14 h-14 rounded-full bg-blue-600/20 text-blue-400 flex items-center justify-center text-xl font-bold shrink-0 border border-blue-600/30 group-hover:bg-blue-600 group-hover:text-white transition-all"><i class="fa-solid fa-leaf"></i></div>
-                            <div><h4 class="font-bold text-xl mb-2">Compromiso Ambiental Certificado</h4><p class="text-slate-400 text-sm leading-relaxed">Uso exclusivo de productos biodegradables de baja toxicidad, seguros para personas, mascotas y el medio ambiente.</p></div>
-                        </div>
-                        <div class="flex gap-5 group">
-                            <div class="w-14 h-14 rounded-full bg-blue-600/20 text-blue-400 flex items-center justify-center text-xl font-bold shrink-0 border border-blue-600/30 group-hover:bg-blue-600 group-hover:text-white transition-all"><i class="fa-solid fa-bell"></i></div>
-                            <div><h4 class="font-bold text-xl mb-2">Sistema de Recordatorios Inteligente</h4><p class="text-slate-400 text-sm leading-relaxed">Te avisamos antes del vencimiento de tus certificados para que nunca pierdas el cumplimiento legal.</p></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="md:w-1/2 relative">
-                    <div class="grid grid-cols-2 gap-6">
-                        <div class="space-y-6 mt-8">
-                            <div class="bg-slate-800 p-8 rounded-2xl border border-slate-700 hover:border-blue-500 transition-all transform hover:scale-105"><div class="text-4xl font-bold text-blue-400 mb-2 counter" data-target="850">0</div><div class="text-sm text-slate-300 font-medium">Empresas Satisfechas</div></div>
-                            <div class="bg-slate-800 p-8 rounded-2xl border border-slate-700 hover:border-blue-500 transition-all transform hover:scale-105"><div class="text-4xl font-bold text-blue-400 mb-2"><span class="counter" data-target="15000">0</span>+</div><div class="text-sm text-slate-300 font-medium">Certificados Emitidos</div></div>
-                        </div>
-                        <div class="space-y-6">
-                            <div class="bg-blue-600 p-8 rounded-2xl shadow-2xl shadow-blue-900/50 transform hover:scale-105 transition-transform"><div class="text-4xl font-bold text-white mb-2">100%</div><div class="text-sm text-blue-100 font-medium">Garantía Legal</div></div>
-                            <div class="bg-slate-800 p-8 rounded-2xl border border-slate-700 hover:border-blue-500 transition-all transform hover:scale-105"><div class="text-4xl font-bold text-blue-400 mb-2"><span class="counter" data-target="12">0</span>+</div><div class="text-sm text-slate-300 font-medium">Años de Experiencia</div></div>
-                            <div class="bg-green-600 p-8 rounded-2xl shadow-lg transform hover:scale-105 transition-transform"><div class="text-4xl font-bold text-white mb-2">4.9★</div><div class="text-sm text-green-100 font-medium">Calificación Google</div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">Respaldo</span>
+            <h2 class="section-title">Espacio preparado para testimonios reales</h2>
+            <p class="section-lead">Solo deben publicarse opiniones con autorización del cliente. Mientras tanto, la web mantiene un bloque listo para evidencia comercial verificable.</p>
+          </div>
         </div>
+        <div class="grid three">
+          <article class="feature"><span class="feature-icon"><i data-lucide="message-square-quote"></i></span><h3>Clientes individuales</h3><p>Publicar experiencias reales sobre el proceso de curso, examen y certificado.</p></article>
+          <article class="feature"><span class="feature-icon"><i data-lucide="store"></i></span><h3>Negocios</h3><p>Espacio para restaurantes, cafeterías, emprendimientos y equipos de trabajo.</p></article>
+          <article class="feature"><span class="feature-icon"><i data-lucide="shield-check"></i></span><h3>Evidencia documentada</h3><p>Usar fotografías o referencias solo cuando exista permiso y soporte.</p></article>
+        </div>
+      </div>
     </section>
 
-    <!-- Testimonios Section -->
-    <section class="py-24 bg-white scroll-mt-20" id="testimonios">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-blue-600 font-bold tracking-wide uppercase text-sm mb-4">Testimonios Reales</h2>
-                <h3 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Lo que dicen nuestros clientes</h3>
-                <p class="text-slate-600 text-lg max-w-2xl mx-auto">Más de 850 empresas confían en nosotros para su cumplimiento normativo</p>
-            </div>
-            <div class="grid md:grid-cols-3 gap-8 mb-12">
-                <div class="bg-slate-50 p-8 rounded-2xl border border-slate-100 relative shadow-sm hover:shadow-xl transition-all hover:-translate-y-2">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="flex text-yellow-400 text-sm"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                        <i class="fa-brands fa-google text-2xl text-slate-300"></i>
-                    </div>
-                    <p class="text-slate-700 italic mb-6 relative z-10 leading-relaxed">"Excelente servicio de fumigación. Nos visitó la Secretaría de Salud 2 semanas después y el concepto fue favorable gracias a los certificados de Multiservicios. Muy profesionales y puntuales. <strong>Los recomiendo 100%</strong>."</p>
-                    <div class="flex items-center gap-4 border-t border-slate-200 pt-4">
-                        <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center font-bold text-white text-lg">CR</div>
-                        <div><p class="font-bold text-slate-900">Carlos Rodríguez</p><p class="text-xs text-slate-500">Gerente - Restaurante El Buen Sabor</p><p class="text-xs text-blue-600 mt-1"><i class="fa-solid fa-check-circle"></i> Cliente desde 2021</p></div>
-                    </div>
-                </div>
-                <div class="bg-slate-50 p-8 rounded-2xl border border-slate-100 relative shadow-sm hover:shadow-xl transition-all hover:-translate-y-2">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="flex text-yellow-400 text-sm"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                        <i class="fa-brands fa-google text-2xl text-slate-300"></i>
-                    </div>
-                    <p class="text-slate-700 italic mb-6 relative z-10 leading-relaxed">"El lavado de tanques fue impecable. El equipo llegó puntual, trabajó ordenadamente y me entregaron el certificado con las fotos del antes y después el mismo día. <strong>El mejor precio del mercado sin sacrificar calidad</strong>."</p>
-                    <div class="flex items-center gap-4 border-t border-slate-200 pt-4">
-                        <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-700 rounded-full flex items-center justify-center font-bold text-white text-lg">AM</div>
-                        <div><p class="font-bold text-slate-900">Ana María Pérez</p><p class="text-xs text-slate-500">Administradora - PH Torres del Parque</p><p class="text-xs text-blue-600 mt-1"><i class="fa-solid fa-check-circle"></i> Cliente desde 2020</p></div>
-                    </div>
-                </div>
-                <div class="bg-slate-50 p-8 rounded-2xl border border-slate-100 relative shadow-sm hover:shadow-xl transition-all hover:-translate-y-2">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="flex text-yellow-400 text-sm"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                        <i class="fa-brands fa-google text-2xl text-slate-300"></i>
-                    </div>
-                    <p class="text-slate-700 italic mb-6 relative z-10 leading-relaxed">"Realizamos los exámenes médicos de ingreso y el curso de manipulación de alimentos para 20 colaboradores. Todo fue muy ágil, el personal muy amable y profesional. <strong>Seguiremos trabajando con ellos</strong>."</p>
-                    <div class="flex items-center gap-4 border-t border-slate-200 pt-4">
-                        <div class="w-14 h-14 bg-gradient-to-br from-green-500 to-green-700 rounded-full flex items-center justify-center font-bold text-white text-lg">JT</div>
-                        <div><p class="font-bold text-slate-900">Jorge Torres</p><p class="text-xs text-slate-500">Jefe de RRHH - Industrias Colombia SAS</p><p class="text-xs text-blue-600 mt-1"><i class="fa-solid fa-check-circle"></i> Cliente desde 2019</p></div>
-                    </div>
-                </div>
-            </div>
+    <section class="section dark">
+      <div class="container split">
+        <div>
+          <span class="eyebrow"><i data-lucide="send"></i> Atención comercial</span>
+          <h2 class="section-title">¿Necesitas el certificado o una cotización?</h2>
+          <p class="section-lead">Escríbenos por WhatsApp con tu nombre, servicio de interés y ciudad. Un asesor te orienta con el siguiente paso.</p>
         </div>
+        <div class="section-actions">
+          <a class="button success" data-whatsapp-link href="#"><i data-lucide="message-circle"></i> Hablar por WhatsApp</a>
+          <a class="button ghost" href="registro.html"><i data-lucide="mail"></i> Registrar solicitud</a>
+        </div>
+      </div>
     </section>
+  </main>
 
-    <!-- FAQ Section -->
-    <section class="py-24 bg-slate-50 border-t border-slate-100">
-        <div class="container mx-auto px-6 max-w-4xl">
-            <div class="text-center mb-12">
-                <h2 class="text-blue-600 font-bold tracking-wide uppercase text-sm mb-4">Preguntas Frecuentes</h2>
-                <h3 class="text-3xl font-bold text-slate-900 mb-4">Resolvemos tus dudas</h3>
-                <p class="text-slate-600">¿No encuentras la respuesta? <a class="text-blue-600 font-semibold hover:underline" href="#contacto">Contáctanos directamente</a></p>
-            </div>
-            <div class="space-y-4">
-                <details class="group bg-white rounded-xl border-2 border-slate-200 open:border-blue-300 transition-all duration-300 shadow-sm hover:shadow-md">
-                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-6 text-slate-900 hover:bg-slate-50 rounded-xl transition-colors"><span class="flex items-center gap-3 font-bold text-lg"><i class="fa-regular fa-circle-question text-blue-500 text-xl"></i> ¿Cada cuánto debo fumigar mi negocio?</span><span class="transition transform group-open:rotate-180"><i class="fa-solid fa-chevron-down text-slate-400"></i></span></summary>
-                    <div class="text-slate-600 mt-0 px-6 pb-6 pl-16 animate-fadeIn leading-relaxed">La normatividad vigente exige una frecuencia mínima semestral (cada 6 meses). Sin embargo, para establecimientos de alimentos o alto tráfico, recomendamos y realizamos controles trimestrales o bimestrales para garantizar ambientes 100% inocuos.</div>
-                </details>
-                <details class="group bg-white rounded-xl border-2 border-slate-200 open:border-blue-300 transition-all duration-300 shadow-sm hover:shadow-md">
-                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-6 text-slate-900 hover:bg-slate-50 rounded-xl transition-colors"><span class="flex items-center gap-3 font-bold text-lg"><i class="fa-regular fa-file-lines text-blue-500 text-xl"></i> ¿Los certificados son válidos ante la Secretaría de Salud?</span><span class="transition transform group-open:rotate-180"><i class="fa-solid fa-chevron-down text-slate-400"></i></span></summary>
-                    <div class="text-slate-600 mt-0 px-6 pb-6 pl-16 animate-fadeIn leading-relaxed">Absolutamente. Somos una empresa legalmente constituida y habilitada. Nuestros certificados incluyen concepto técnico, firma de ingeniero sanitario/agrónomo, número de licencia y todos los soportes exigidos por la ley colombiana.</div>
-                </details>
-                <details class="group bg-white rounded-xl border-2 border-slate-200 open:border-blue-300 transition-all duration-300 shadow-sm hover:shadow-md">
-                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-6 text-slate-900 hover:bg-slate-50 rounded-xl transition-colors"><span class="flex items-center gap-3 font-bold text-lg"><i class="fa-solid fa-shield-cat text-blue-500 text-xl"></i> ¿Los productos son seguros para mascotas y personas?</span><span class="transition transform group-open:rotate-180"><i class="fa-solid fa-chevron-down text-slate-400"></i></span></summary>
-                    <div class="text-slate-600 mt-0 px-6 pb-6 pl-16 animate-fadeIn leading-relaxed">Sí, utilizamos exclusivamente productos biodegradables con registro sanitario y ficha técnica aprobada. Son de baja toxicidad y diseñados para ser seguros en ambientes residenciales y comerciales, protegiendo la salud de sus empleados, clientes y mascotas.</div>
-                </details>
-                <details class="group bg-white rounded-xl border-2 border-slate-200 open:border-blue-300 transition-all duration-300 shadow-sm hover:shadow-md">
-                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-6 text-slate-900 hover:bg-slate-50 rounded-xl transition-colors"><span class="flex items-center gap-3 font-bold text-lg"><i class="fa-solid fa-headset text-blue-500 text-xl"></i> ¿Qué pasa si tengo una visita de inspección sorpresa?</span><span class="transition transform group-open:rotate-180"><i class="fa-solid fa-chevron-down text-slate-400"></i></span></summary>
-                    <div class="text-slate-600 mt-0 px-6 pb-6 pl-16 animate-fadeIn leading-relaxed">No se preocupe. Al contratar con nosotros, cuenta con respaldo técnico inmediato. Si recibe una visita de sanidad, nuestros certificados y carpetas técnicas están diseñados para ser presentados al instante. Además, ofrecemos asesoría telefónica inmediata para guiarle durante la inspección.</div>
-                </details>
-            </div>
-        </div>
-    </section>
-
-    <!-- Multimedia Section (AHORA GALERÍA DE IMÁGENES - TEXTO RESTAURADO Y CORREGIDO) -->
-    <section class="py-24 bg-slate-900 text-white overflow-hidden relative" id="multimedia">
-        <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0 opacity-10">
-            <!-- Fondo vacío para mantener limpieza -->
-        </div>
-        
-        <div class="container mx-auto px-6 relative z-10">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-12">
-                <div>
-                    <span class="text-blue-400 font-bold tracking-widest uppercase text-sm flex items-center gap-2"><span class="w-8 h-0.5 bg-blue-400"></span> Tecnología en Acción</span>
-                    <h2 class="text-3xl md:text-4xl font-bold mt-3">Así trabajamos en Multiservicios</h2>
-                    <p class="text-slate-400 mt-2 text-lg">Transparencia total: vea cómo protegemos su empresa.</p>
-                </div>
-            </div>
-
-            <!-- GRID DE IMÁGENES -->
-            <div class="grid lg:grid-cols-3 gap-8 h-auto lg:h-[500px]">
-                <!-- IMAGEN PRINCIPAL (Izquierda) -->
-                <div class="lg:col-span-2 relative group rounded-2xl overflow-hidden border border-slate-700 shadow-2xl h-full gallery-item">
-                    <!-- CORRECCIÓN: Nuevo fallback con imagen industrial de alta calidad -->
-                    <img alt="Evidencia principal de servicio" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" src="assets/images/evidencia-principal.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=1200';"/>
-                    
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-80 group-hover:opacity-60 transition-opacity"></div>
-                    
-                    <div class="absolute bottom-0 left-0 w-full p-8 pointer-events-none transform translate-y-2 group-hover:translate-y-0 transition-transform">
-                        <div class="inline-block bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded mb-3">ANTES Y DESPUÉS</div>
-                        <h3 class="text-2xl font-bold text-white mb-1">Inspección y Control Sanitario</h3>
-                        <p class="text-slate-300 text-sm">Procedimientos estandarizados de alta calidad</p>
-                    </div>
-                </div>
-                
-                <!-- COLUMNA DERECHA (2 Imágenes) -->
-                <div class="flex flex-col gap-8 h-full">
-                    <!-- IMAGEN SECUNDARIA 1 (Arriba) -->
-                    <div class="relative group rounded-2xl overflow-hidden border border-slate-700 shadow-lg flex-1 gallery-item">
-                        <img alt="Detalle de fumigación" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" src="assets/images/evidencia-1.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?w=600';"/>
-                        <div class="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors"></div>
-                        <div class="absolute bottom-4 left-4 bg-black/60 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold border border-white/20 pointer-events-none z-10">
-                            <i class="fa-solid fa-bug"></i> Control de Plagas
-                        </div>
-                    </div>
-                    
-                    <!-- IMAGEN SECUNDARIA 2 (Abajo) -->
-                    <div class="relative group rounded-2xl overflow-hidden border border-slate-700 shadow-lg flex-1 gallery-item">
-                        <img alt="Limpieza de tanque" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" src="assets/images/evidencia-2.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=600';"/>
-                        <div class="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors"></div>
-                        <div class="absolute bottom-4 left-4 bg-black/60 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold border border-white/20 pointer-events-none z-10">
-                            <i class="fa-solid fa-water"></i> Mantenimiento
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contacto Section -->
-    <section class="py-24 bg-slate-50 relative scroll-mt-20" id="contacto">
-        <div class="container mx-auto px-6 relative z-10">
-            <div class="flex flex-col lg:flex-row gap-0 rounded-3xl overflow-hidden shadow-2xl bg-white max-w-6xl mx-auto">
-                <div class="lg:w-2/5 bg-gradient-blue p-10 md:p-14 text-white relative flex flex-col justify-between overflow-hidden">
-                    <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
-                    <div class="absolute bottom-0 left-0 w-64 h-64 bg-black/10 rounded-full blur-3xl transform -translate-x-1/2 translate-y-1/2"></div>
-                    <div class="relative z-10">
-                        <h3 class="text-3xl font-bold mb-2">¡Evite Sanciones!</h3>
-                        <p class="text-blue-100 mb-10 text-lg leading-relaxed">Déjenos sus datos y un ingeniero experto le contactará en menos de 30 minutos con una cotización formal.</p>
-                        <div class="space-y-8">
-                            <div class="flex items-start gap-4 group">
-                                <div class="w-12 h-12 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center text-xl shrink-0 group-hover:bg-white group-hover:text-blue-600 transition-all"><i class="fa-solid fa-location-dot"></i></div>
-                                <div><p class="font-bold text-lg">Oficina Principal</p><p class="text-blue-100 text-sm">Calle 100 # 15-23, Bogotá D.C.<br/>Cobertura Nacional</p></div>
-                            </div>
-                            <!-- Número Principal (Click to Call) -->
-                            <div class="flex items-start gap-4 group">
-                                <div class="w-12 h-12 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center text-xl shrink-0 group-hover:bg-white group-hover:text-blue-600 transition-all"><i class="fa-solid fa-phone"></i></div>
-                                <div>
-                                    <p class="font-bold text-lg">Línea de Ventas</p>
-                                    <a href="tel:+573222166831" class="text-blue-100 text-sm hover:text-white transition-colors underline decoration-blue-400/50">+57 322 216 6831</a>
-                                </div>
-                            </div>
-                            <!-- Número Secundario (Solo Texto) -->
-                            <div class="flex items-start gap-4 group">
-                                <div class="w-12 h-12 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center text-xl shrink-0 group-hover:bg-white group-hover:text-blue-600 transition-all"><i class="fa-solid fa-building-user"></i></div>
-                                <div>
-                                    <p class="font-bold text-lg">Línea Administrativa</p>
-                                    <p class="text-blue-100 text-sm">305 700 2164</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start gap-4 group">
-                                <div class="w-12 h-12 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center text-xl shrink-0 group-hover:bg-white group-hover:text-blue-600 transition-all"><i class="fa-solid fa-envelope"></i></div>
-                                <div><p class="font-bold text-lg">Email</p><p class="text-blue-100 text-sm">gerencia@multiservicios.com</p></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="lg:w-3/5 p-10 md:p-14 bg-white">
-                    <form class="space-y-6" id="whatsappForm">
-                        <div class="flex justify-between items-center mb-6">
-                            <h4 class="text-2xl font-bold text-slate-800">Solicitud de Cotización</h4>
-                            <span class="text-xs font-bold text-green-600 bg-green-100 px-3 py-1 rounded-full animate-pulse">● En línea ahora</span>
-                        </div>
-                        <div class="grid md:grid-cols-2 gap-6">
-                            <div class="space-y-2">
-                                <label class="text-sm font-bold text-slate-700">Nombre Completo <span class="text-red-500">*</span></label>
-                                <input class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-blue-500 outline-none" id="nombre" placeholder="Su nombre" required="" type="text"/>
-                            </div>
-                            <div class="space-y-2">
-                                <label class="text-sm font-bold text-slate-700">Empresa / Negocio</label>
-                                <input class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-blue-500 outline-none" id="empresa" placeholder="Nombre de su empresa" type="text"/>
-                            </div>
-                        </div>
-                        <div class="grid md:grid-cols-2 gap-6">
-                            <div class="space-y-2">
-                                <label class="text-sm font-bold text-slate-700">Teléfono / WhatsApp <span class="text-red-500">*</span></label>
-                                <input class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-blue-500 outline-none" id="telefono" placeholder="300 000 0000" required="" type="tel"/>
-                            </div>
-                            <div class="space-y-2">
-                                <label class="text-sm font-bold text-slate-700">Servicio de Interés <span class="text-red-500">*</span></label>
-                                <select class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-blue-500 outline-none" id="servicio">
-                                    <option disabled="" selected="" value="">Seleccione una opción...</option>
-                                    <option value="Control de Plagas">Control de Plagas (Fumigación)</option>
-                                    <option value="Lavado de Tanques">Lavado de Tanques</option>
-                                    <option value="Manipulación de Alimentos">Curso Manipulación Alimentos</option>
-                                    <option value="Exámenes Médicos">Exámenes Médicos</option>
-                                    <option value="Recarga de Extintores">Recarga de Extintores</option>
-                                    <option value="Plan de Saneamiento">Plan de Saneamiento</option>
-                                    <option value="Otro">Otro servicio</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-sm font-bold text-slate-700">Detalles adicionales</label>
-                            <textarea class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-blue-500 outline-none" id="mensaje" placeholder="Ej: Necesito fumigación para un local de 50m2..." rows="3"></textarea>
-                        </div>
-                        <button class="w-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold py-4 rounded-xl shadow-lg transition-all transform hover:-translate-y-1 flex justify-center items-center gap-3" type="submit">
-                            <span class="text-lg">Solicitar Cotización por WhatsApp</span>
-                            <i class="fa-brands fa-whatsapp text-2xl"></i>
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-slate-900 text-slate-400 py-16 border-t border-slate-800">
-        <div class="container mx-auto px-6">
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
-                <!-- Columna 1: Sobre Nosotros -->
-                <div>
-                    <!-- LOGO FOOTER -->
-                    <a class="mb-6 block" href="#inicio">
-                        <img src="assets/images/logo-horizontal.png" alt="Multiservicios Logo" class="h-10 w-auto opacity-90 hover:opacity-100 transition-opacity" onerror="this.onerror=null; this.src='https://placehold.co/180x50/1e293b/ffffff?text=LOGO+FOOTER';"/>
-                    </a>
-                    <p class="text-sm leading-relaxed mb-6">
-                        Líderes en soluciones integrales de seguridad industrial y saneamiento ambiental en Colombia. Comprometidos con la calidad y el cumplimiento normativo de su empresa.
-                    </p>
-                    <!-- NIT ELIMINADO SEGÚN SOLICITUD -->
-                </div>
-
-                <!-- Columna 2: Enlaces Rápidos -->
-                <div>
-                    <h4 class="text-white font-bold text-lg mb-6">Navegación</h4>
-                    <ul class="space-y-3 text-sm">
-                        <li><a class="hover:text-blue-400 transition-colors flex items-center gap-2" href="#inicio"><i class="fa-solid fa-chevron-right text-xs text-blue-600"></i> Inicio</a></li>
-                        <li><a class="hover:text-blue-400 transition-colors flex items-center gap-2" href="#servicios"><i class="fa-solid fa-chevron-right text-xs text-blue-600"></i> Servicios</a></li>
-                        <li><a class="hover:text-blue-400 transition-colors flex items-center gap-2" href="#proyectos"><i class="fa-solid fa-chevron-right text-xs text-blue-600"></i> Proyectos</a></li>
-                        <li><a class="hover:text-blue-400 transition-colors flex items-center gap-2" href="#testimonios"><i class="fa-solid fa-chevron-right text-xs text-blue-600"></i> Testimonios</a></li>
-                        <li><a class="hover:text-blue-400 transition-colors flex items-center gap-2" href="#contacto"><i class="fa-solid fa-chevron-right text-xs text-blue-600"></i> Contacto</a></li>
-                    </ul>
-                </div>
-
-                <!-- Columna 3: Contacto -->
-                <div>
-                    <h4 class="text-white font-bold text-lg mb-6">Contáctenos</h4>
-                    <ul class="space-y-4 text-sm">
-
-                        <li class="flex items-center gap-3">
-                            <i class="fa-brands fa-whatsapp text-green-500"></i>
-                            <a href="https://wa.me/573222166831" class="hover:text-white transition-colors" target="_blank">+57 322 216 6831</a>
-                        </li>
-                        <li class="flex items-center gap-3">
-                            <i class="fa-solid fa-phone text-blue-500"></i>
-                            <span class="text-slate-400">PBX: 305 700 2164</span>
-                        </li>
-                        <li class="flex items-center gap-3">
-                            <i class="fa-solid fa-envelope text-blue-500"></i>
-                            <a href="mailto:info@multiservicios.com" class="hover:text-white transition-colors">info@multiservicios.com</a>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Columna 4: Legal y Redes -->
-                <div>
-                    <h4 class="text-white font-bold text-lg mb-6">Horario & Legal</h4>
-                    <div class="bg-slate-800 p-4 rounded-lg mb-6">
-                        <p class="text-xs text-green-400 font-bold flex items-center gap-2 mb-1"><i class="fa-solid fa-clock"></i> Atención 24/7</p>
-                        <p class="text-xs">Lunes a Domingo: Abierto</p>
-                    </div>
-                    <div class="flex gap-4">
-                        <a href="#" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all"><i class="fa-brands fa-facebook-f"></i></a>
-                        <a href="#" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-pink-600 hover:text-white transition-all"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="#" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-blue-500 hover:text-white transition-all"><i class="fa-brands fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-                <p class="text-xs text-slate-500">© 2024 Multiservicios S.A.S. Todos los derechos reservados.</p>
-                <div class="flex gap-6 text-xs text-slate-500">
-                    <a href="#" class="hover:text-white">Política de Privacidad</a>
-                    <a href="#" class="hover:text-white">Términos y Condiciones</a>
-                </div>
-                <p class="text-xs text-slate-500 flex items-center gap-1">Diseñado con <i class="fa-solid fa-heart text-red-500"></i> y excelencia tecnológica.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- WhatsApp Float -->
-    <!-- Actualizado al nuevo número principal -->
-    <a aria-label="Chat en WhatsApp" class="fixed bottom-8 right-8 z-50 group" href="https://wa.me/573222166831?text=Hola%20Multiservicios%2C%20deseo%20m%C3%A1s%20informaci%C3%B3n." target="_blank">
-        <div class="relative w-16 h-16 bg-[#25D366] rounded-full flex items-center justify-center shadow-[0_4px_20px_rgba(37,211,102,0.4)] hover:shadow-[0_4px_25px_rgba(37,211,102,0.6)] transition-all transform hover:scale-110">
-            <i class="fa-brands fa-whatsapp text-3xl text-white"></i>
-        </div>
-    </a>
-
-    <!-- Modal -->
-    <div class="modal" id="serviceModal">
-        <div class="modal-content relative">
-            <button class="absolute right-4 top-4 text-slate-400 hover:text-slate-800 transition z-10" onclick="cerrarModal()"><i class="fa-solid fa-xmark text-2xl"></i></button>
-            <div class="flex flex-col md:flex-row">
-                <div class="md:w-1/2 bg-blue-600 p-8 text-white flex flex-col justify-center relative overflow-hidden">
-                    <div class="absolute inset-0 bg-blue-700 opacity-50 transform skew-x-12"></div>
-                    <div class="relative z-10">
-                        <i class="fa-solid fa-calendar-check text-4xl mb-4"></i>
-                        <h3 class="text-2xl font-bold mb-2">¡Gran Elección!</h3>
-                        <p class="text-blue-100 text-sm">Estás a un paso de asegurar el cumplimiento normativo de tu empresa.</p>
-                    </div>
-                </div>
-                <div class="md:w-1/2 p-8 bg-white">
-                    <h4 class="font-bold text-slate-800 text-lg mb-1" id="modalServiceName">Servicio Seleccionado</h4>
-                    <input class="w-full px-4 py-2 mb-3 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm" id="modalName" placeholder="Su Nombre" type="text"/>
-                    <input class="w-full px-4 py-2 mb-4 rounded-lg border border-slate-200 focus:border-blue-500 outline-none text-sm" id="modalCompany" placeholder="Nombre Empresa" type="text"/>
-                    <button class="w-full bg-[#25D366] text-white py-3 rounded-lg font-bold hover:bg-[#20bd5a] transition flex items-center justify-center gap-2" onclick="enviarDesdeModal()">
-                        <i class="fa-brands fa-whatsapp"></i> Continuar
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // 1. Lógica del Menú Móvil
-        const menuBtn = document.getElementById('menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-
-        menuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-            const icon = menuBtn.querySelector('i');
-            if (mobileMenu.classList.contains('hidden')) {
-                icon.classList.remove('fa-xmark');
-                icon.classList.add('fa-bars');
-            } else {
-                icon.classList.remove('fa-bars');
-                icon.classList.add('fa-xmark');
-            }
-        });
-
-        // 2. Banner de Urgencia
-        function closeBanner() {
-            document.getElementById('urgencyBanner').style.display = 'none';
-        }
-
-        // 3. Barra de Progreso Scroll
-        window.onscroll = function() {
-            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            let scrolled = (winScroll / height) * 100;
-            document.getElementById("progressBar").style.width = scrolled + "%";
-            
-            // Header Shadow
-            const header = document.getElementById('header');
-            if (winScroll > 50) {
-                header.classList.add('shadow-md');
-            } else {
-                header.classList.remove('shadow-md');
-            }
-        };
-
-        // 4. Lógica de Contadores Animados
-        const counters = document.querySelectorAll('.counter');
-        const speed = 200;
-
-        const animateCounters = (entries, observer) => {
-            entries.forEach(entry => {
-                if(entry.isIntersecting) {
-                    const counter = entry.target;
-                    const target = +counter.getAttribute('data-target');
-                    const inc = target / speed;
-
-                    const updateCount = () => {
-                        const count = +counter.innerText;
-                        if(count < target) {
-                            counter.innerText = Math.ceil(count + inc);
-                            setTimeout(updateCount, 20);
-                        } else {
-                            counter.innerText = target;
-                        }
-                    };
-                    updateCount();
-                    observer.unobserve(counter);
-                }
-            });
-        };
-
-        const counterObserver = new IntersectionObserver(animateCounters, { threshold: 0.5 });
-        counters.forEach(counter => counterObserver.observe(counter));
-
-        // 5. Formulario a WhatsApp
-        document.getElementById('whatsappForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const nombre = document.getElementById('nombre').value;
-            const empresa = document.getElementById('empresa').value;
-            const telefono = document.getElementById('telefono').value;
-            const servicio = document.getElementById('servicio').value;
-            const mensaje = document.getElementById('mensaje').value;
-
-            const text = `Hola *Multiservicios*, estoy interesado en una cotización.%0A%0A*DATOS DEL CLIENTE:*%0A👤 Nombre: ${nombre}%0A🏢 Empresa: ${empresa}%0A📞 Teléfono: ${telefono}%0A🛠️ Servicio: ${servicio}%0A📝 Detalles: ${mensaje}%0A%0ASolicito que me contacten lo antes posible.`;
-            // NÚMERO ACTUALIZADO
-            const phone = '573222166831';
-
-            const toast = document.getElementById('toast');
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-
-            setTimeout(() => {
-                window.open(`https://wa.me/${phone}?text=${text}`, '_blank');
-            }, 1000);
-        });
-
-        // 6. Lógica del Modal
-        const modal = document.getElementById('serviceModal');
-        let currentService = '';
-
-        function abrirModalServicio(servicio) {
-            currentService = servicio;
-            document.getElementById('modalServiceName').innerText = servicio;
-            modal.classList.add('active');
-        }
-
-        function cerrarModal() {
-            modal.classList.remove('active');
-        }
-
-        function enviarDesdeModal() {
-            const nombre = document.getElementById('modalName').value;
-            const empresa = document.getElementById('modalCompany').value;
-            
-            if(!nombre) {
-                alert("Por favor ingrese su nombre");
-                return;
-            }
-
-            // NÚMERO ACTUALIZADO EN MODAL
-            const text = `Hola, quiero cotizar el servicio de: *${currentService}*.%0A%0AMi nombre es ${nombre}%0AEmpresa: ${empresa}`;
-            window.open(`https://wa.me/573222166831?text=${text}`, '_blank');
-            cerrarModal();
-        }
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                cerrarModal();
-            }
-        }
-    </script>
+  <div id="site-footer"></div>
+  <a class="whatsapp-float" data-whatsapp-link href="#" aria-label="WhatsApp"><i data-lucide="message-circle"></i></a>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/config.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>

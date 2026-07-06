@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registro para Certificado | Multiservicios</title>
+  <meta name="description" content="Registra tu solicitud para certificado digital de manipulacion de alimentos con Multiservicios." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <div id="site-header"></div>
+  <main>
+    <section class="hero hero-compact" style="--hero-image:url('assets/images/capacitacion-alimentos-certificado.jpg')">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <span class="section-kicker">Solicitud digital</span>
+          <h1>Obten tu certificado digital de manipulacion de alimentos</h1>
+          <p>Registra tus datos, recibe orientacion y avanza al curso, examen, pago manual y emision del certificado verificable.</p>
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container split">
+        <form class="admin-tile" data-request-form>
+          <span class="section-kicker">Registro</span>
+          <h2 class="section-title">Datos del solicitante</h2>
+          <div class="field-grid">
+            <div class="field"><label>Nombre completo</label><input name="nombre" required /></div>
+            <div class="field"><label>Tipo de documento</label><select name="tipo_documento"><option>C.C.</option><option>T.I.</option><option>C.E.</option><option>Pasaporte</option></select></div>
+            <div class="field"><label>Numero de documento</label><input name="documento" required /></div>
+            <div class="field"><label>Correo</label><input name="correo" type="email" required /></div>
+            <div class="field"><label>Celular / WhatsApp</label><input name="celular" required /></div>
+            <div class="field"><label>Ciudad</label><input name="ciudad" /></div>
+            <div class="field"><label>Servicio requerido</label><select name="servicio"><option>Certificado de manipulacion de alimentos</option><option>Lavado y desinfeccion de tanques</option><option>Plan de saneamiento para control de plagas</option><option>Paquete empresarial</option><option>Capacitacion en extintores</option></select></div>
+            <div class="field"><label>Empresa (opcional)</label><input name="empresa" /></div>
+            <div class="field"><label>Referencia de pago manual (opcional)</label><input name="referencia_pago" placeholder="Nequi, transferencia, recibo" /></div>
+            <div class="field"><label>Monto reportado (opcional)</label><input name="monto" placeholder="Ej: 50000 COP" /></div>
+          </div>
+          <div class="field"><label>Mensaje</label><textarea name="mensaje" placeholder="Cuéntanos si necesitas fecha, empresa o soporte especial"></textarea></div>
+          <label class="field" style="display:flex;gap:10px;align-items:flex-start"><input name="acepta_datos" type="checkbox" required /> Acepto el tratamiento de datos para gestionar mi solicitud.</label>
+          <button class="button success" type="submit"><i data-lucide="send"></i> Registrar solicitud</button>
+        </form>
+        <div>
+          <div class="media-frame" style="margin-bottom:24px">
+            <img src="assets/images/servicio-saneamiento-cocina.jpg" alt="Equipo Multiservicios revisando procesos de saneamiento" loading="lazy" />
+          </div>
+          <span class="section-kicker">Siguiente paso</span>
+          <h2 class="section-title">Proceso claro y verificable</h2>
+          <div class="timeline">
+            <div><span>1</span><p>Registro y orientacion inicial.</p></div>
+            <div><span>2</span><p>Curso digital y examen.</p></div>
+            <div><span>3</span><p>Revision de pago manual o acuerdo comercial.</p></div>
+            <div><span>4</span><p>Certificado con codigo unico, QR y validacion online.</p></div>
+          </div>
+          <div class="notice secure"><strong>Privacidad:</strong> el sistema guarda hash del documento y muestra solo datos parciales en validacion publica.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div id="site-footer"></div>
+  <a class="whatsapp-float" data-whatsapp-link href="#" aria-label="WhatsApp"><i data-lucide="message-circle"></i></a>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/config.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/solicitudes.js"></script>
+</body>
+</html>

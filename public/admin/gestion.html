@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestion Operativa | Multiservicios</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+</head>
+<body class="app-shell" data-admin-protected="true">
+  <header class="app-topbar">
+    <div class="app-brand">
+      <img src="../assets/logos/logo-horizontal.png" alt="Multiservicios" />
+      <strong>Gestion operativa</strong>
+    </div>
+    <nav class="section-actions">
+      <a class="button small secondary" href="dashboard.html"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+      <a class="button small secondary" href="certificados-admin.html"><i data-lucide="table"></i> Certificados</a>
+      <button class="button small warning" data-admin-logout type="button"><i data-lucide="log-out"></i> Salir</button>
+    </nav>
+  </header>
+  <main class="section">
+    <div class="container">
+      <span class="section-kicker">Backoffice</span>
+      <h1 style="color:var(--ink);font-size:clamp(2rem,4vw,3.4rem);margin:8px 0">Gestion central</h1>
+      <p class="section-lead">Administra clientes, solicitudes, pagos manuales, servicios, cursos, preguntas, contenido editable y auditoria.</p>
+
+      <section class="section tight">
+        <div class="section-head"><div><span class="section-kicker">Clientes</span><h2 class="section-title">Crear cliente / estudiante</h2></div></div>
+        <form class="admin-tile" data-admin-form data-endpoint="/admin/clientes" data-refresh="clientes">
+          <div class="field-grid">
+            <div class="field"><label>Nombre</label><input name="nombre" required /></div>
+            <div class="field"><label>Tipo documento</label><select name="tipo_documento"><option>C.C.</option><option>T.I.</option><option>C.E.</option><option>Pasaporte</option></select></div>
+            <div class="field"><label>Documento</label><input name="documento" required /></div>
+            <div class="field"><label>Correo</label><input name="correo" type="email" /></div>
+            <div class="field"><label>Celular</label><input name="celular" /></div>
+            <div class="field"><label>Ciudad</label><input name="ciudad" /></div>
+            <div class="field"><label>Empresa</label><input name="empresa" /></div>
+            <div class="field"><label>Servicio de interes</label><input name="servicio_interes" value="Certificado de manipulacion de alimentos" /></div>
+          </div>
+          <button class="button success" type="submit"><i data-lucide="user-plus"></i> Guardar cliente</button>
+        </form>
+        <div style="margin-top:18px" data-admin-list="clientes"></div>
+      </section>
+
+      <section class="section tight">
+        <div class="section-head"><div><span class="section-kicker">Solicitudes</span><h2 class="section-title">Solicitudes de clientes y empresas</h2></div></div>
+        <div class="grid two">
+          <div data-admin-list="solicitudes"></div>
+          <div data-admin-list="empresas"></div>
+        </div>
+      </section>
+
+      <section class="section tight">
+        <div class="section-head"><div><span class="section-kicker">Pagos</span><h2 class="section-title">Pago manual y comprobantes</h2></div></div>
+        <form class="admin-tile" data-admin-form data-endpoint="/admin/pagos" data-refresh="pagos">
+          <div class="field-grid">
+            <div class="field"><label>Cliente</label><input name="nombre_cliente" required /></div>
+            <div class="field"><label>Servicio</label><input name="servicio" value="Certificado de manipulacion de alimentos" /></div>
+            <div class="field"><label>Monto</label><input name="monto" placeholder="Ej: 50000" /></div>
+            <div class="field"><label>Moneda</label><input name="moneda" value="COP" /></div>
+            <div class="field"><label>Metodo</label><select name="metodo"><option>Manual</option><option>Transferencia</option><option>Nequi</option><option>Efectivo</option></select></div>
+            <div class="field"><label>Referencia</label><input name="referencia" /></div>
+            <div class="field"><label>Estado</label><select name="estado"><option>Pendiente</option><option>Aprobado</option><option>Rechazado</option><option>Manual</option></select></div>
+          </div>
+          <div class="field"><label>Notas</label><textarea name="notas"></textarea></div>
+          <button class="button success" type="submit"><i data-lucide="credit-card"></i> Guardar pago</button>
+        </form>
+        <div style="margin-top:18px" data-admin-list="pagos"></div>
+      </section>
+
+      <section class="section tight">
+        <div class="section-head"><div><span class="section-kicker">Servicios</span><h2 class="section-title">Servicios y planes</h2></div></div>
+        <form class="admin-tile" data-admin-form data-endpoint="/admin/servicios" data-refresh="servicios">
+          <div class="field-grid">
+            <div class="field"><label>Nombre</label><input name="nombre" required /></div>
+            <div class="field"><label>Precio</label><input name="precio" placeholder="Solicitar precio" /></div>
+            <div class="field"><label>Duracion</label><input name="duracion" /></div>
+            <div class="field"><label>Modalidad</label><input name="modalidad" /></div>
+            <div class="field"><label>Estado</label><select name="estado"><option>Activo</option><option>Inactivo</option></select></div>
+          </div>
+          <div class="field"><label>Descripcion</label><textarea name="descripcion"></textarea></div>
+          <div class="field"><label>Beneficios</label><textarea name="beneficios"></textarea></div>
+          <div class="field"><label>Requisitos</label><textarea name="requisitos"></textarea></div>
+          <button class="button success" type="submit"><i data-lucide="briefcase-business"></i> Guardar servicio</button>
+        </form>
+        <div style="margin-top:18px" data-admin-list="servicios"></div>
+      </section>
+
+      <section class="section tight">
+        <div class="section-head"><div><span class="section-kicker">Cursos y examen</span><h2 class="section-title">Cursos y preguntas</h2></div></div>
+        <div class="grid two">
+          <form class="admin-tile" data-admin-form data-endpoint="/admin/cursos" data-refresh="cursos">
+            <h3>Crear / actualizar curso</h3>
+            <div class="field"><label>Nombre</label><input name="nombre" required /></div>
+            <div class="field"><label>Descripcion</label><textarea name="descripcion"></textarea></div>
+            <div class="field-grid"><div class="field"><label>Puntaje minimo</label><input name="puntaje_minimo" type="number" value="70" /></div><div class="field"><label>Intentos maximos</label><input name="intentos_maximos" type="number" value="2" /></div></div>
+            <button class="button success" type="submit">Guardar curso</button>
+          </form>
+          <form class="admin-tile" data-admin-form data-endpoint="/admin/preguntas" data-refresh="preguntas">
+            <h3>Crear pregunta</h3>
+            <div class="field"><label>ID curso</label><input name="course_id" type="number" value="1" /></div>
+            <div class="field"><label>Pregunta</label><textarea name="pregunta" required></textarea></div>
+            <div class="field"><label>Opciones separadas por |</label><textarea name="opciones" required></textarea></div>
+            <div class="field-grid"><div class="field"><label>Respuesta correcta (0-3)</label><input name="respuesta_correcta" type="number" value="0" /></div><div class="field"><label>Puntaje</label><input name="puntaje" type="number" value="1" /></div></div>
+            <button class="button success" type="submit">Guardar pregunta</button>
+          </form>
+        </div>
+        <div class="grid two" style="margin-top:18px"><div data-admin-list="cursos"></div><div data-admin-list="preguntas"></div></div>
+      </section>
+
+      <section class="section tight">
+        <div class="section-head"><div><span class="section-kicker">Contenido web</span><h2 class="section-title">FAQ y testimonios</h2></div></div>
+        <div class="grid two">
+          <form class="admin-tile" data-admin-form data-endpoint="/admin/faqs" data-refresh="faqs">
+            <h3>FAQ</h3>
+            <div class="field"><label>Pregunta</label><input name="pregunta" required /></div>
+            <div class="field"><label>Respuesta</label><textarea name="respuesta" required></textarea></div>
+            <div class="field"><label>Categoria</label><input name="categoria" value="General" /></div>
+            <button class="button success" type="submit">Guardar FAQ</button>
+          </form>
+          <form class="admin-tile" data-admin-form data-endpoint="/admin/testimonios" data-refresh="testimonios">
+            <h3>Testimonio</h3>
+            <div class="field"><label>Nombre</label><input name="nombre" required /></div>
+            <div class="field"><label>Cargo</label><input name="cargo" /></div>
+            <div class="field"><label>Texto</label><textarea name="texto" required></textarea></div>
+            <button class="button success" type="submit">Guardar testimonio</button>
+          </form>
+        </div>
+        <div class="grid two" style="margin-top:18px"><div data-admin-list="faqs"></div><div data-admin-list="testimonios"></div></div>
+      </section>
+
+      <section class="section tight">
+        <div class="section-head"><div><span class="section-kicker">Seguridad</span><h2 class="section-title">Auditoria</h2></div></div>
+        <div data-admin-list="auditoria"></div>
+      </section>
+    </div>
+  </main>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/admin-gestion.js"></script>
+</body>
+</html>

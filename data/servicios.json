@@ -1,0 +1,62 @@
+[
+  {
+    "id": "certificacion-alimentos",
+    "nombre": "Certificacion en Manipulacion de Alimentos",
+    "tipo": "digital",
+    "descripcion": "Curso, examen y certificado digital verificable para personas, negocios y empresas.",
+    "beneficios": ["Proceso acompanado", "Certificado con codigo unico", "Validacion publica"],
+    "requisitos": ["Datos del titular", "Aprobacion del examen", "Confirmacion administrativa"],
+    "duracion": "Segun avance del estudiante",
+    "modalidad": "Digital acompanada"
+  },
+  {
+    "id": "lavado-desinfeccion-tanques",
+    "nombre": "Lavado y desinfeccion de tanques",
+    "tipo": "presencial",
+    "descripcion": "Limpieza, lavado y desinfeccion de tanques para viviendas, restaurantes, conjuntos y empresas.",
+    "beneficios": ["Cotizacion por alcance", "Atencion presencial", "Registro de solicitud"],
+    "requisitos": ["Ubicacion", "Tipo de tanque", "Capacidad aproximada"],
+    "duracion": "Segun alcance",
+    "modalidad": "Presencial"
+  },
+  {
+    "id": "plan-saneamiento-control-plagas",
+    "nombre": "Plan de saneamiento para control de plagas",
+    "tipo": "presencial-mixto",
+    "descripcion": "Plan preventivo y correctivo para control de plagas, saneamiento y seguimiento del espacio.",
+    "beneficios": ["Diagnostico", "Programacion", "Trazabilidad del servicio"],
+    "requisitos": ["Tipo de espacio", "Necesidad", "Ubicacion"],
+    "duracion": "Segun diagnostico",
+    "modalidad": "Presencial o mixta"
+  },
+  {
+    "id": "manejo-extintores",
+    "nombre": "Manejo de extintores",
+    "tipo": "presencial-mixto",
+    "descripcion": "Capacitacion o servicio relacionado con extintores segun disponibilidad comercial.",
+    "beneficios": ["Apoyo para negocios", "Cotizacion por caso", "Atencion por WhatsApp"],
+    "requisitos": ["Ubicacion", "Tipo de servicio", "Cantidad o necesidad"],
+    "duracion": "Por definir segun alcance",
+    "modalidad": "Presencial o mixta"
+  },
+  {
+    "id": "certificados-digitales",
+    "nombre": "Generacion de certificados digitales",
+    "tipo": "administrativo",
+    "descripcion": "Sistema interno para emitir certificados PDF con logo, codigo unico, QR y estado.",
+    "beneficios": ["PDF descargable", "Codigo unico", "Base publica verificable"],
+    "requisitos": ["Acceso administrativo", "Datos completos", "Validacion del proceso"],
+    "duracion": "Inmediata despues de revisar datos",
+    "modalidad": "Administrativa"
+  },
+  {
+    "id": "capacitaciones",
+    "nombre": "Capacitaciones empresariales",
+    "tipo": "mixto",
+    "descripcion": "Formacion para equipos de trabajo, emprendimientos y negocios.",
+    "beneficios": ["Escalable por equipo", "Material digital", "Acompanamiento comercial"],
+    "requisitos": ["Tema", "Numero de participantes", "Modalidad esperada"],
+    "duracion": "Por definir segun alcance",
+    "modalidad": "Digital, presencial o mixta"
+  }
+]

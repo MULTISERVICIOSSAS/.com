@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Certificados para Empresas | Multiservicios</title>
+  <meta name="description" content="Solicita certificados y capacitaciones para equipos, restaurantes, colegios, cafeterias y empresas." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <div id="site-header"></div>
+  <main>
+    <section class="hero hero-compact" style="--hero-image:url('assets/images/cliente-empresa-oficina.jpg')">
+      <div class="container hero-grid"><div class="hero-copy"><span class="section-kicker">Empresas</span><h1>Certifica equipos de trabajo con trazabilidad</h1><p>Solicita orientacion para grupos, restaurantes, colegios, cafeterias, cocinas y negocios de alimentos.</p></div></div>
+    </section>
+    <section class="section">
+      <div class="container split">
+        <form class="admin-tile" data-company-form>
+          <span class="section-kicker">Solicitud empresarial</span>
+          <h2 class="section-title">Datos de la empresa</h2>
+          <div class="field-grid">
+            <div class="field"><label>Empresa</label><input name="empresa" required /></div>
+            <div class="field"><label>Contacto</label><input name="contacto" required /></div>
+            <div class="field"><label>Correo</label><input name="correo" type="email" /></div>
+            <div class="field"><label>Celular</label><input name="celular" required /></div>
+            <div class="field"><label>Ciudad</label><input name="ciudad" /></div>
+            <div class="field"><label>Cantidad de personas</label><input name="cantidad_personas" type="number" min="1" value="1" /></div>
+            <div class="field"><label>Servicio</label><select name="servicio"><option>Certificados de manipulacion de alimentos</option><option>Lavado y desinfeccion de tanques</option><option>Plan de saneamiento para control de plagas</option><option>Capacitacion en extintores</option><option>Paquete empresarial mixto</option></select></div>
+          </div>
+          <div class="field"><label>Mensaje</label><textarea name="mensaje" placeholder="Indica fechas, cantidad estimada o necesidad especial"></textarea></div>
+          <button class="button success" type="submit"><i data-lucide="building-2"></i> Solicitar propuesta</button>
+        </form>
+        <div>
+          <div class="media-frame" style="margin-bottom:24px">
+            <img src="assets/images/cliente-conjunto-residencial.jpg" alt="Conjunto residencial atendido por Multiservicios" loading="lazy" />
+          </div>
+          <span class="section-kicker">Beneficios</span><h2 class="section-title">Gestion para grupos</h2><div class="grid two"><article class="admin-tile"><h3>Registro central</h3><p>Solicitudes empresariales visibles desde el panel administrativo.</p></article><article class="admin-tile"><h3>Proceso verificable</h3><p>Certificados con QR, codigo unico y estado consultable.</p></article></div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div id="site-footer"></div>
+  <a class="whatsapp-float" data-whatsapp-link href="#" aria-label="WhatsApp"><i data-lucide="message-circle"></i></a>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/config.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/solicitudes.js"></script>
+</body>
+</html>

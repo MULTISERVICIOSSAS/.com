@@ -1,0 +1,3 @@
+# No requiere paquetes externos.
+# Backend creado con librerias estandar de Python: http.server, sqlite3, hashlib y pathlib.
+

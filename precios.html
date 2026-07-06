@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Planes y Pagos | Multiservicios</title>
+  <meta name="description" content="Planes, precios orientativos y pago manual para certificados digitales de Multiservicios." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <div id="site-header"></div>
+  <main>
+    <section class="hero hero-compact" style="--hero-image:url('assets/images/equipo-multiservicios.jpg')">
+      <div class="container hero-grid"><div class="hero-copy"><span class="section-kicker">Pagos manuales</span><h1>Planes claros para personas y empresas</h1><p>Los precios se gestionan desde el panel administrativo. Puedes registrar una solicitud y reportar referencia de pago manual.</p></div></div>
+    </section>
+    <section class="section">
+      <div class="container">
+        <div class="section-head"><div><span class="section-kicker">Servicios activos</span><h2 class="section-title">Catalogo editable desde el admin</h2></div><a class="button success" href="registro.html"><i data-lucide="badge-check"></i> Obtener certificado</a></div>
+        <div class="grid three" data-catalog-services></div>
+      </div>
+    </section>
+    <section class="section alt">
+      <div class="container split">
+        <div><span class="section-kicker">Pago</span><h2 class="section-title">Modo manual funcional</h2><p class="section-lead">El sistema registra referencia, monto y estado del pago para revision administrativa.</p><a class="button secondary" href="registro.html">Registrar pago manual</a></div>
+        <div class="notice secure"><strong>Preparado para pasarela:</strong> usa variables `MS_PAYMENT_PROVIDER`, `MS_PAYMENT_PUBLIC_KEY` y credenciales privadas del proveedor desde entorno del servidor.</div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container split">
+        <div class="media-frame">
+          <img src="assets/images/cliente-restaurante.jpg" alt="Cliente empresarial atendido por Multiservicios" loading="lazy" />
+        </div>
+        <div><span class="section-kicker">Cotizacion</span><h2 class="section-title">Precios por persona, equipo o servicio</h2><p class="section-lead">Certificados, saneamiento, tanques, plagas y extintores pueden cotizarse por alcance, cantidad de personas o visita requerida.</p><a class="button success" href="registro.html">Solicitar cotizacion</a></div>
+      </div>
+    </section>
+  </main>
+  <div id="site-footer"></div>
+  <a class="whatsapp-float" data-whatsapp-link href="#" aria-label="WhatsApp"><i data-lucide="message-circle"></i></a>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/config.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/solicitudes.js"></script>
+</body>
+</html>

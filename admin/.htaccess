@@ -1,0 +1,8 @@
+Options -Indexes
+
+# Proteger esta carpeta con autenticación real en cPanel/Apache.
+# Ejemplo recomendado:
+# AuthType Basic
+# AuthName "Multiservicios Admin"
+# AuthUserFile /home/usuario/.htpasswd
+# Require valid-user

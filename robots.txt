@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /private/
+Disallow: /backup_original/
+Disallow: /original_files_backup/
+Disallow: /pagina%20web/
+Disallow: /pagina web/
+Disallow: /App%20generador%20certificados/
+Disallow: /App generador certificados/
+Disallow: /App%20modulos%20y%20examen/
+Disallow: /App modulos y examen/
+Disallow: /Volante%20digital/
+Disallow: /Volante digital/
+Disallow: /Certificados%20generados%202026/
+Disallow: /Certificados generados 2026/
+Disallow: /assets/certificates/
+
+Sitemap: https://multiserviciossas.github.io/.com/sitemap.xml

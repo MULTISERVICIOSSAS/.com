@@ -1,0 +1,22 @@
+# Python / runtime
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local environment
+.env
+.venv/
+venv/
+
+# Temporary QA/server artifacts
+storage/*.log
+storage/*cookies*.txt
+storage/server-*.out.log
+storage/server-*.err.log
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/

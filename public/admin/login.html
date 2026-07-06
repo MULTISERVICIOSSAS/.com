@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Acceso Administrativo | Multiservicios</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+</head>
+<body>
+  <main class="login-shell">
+    <form class="login-card" data-admin-login>
+      <img src="../assets/logos/logo-horizontal.png" alt="Multiservicios" style="width:min(280px,100%);height:auto;margin-bottom:20px" />
+      <span class="badge green"><i data-lucide="lock-keyhole"></i> Acceso interno</span>
+      <h1 style="color:var(--ink);font-size:2.4rem;margin:18px 0 12px">Area administrativa</h1>
+      <p class="section-lead">Panel para gestionar certificados, resultados del curso y herramientas internas de Multiservicios.</p>
+      <div class="notice secure" style="margin:18px 0">
+        <strong>Acceso protegido:</strong> usa la clave administrativa configurada para Multiservicios.
+      </div>
+      <div class="field">
+        <label for="frase">Clave</label>
+        <input id="frase" name="frase" type="text" autocomplete="off" required />
+      </div>
+      <button class="button" type="submit"><i data-lucide="log-in"></i> Entrar al dashboard</button>
+      <a class="button secondary" href="../index.html" style="margin-top:10px"><i data-lucide="home"></i> Volver al sitio</a>
+    </form>
+  </main>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

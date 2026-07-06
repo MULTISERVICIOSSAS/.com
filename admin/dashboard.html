@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Administrativo | Multiservicios</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+</head>
+<body class="app-shell" data-admin-protected="true">
+  <header class="app-topbar">
+    <div class="app-brand">
+      <img src="../assets/logos/logo-horizontal.png" alt="Multiservicios" />
+      <strong>Dashboard administrativo</strong>
+    </div>
+    <nav class="section-actions">
+      <a class="button small secondary" href="../index.html"><i data-lucide="globe"></i> Sitio</a>
+      <button class="button small warning" data-admin-logout type="button"><i data-lucide="log-out"></i> Salir</button>
+    </nav>
+  </header>
+  <main class="section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="section-kicker">Operación</span>
+          <h1 style="color:var(--ink);font-size:clamp(2rem,4vw,3.4rem);margin:8px 0">Panel administrativo</h1>
+          <p class="section-lead">Gestiona certificados, resultados del curso, validación pública y herramientas internas.</p>
+        </div>
+      </div>
+
+      <div class="grid four">
+        <article class="admin-tile"><span class="feature-icon"><i data-lucide="file-badge"></i></span><h3><span data-stat="certificates">0</span> certificados</h3><p>Emitidos desde el generador administrativo.</p><span class="badge green">Registro</span></article>
+        <article class="admin-tile"><span class="feature-icon"><i data-lucide="book-open-check"></i></span><h3><span data-stat="course-results">0</span> resultados</h3><p>App de 27 módulos y examen final.</p><span class="badge green">Activo</span></article>
+        <article class="admin-tile"><span class="feature-icon"><i data-lucide="ban"></i></span><h3><span data-stat="annulled">0</span> anulados</h3><p>Certificados marcados como anulados en la base central.</p><span class="badge gold">Control</span></article>
+        <article class="admin-tile"><span class="feature-icon"><i data-lucide="users"></i></span><h3><span data-stat="customers">0</span> clientes</h3><p>Estudiantes y solicitudes registrados.</p><span class="badge green">CRM</span></article>
+        <article class="admin-tile"><span class="feature-icon"><i data-lucide="inbox"></i></span><h3><span data-stat="pending-requests">0</span> solicitudes</h3><p>Pendientes por gestionar.</p><span class="badge gold">Atención</span></article>
+        <article class="admin-tile"><span class="feature-icon"><i data-lucide="credit-card"></i></span><h3><span data-stat="pending-payments">0</span> pagos</h3><p>Pagos manuales pendientes.</p><span class="badge gold">Manual</span></article>
+        <article class="admin-tile"><span class="feature-icon"><i data-lucide="check-circle"></i></span><h3><span data-stat="approved-exams">0</span> aprobados</h3><p>Exámenes aprobados.</p><span class="badge green">Curso</span></article>
+        <article class="admin-tile"><span class="feature-icon"><i data-lucide="briefcase-business"></i></span><h3><span data-stat="active-services">0</span> servicios</h3><p>Servicios activos editables.</p><span class="badge green">Catálogo</span></article>
+      </div>
+
+      <section class="section tight">
+        <div class="grid three">
+          <a class="admin-tile" href="generador-certificados/index.html"><span class="feature-icon"><i data-lucide="file-plus-2"></i></span><h3>Generador de certificados</h3><p>Crear PDF/imagen con código único y plantilla integrada.</p></a>
+          <a class="admin-tile" href="certificados-admin.html"><span class="feature-icon"><i data-lucide="table"></i></span><h3>Registro central</h3><p>Ver certificados y resultados guardados en la base SQLite.</p></a>
+          <a class="admin-tile" href="gestion.html"><span class="feature-icon"><i data-lucide="settings-2"></i></span><h3>Gestión operativa</h3><p>Clientes, pagos, servicios, cursos, preguntas, FAQ y auditoría.</p></a>
+          <a class="admin-tile" href="../apps/modulos-examen/index.html"><span class="feature-icon"><i data-lucide="clipboard-check"></i></span><h3>Curso y examen</h3><p>Abrir la app integrada para prueba o acompañamiento.</p></a>
+        </div>
+      </section>
+
+      <div class="notice secure">
+        <h3>Flujo recomendado</h3>
+        <p>Genera certificados y revisa el registro central. La validacion publica consulta el backend conectado a la base SQLite.</p>
+      </div>
+    </div>
+  </main>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/main.js"></script>
+  <script>
+    (async function loadStats() {
+      const cfg = window.MULTISERVICIOS_CONFIG || {};
+      const base = String(cfg.certificadosAdminApiUrl || cfg.certificadosApiUrl || "").replace(/\/$/, "");
+      if (!base) return;
+      try {
+        const response = await fetch(base + "/admin/stats", { credentials: "include", cache: "no-store" });
+        if (!response.ok) throw new Error("stats");
+        const stats = await response.json();
+        document.querySelector("[data-stat='certificates']").textContent = stats.certificates || 0;
+        document.querySelector("[data-stat='course-results']").textContent = stats.course_results || 0;
+        document.querySelector("[data-stat='annulled']").textContent = stats.annulled || 0;
+        document.querySelector("[data-stat='customers']").textContent = stats.customers || 0;
+        document.querySelector("[data-stat='pending-requests']").textContent = stats.pending_requests || 0;
+        document.querySelector("[data-stat='pending-payments']").textContent = stats.pending_payments || 0;
+        document.querySelector("[data-stat='approved-exams']").textContent = stats.approved_exams || 0;
+        document.querySelector("[data-stat='active-services']").textContent = stats.active_services || 0;
+      } catch (error) {
+        document.querySelector("[data-stat='certificates']").textContent = "0";
+        document.querySelector("[data-stat='course-results']").textContent = "0";
+        document.querySelector("[data-stat='annulled']").textContent = "0";
+        document.querySelector("[data-stat='customers']").textContent = "0";
+        document.querySelector("[data-stat='pending-requests']").textContent = "0";
+        document.querySelector("[data-stat='pending-payments']").textContent = "0";
+        document.querySelector("[data-stat='approved-exams']").textContent = "0";
+        document.querySelector("[data-stat='active-services']").textContent = "0";
+      }
+    })();
+  </script>
+</body>
+</html>

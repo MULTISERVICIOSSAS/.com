@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contacto y Ventas | Multiservicios</title>
+  <meta name="description" content="Contacta a Multiservicios por WhatsApp o formulario para certificados de manipulación de alimentos, cursos, extintores y servicios empresariales." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <div id="site-header"></div>
+  <main>
+    <section class="hero hero-compact" style="--hero-image:url('assets/images/equipo-multiservicios.jpg')">
+      <div class="container hero-content">
+        <span class="eyebrow"><i data-lucide="send"></i> Contacto y ventas</span>
+        <h1>Hablemos de tu certificado o servicio</h1>
+        <p>Completa el formulario o abre WhatsApp con un mensaje prellenado para recibir orientación.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container split">
+        <div>
+          <span class="section-kicker">Canales</span>
+          <h2 class="section-title">Atención personalizada por WhatsApp</h2>
+          <p class="section-lead">Usa mensajes claros para acelerar la asesoría: nombre, servicio de interés, ciudad y cantidad de certificados o extintores si aplica.</p>
+          <div class="grid two" style="margin-top:22px">
+            <article class="feature"><span class="feature-icon"><i data-lucide="badge-check"></i></span><h3>Certificado</h3><p>Solicita información para manipulación de alimentos.</p><button class="button small secondary" data-service="Certificación de alimentos" type="button">Elegir</button></article>
+            <article class="feature"><span class="feature-icon"><i data-lucide="flame"></i></span><h3>Extintores</h3><p>Cotiza venta, recarga, revisión o servicio presencial.</p><button class="button small secondary" data-service="Extintores" type="button">Elegir</button></article>
+          </div>
+        </div>
+        <form class="form-panel" data-whatsapp-form>
+          <div class="field">
+            <label for="nombre">Nombre</label>
+            <input id="nombre" name="nombre" type="text" required autocomplete="name" />
+          </div>
+          <div class="field-grid">
+            <div class="field">
+              <label for="telefono">Teléfono</label>
+              <input id="telefono" name="telefono" type="tel" required autocomplete="tel" />
+            </div>
+            <div class="field">
+              <label for="servicio">Servicio de interés</label>
+              <select id="servicio" name="servicio" required>
+                <option value="">Seleccionar</option>
+                <option>Certificación de alimentos</option>
+                <option>Curso digital</option>
+                <option>Validación de certificado</option>
+                <option>Extintores</option>
+                <option>Servicios empresariales</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="mensaje">Mensaje</label>
+            <textarea id="mensaje" name="mensaje" placeholder="Hola, quiero información sobre el certificado de manipulación de alimentos con Multiservicios."></textarea>
+          </div>
+          <button class="button success" type="submit"><i data-lucide="message-circle"></i> Enviar por WhatsApp</button>
+        </form>
+      </div>
+    </section>
+  </main>
+  <div id="site-footer"></div>
+  <a class="whatsapp-float" data-whatsapp-link href="#" aria-label="WhatsApp"><i data-lucide="message-circle"></i></a>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/config.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
