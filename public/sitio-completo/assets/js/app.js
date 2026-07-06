@@ -131,13 +131,21 @@
         approved_exams: 0
       };
       try {
+        let certificates = [];
         const response = await fetch("../data/certificados.json", { cache: "no-store" });
         if (response.ok) {
-          const certificates = await response.json();
-          if (Array.isArray(certificates)) {
-            stats.certificates = certificates.length;
-          }
+          const data = await response.json();
+          certificates = Array.isArray(data) ? data : [];
         }
+        const generated = JSON.parse(localStorage.getItem("msGeneratedCertificates") || "[]");
+        const allCertificates = [...(Array.isArray(generated) ? generated : []), ...certificates];
+        const byCode = new Map();
+        allCertificates.forEach((item, index) => {
+          item = item || {};
+          const code = String(item.codigo || item.codigo_unico || item.codigoCertificado || `sin-codigo-${index}`).trim().toUpperCase();
+          if (!byCode.has(code)) byCode.set(code, item);
+        });
+        stats.certificates = byCode.size;
       } catch (error) {}
       try {
         const results = JSON.parse(localStorage.getItem("msCourseResults") || "[]");

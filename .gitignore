@@ -9,6 +9,7 @@ __pycache__/
 venv/
 
 # Temporary QA/server artifacts
+.tools/
 storage/*.log
 storage/*cookies*.txt
 storage/server-*.out.log
