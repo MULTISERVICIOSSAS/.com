@@ -714,6 +714,22 @@ def certificate_to_public(row: sqlite3.Row) -> dict[str, Any]:
     }
 
 
+def public_certificates_from_db(conn: sqlite3.Connection) -> list[dict[str, Any]]:
+    rows = conn.execute("SELECT * FROM certificates ORDER BY id DESC").fetchall()
+    return [certificate_to_public(row) for row in rows]
+
+
+def write_public_certificates_json(conn: sqlite3.Connection) -> tuple[int, list[str]]:
+    data = public_certificates_from_db(conn)
+    targets = [ROOT / "data" / "certificados.json", PUBLIC_DIR / "data" / "certificados.json"]
+    written: list[str] = []
+    for target in targets:
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        written.append(str(target.relative_to(ROOT)))
+    return len(data), written
+
+
 def certificate_to_admin(row: sqlite3.Row) -> dict[str, Any]:
     data = certificate_to_public(row)
     data.update(
@@ -1026,6 +1042,10 @@ class MultiserviciosHandler(BaseHTTPRequestHandler):
                 self.api_list_certificates()
             elif method == "POST" and path == "/api/admin/certificados":
                 self.api_create_certificate()
+            elif method == "GET" and path == "/api/admin/certificados/public-json":
+                self.api_public_certificates_json()
+            elif method == "POST" and path == "/api/admin/certificados/publicar-base":
+                self.api_publish_certificates_json()
             elif method == "GET" and path == "/api/admin/resultados":
                 self.api_list_results()
             elif method == "POST" and path == "/api/admin/resultados":
@@ -1655,6 +1675,22 @@ class MultiserviciosHandler(BaseHTTPRequestHandler):
             row = conn.execute("SELECT * FROM certificates WHERE codigo_unico = ?", (cert["codigo_unico"],)).fetchone()
             log_action(conn, admin["id"], "certificado_guardado", cert["codigo_unico"], self.client_address[0])
         self.send_json({"ok": True, "certificado": certificate_to_admin(row)}, 201)
+
+    def api_public_certificates_json(self) -> None:
+        if not self.require_admin():
+            return
+        with db() as conn:
+            data = public_certificates_from_db(conn)
+        self.send_json({"ok": True, "certificados": data, "total": len(data)})
+
+    def api_publish_certificates_json(self) -> None:
+        admin = self.require_admin()
+        if not admin:
+            return
+        with db() as conn:
+            total, written = write_public_certificates_json(conn)
+            log_action(conn, admin["id"], "base_publica_certificados", f"{total} certificados", self.client_address[0])
+        self.send_json({"ok": True, "total": total, "archivos": written})
 
     def api_annul_certificate(self, code: str) -> None:
         admin = self.require_admin()

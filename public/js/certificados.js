@@ -214,6 +214,22 @@
         await navigator.clipboard.writeText(JSON.stringify(data, null, 2)).catch(() => {});
         if (exportStatus) exportStatus.textContent = `JSON copiado con ${data.length} certificado(s).`;
       }
+      const publishJson = event.target.closest("[data-publish-certificates-json]");
+      if (publishJson) {
+        try {
+          const payload = await apiJson("/admin/certificados/publicar-base", {
+            method: "POST",
+            body: "{}"
+          });
+          if (!payload || !payload.ok) throw new Error("Backend no disponible");
+          const total = payload?.total ?? 0;
+          if (exportStatus) exportStatus.textContent = `Base publica actualizada con ${total} certificado(s). Sube el commit a GitHub para que funcione en todos los dispositivos.`;
+        } catch (error) {
+          const data = await buildPublicCertificatesJson();
+          downloadJson("certificados.json", data);
+          if (exportStatus) exportStatus.textContent = `GitHub Pages no puede escribir archivos. Se descargo certificados.json con ${data.length} certificado(s) para subirlo al repositorio.`;
+        }
+      }
       const copy = event.target.closest("[data-copy-code]");
       if (copy) {
         await navigator.clipboard.writeText(copy.dataset.copyCode).catch(() => {});

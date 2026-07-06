@@ -29,9 +29,22 @@ Codigo activo de prueba:
 
 ```text
 MS-D3EC4TP5
+Documento: 1111
 ```
 
-Nota: `MS-2026-0001` esta guardado como anulado en la base local, por eso aparece anulado aunque el formulario funcione.
+Nota: `MS-2026-0001` esta guardado como anulado en la base local, por eso aparece en revision/anulado aunque el formulario funcione.
+
+Si generas un certificado nuevo en GitHub Pages y lo validas en el mismo navegador, funciona con el almacenamiento local. Para que funcione en otro celular, navegador privado o despues de limpiar datos, debes publicar la base.
+
+## Publicar base de certificados
+
+1. Inicia el backend local con `INICIAR_MULTISERVICIOS.bat`.
+2. Entra a `http://127.0.0.1:8090/admin/`.
+3. Genera o revisa certificados.
+4. Abre `Registro central`.
+5. Pulsa `Actualizar base publica`.
+6. Verifica que se actualicen `data/certificados.json` y `public/data/certificados.json`.
+7. Haz commit y push a GitHub.
 
 ## Donde esta cada cosa
 

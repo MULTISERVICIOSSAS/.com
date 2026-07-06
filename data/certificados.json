@@ -1,24 +1,53 @@
 [
   {
-    "codigo": "MS-2026-0001",
-    "nombre": "Nombre del estudiante",
-    "documento_parcial": "****1234",
-    "curso": "Manipulacion de Alimentos",
-    "fecha_emision": "2026-03-21",
-    "fecha_vencimiento": "2027-03-21",
+    "codigo": "MS-D3EC4TP5",
+    "codigo_unico": "MS-D3EC4TP5",
+    "nombre": "ssssss",
+    "nombre_estudiante": "ssssss",
+    "documento_parcial": "****1111",
+    "curso": "Manipulación de Alimentos",
+    "intensidad_horaria": "",
+    "fecha_emision": "2026-06-29",
+    "fecha_vencimiento": "2027-06-29",
     "estado": "Activo",
     "url_pdf": "",
-    "qr": ""
+    "archivo_pdf_url": "",
+    "qr": "",
+    "qr_url": "",
+    "validation_url": "http://127.0.0.1:8090/validar-certificado.html?codigo=MS-D3EC4TP5"
   },
   {
     "codigo": "MS-2026-ANULADO",
+    "codigo_unico": "MS-2026-ANULADO",
     "nombre": "Registro de prueba anulado",
+    "nombre_estudiante": "Registro de prueba anulado",
     "documento_parcial": "****0000",
     "curso": "Manipulacion de Alimentos",
+    "intensidad_horaria": "",
     "fecha_emision": "2026-03-21",
     "fecha_vencimiento": "2027-03-21",
     "estado": "Anulado",
     "url_pdf": "",
-    "qr": ""
+    "archivo_pdf_url": "",
+    "qr": "",
+    "qr_url": "",
+    "validation_url": ""
+  },
+  {
+    "codigo": "MS-2026-0001",
+    "codigo_unico": "MS-2026-0001",
+    "nombre": "Nombre del estudiante",
+    "nombre_estudiante": "Nombre del estudiante",
+    "documento_parcial": "****1234",
+    "curso": "Manipulacion de Alimentos",
+    "intensidad_horaria": "",
+    "fecha_emision": "2026-03-21",
+    "fecha_vencimiento": "2027-03-21",
+    "estado": "Anulado",
+    "url_pdf": "",
+    "archivo_pdf_url": "",
+    "qr": "",
+    "qr_url": "",
+    "validation_url": ""
   }
 ]

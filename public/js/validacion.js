@@ -21,6 +21,11 @@
       .replace(/[\u0300-\u036f]/g, "");
   }
 
+  function isStaticPublicHost() {
+    const host = window.location.hostname;
+    return window.location.protocol === "file:" || host.endsWith("github.io");
+  }
+
   function onlyDigits(value) {
     return String(value || "").replace(/\D/g, "");
   }
@@ -77,10 +82,33 @@
     }
   }
 
+  function decodeBase64Url(value) {
+    const normalized = String(value || "").replace(/-/g, "+").replace(/_/g, "/");
+    const padded = normalized + "=".repeat((4 - (normalized.length % 4)) % 4);
+    return decodeURIComponent(
+      Array.prototype.map
+        .call(atob(padded), (char) => "%" + char.charCodeAt(0).toString(16).padStart(2, "0"))
+        .join("")
+    );
+  }
+
+  function loadCertificateFromUrl() {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const encoded = params.get("cert");
+      if (!encoded) return [];
+      const parsed = JSON.parse(decodeBase64Url(encoded));
+      return parsed && typeof parsed === "object" ? [parsed] : [];
+    } catch (error) {
+      return [];
+    }
+  }
+
   async function loadCertificates() {
     const base = await loadStaticCertificates();
     const local = loadLocalGeneratedCertificates();
-    const merged = [...local, ...base].map(normalizeCertificate);
+    const fromUrl = loadCertificateFromUrl();
+    const merged = [...fromUrl, ...local, ...base].map(normalizeCertificate);
     const byCode = new Map();
     merged.forEach((cert) => {
       const key = normalize(cert.codigo);
@@ -91,7 +119,9 @@
 
   function apiBaseUrl() {
     const cfg = window.MULTISERVICIOS_CONFIG || {};
-    return String(cfg.certificadosApiUrl || "").trim().replace(/\/$/, "");
+    const base = String(cfg.certificadosApiUrl || "").trim().replace(/\/$/, "");
+    if (isStaticPublicHost() && base.startsWith("/")) return "";
+    return base;
   }
 
   async function validateWithApi(code, documentValue) {
@@ -101,7 +131,7 @@
     if (code) params.set("codigo", code);
     if (documentValue) params.set("documento", documentValue);
     const response = await fetch(base + "/certificados/validar?" + params.toString(), { cache: "no-store" });
-    if (response.status === 404) return { found: false };
+    if ([404, 405, 501].includes(response.status)) return null;
     if (!response.ok) throw new Error("No se pudo consultar la API de certificados");
     const payload = await response.json();
     const cert = payload.certificado || payload.data || payload;
@@ -193,8 +223,8 @@
       }
 
       try {
-        const apiResult = await validateWithApi(code, documentValue);
-        const validation = apiResult || (await validateLocally(code, documentValue));
+        const apiResult = await validateWithApi(code, documentValue).catch(() => null);
+        const validation = apiResult && apiResult.found ? apiResult : await validateLocally(code, documentValue);
         if (validation.found) renderResult(result, validation.cert, documentValue);
         else renderNotFound(result);
       } catch (error) {
