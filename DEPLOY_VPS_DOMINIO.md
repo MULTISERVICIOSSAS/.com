@@ -89,6 +89,12 @@ https://tudominio.com/admin/
 https://code.tudominio.com/
 ```
 
+Desde Windows puedes verificar DNS y HTTP con:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\deploy\check_domain.ps1 -Domain tudominio.com -CodeDomain code.tudominio.com -ExpectedIp IP_PUBLICA_DEL_VPS
+```
+
 ## 5. Actualizar produccion
 
 Flujo normal:
@@ -135,6 +141,7 @@ Luego ejecuta el workflow manual **Deploy VPS** desde GitHub Actions.
 - `deploy/nginx/multiservicios.conf`: proxy Nginx para el sitio.
 - `deploy/nginx/code-server.conf`: proxy Nginx para el editor.
 - `deploy/systemd/multiservicios.service`: servicio systemd de la app.
+- `deploy/systemd/multiservicios-backup.timer`: backup diario de base y PDFs.
 - `deploy/env.production.example`: variables de entorno de produccion.
 
 ## 8. Seguridad minima
@@ -145,6 +152,14 @@ Luego ejecuta el workflow manual **Deploy VPS** desde GitHub Actions.
 - Manten `storage/` con permisos restringidos.
 - Activa firewall con `ufw allow OpenSSH` y `ufw allow 'Nginx Full'`.
 - Respalda `storage/db/multiservicios.sqlite3` y `storage/pdfs/`.
+
+El instalador activa un backup diario de `storage/`:
+
+```bash
+systemctl status multiservicios-backup.timer
+systemctl start multiservicios-backup.service
+ls -lh /var/backups/multiservicios/
+```
 
 ## 9. Fuentes oficiales usadas
 

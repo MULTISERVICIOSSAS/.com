@@ -69,7 +69,10 @@ chmod 640 /etc/multiservicios.env
 chown root:www-data /etc/multiservicios.env
 
 install -m 0644 "$APP_DIR/deploy/systemd/multiservicios.service" /etc/systemd/system/multiservicios.service
+install -m 0644 "$APP_DIR/deploy/systemd/multiservicios-backup.service" /etc/systemd/system/multiservicios-backup.service
+install -m 0644 "$APP_DIR/deploy/systemd/multiservicios-backup.timer" /etc/systemd/system/multiservicios-backup.timer
 sed -i "s#/var/www/multiservicios#$APP_DIR#g" /etc/systemd/system/multiservicios.service
+sed -i "s#/var/www/multiservicios#$APP_DIR#g" /etc/systemd/system/multiservicios-backup.service
 sed -i "s#User=multiservicios#User=$APP_USER#g" /etc/systemd/system/multiservicios.service
 
 sed \
@@ -82,6 +85,7 @@ rm -f /etc/nginx/sites-enabled/default
 
 systemctl daemon-reload
 systemctl enable --now multiservicios
+systemctl enable --now multiservicios-backup.timer
 
 if [ "$INSTALL_CODE_SERVER" = "1" ]; then
   curl -fsSL https://code-server.dev/install.sh | sh
@@ -133,6 +137,7 @@ Multiservicios instalado.
 Sitio: http://$DOMAIN
 Admin: http://$DOMAIN/admin/
 Servicio: systemctl status multiservicios
+Backups: systemctl status multiservicios-backup.timer
 Code-Server: http://$CODE_DOMAIN
 App dir: $APP_DIR
 

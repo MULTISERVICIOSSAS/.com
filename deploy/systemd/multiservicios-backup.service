@@ -1,0 +1,9 @@
+[Unit]
+Description=Multiservicios storage backup
+
+[Service]
+Type=oneshot
+Environment=APP_DIR=/var/www/multiservicios
+Environment=BACKUP_DIR=/var/backups/multiservicios
+Environment=KEEP_DAYS=14
+ExecStart=/usr/bin/bash /var/www/multiservicios/deploy/backup_storage.sh
