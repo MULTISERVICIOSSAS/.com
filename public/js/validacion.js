@@ -36,7 +36,25 @@
     return String(value || "No publicado");
   }
 
+  function expandCertificatePayload(item) {
+    if (!item || typeof item !== "object") return {};
+    if (!("c" in item) && !("n" in item) && !("fi" in item)) return item;
+    return {
+      codigo: item.c || item.codigo || "",
+      nombre: item.n || item.nombre || "",
+      documento_parcial: item.d || item.documento_parcial || "",
+      curso: item.cu || item.curso || "Manipulacion de Alimentos",
+      fecha_emision: item.fi || item.fecha_emision || "",
+      fecha_vencimiento: item.fv || item.fecha_vencimiento || "",
+      estado: item.e || item.estado || "Activo",
+      validation_url: item.u || item.validation_url || "",
+      qr: item.q || item.qr || "",
+      _source: "qr"
+    };
+  }
+
   function normalizeCertificate(item) {
+    item = expandCertificatePayload(item);
     const codigo = item.codigo || item.codigo_unico || item.code || "";
     const documentoParcial = item.documento_parcial || item.documentoParcial || item.documento || item.document || "";
     return {
@@ -49,7 +67,8 @@
       estado: item.estado || item.status || "Activo",
       url_pdf: item.url_pdf || item.archivo_pdf_url || "",
       validation_url: item.validation_url || item.validationUrl || "",
-      qr: item.qr || item.qr_url || ""
+      qr: item.qr || item.qr_url || "",
+      _source: item._source || item.source || ""
     };
   }
 
@@ -82,6 +101,27 @@
     }
   }
 
+  function rememberUrlCertificate(cert) {
+    try {
+      const key = normalize(cert.codigo);
+      if (!key) return;
+      const current = loadLocalGeneratedCertificates();
+      const stored = {
+        codigo: cert.codigo,
+        nombre: cert.nombre,
+        documento_parcial: cert.documento_parcial,
+        curso: cert.curso,
+        fecha_emision: cert.fecha_emision,
+        fecha_vencimiento: cert.fecha_vencimiento,
+        estado: cert.estado,
+        validation_url: cert.validation_url,
+        _source: cert._source || "qr"
+      };
+      const next = [stored, ...current.filter((item) => normalize(item.codigo || item.codigo_unico || item.code) !== key)];
+      localStorage.setItem("msGeneratedCertificates", JSON.stringify(next.slice(0, 250)));
+    } catch (error) {}
+  }
+
   function decodeBase64Url(value) {
     const normalized = String(value || "").replace(/-/g, "+").replace(/_/g, "/");
     const padded = normalized + "=".repeat((4 - (normalized.length % 4)) % 4);
@@ -97,8 +137,12 @@
       const params = new URLSearchParams(window.location.search);
       const encoded = params.get("cert");
       if (!encoded) return [];
-      const parsed = JSON.parse(decodeBase64Url(encoded));
-      return parsed && typeof parsed === "object" ? [parsed] : [];
+      const parsed = expandCertificatePayload(JSON.parse(decodeBase64Url(encoded)));
+      const cert = normalizeCertificate(parsed);
+      const codeFromUrl = normalize(params.get("codigo") || params.get("code") || "");
+      if (codeFromUrl && normalize(cert.codigo) && codeFromUrl !== normalize(cert.codigo)) return [];
+      rememberUrlCertificate(cert);
+      return cert.codigo ? [cert] : [];
     } catch (error) {
       return [];
     }
@@ -135,7 +179,7 @@
     if (!response.ok) throw new Error("No se pudo consultar la API de certificados");
     const payload = await response.json();
     const cert = payload.certificado || payload.data || payload;
-    return cert && (cert.codigo || cert.codigo_unico || cert.code) ? { found: true, cert: normalizeCertificate(cert) } : { found: false };
+    return cert && (cert.codigo || cert.codigo_unico || cert.code) ? { found: true, cert: normalizeCertificate({ ...cert, _source: "api" }) } : { found: false };
   }
 
   async function validateLocally(code, documentValue) {
@@ -160,13 +204,16 @@
     target.className = "validation-result show " + (ok ? "valid" : "invalid");
     const statusClass = active ? "green" : "gold";
     const title = ok ? "Certificado valido" : "Revision requerida";
+    const sourceText = cert._source === "qr"
+      ? "Este certificado se valido desde el enlace publico del QR de Multiservicios."
+      : "Este certificado se encontro en la base de validacion de Multiservicios.";
     const documentNote = matches
       ? "La informacion ingresada coincide con el registro disponible."
       : "El codigo existe, pero el documento ingresado no coincide con el dato parcial registrado.";
 
     target.innerHTML = `
       <h3>${title}</h3>
-      <p>Este certificado se encontro en la base de validacion de Multiservicios.</p>
+      <p>${sourceText}</p>
       <div class="table-wrap">
         <table>
           <tbody>
@@ -189,7 +236,7 @@
     target.className = "validation-result show invalid";
     target.innerHTML = `
       <h3>No encontramos ese certificado</h3>
-      <p>Verifica el codigo y los ultimos digitos del documento. Si el certificado fue generado hace poco, publica la base de certificados desde el panel administrativo.</p>
+      <p>Verifica el codigo y los ultimos digitos del documento. Si es un certificado nuevo en GitHub Pages, escanea el QR del certificado o actualiza la base publica desde el panel administrativo.</p>
     `;
   }
 
@@ -234,7 +281,8 @@
     });
 
     const params = new URLSearchParams(window.location.search);
-    const codeFromUrl = params.get("codigo") || params.get("code");
+    const certFromUrl = loadCertificateFromUrl()[0];
+    const codeFromUrl = params.get("codigo") || params.get("code") || (certFromUrl && certFromUrl.codigo);
     if (codeFromUrl) {
       const input = form.querySelector("[name='codigo']");
       if (input) input.value = codeFromUrl;
