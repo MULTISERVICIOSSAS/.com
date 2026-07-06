@@ -11,6 +11,7 @@
   --danger: #bd2d2a;
   --radius: 8px;
   --shadow: 0 22px 55px rgba(13, 28, 49, 0.14);
+  --site-bg-image: url("../images/equipo-multiservicios.jpg");
 }
 
 * {
@@ -515,8 +516,8 @@ h3 {
 .cta {
   padding: 72px 0;
   background:
-    linear-gradient(90deg, rgba(13, 28, 49, 0.94), rgba(13, 28, 49, 0.8)),
-    url("../images/servicio-control-plagas.jpg") center / cover;
+    linear-gradient(90deg, rgba(13, 28, 49, 0.96), rgba(13, 28, 49, 0.82)),
+    var(--site-bg-image) center / cover no-repeat;
   color: #fff;
 }
 
@@ -533,7 +534,9 @@ h3 {
 
 .footer {
   padding: 48px 0;
-  background: #091421;
+  background:
+    linear-gradient(90deg, rgba(9, 20, 33, 0.98), rgba(9, 20, 33, 0.88)),
+    var(--site-bg-image) center / cover no-repeat;
   color: #d8e3ef;
 }
 

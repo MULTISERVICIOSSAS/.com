@@ -203,6 +203,15 @@
     return window.location.protocol === "file:" || host.endsWith("github.io");
   }
 
+  function isLocalAdminHost() {
+    const host = window.location.hostname;
+    return host === "localhost" || host === "127.0.0.1" || host === "";
+  }
+
+  function isRelativeApiBase(base) {
+    return Boolean(base) && base.startsWith("/");
+  }
+
   function isAdminPassword(value) {
     return clean(value).toUpperCase() === "MULTISERVICIOS";
   }
@@ -242,11 +251,11 @@
       loginForm.addEventListener("submit", async (event) => {
         event.preventDefault();
         const phrase = clean(new FormData(loginForm).get("frase"));
-        if (isStaticAdminHost() && isAdminPassword(phrase)) {
+        const base = apiBaseUrl();
+        if (isAdminPassword(phrase) && (isStaticAdminHost() || isLocalAdminHost() || !base || isRelativeApiBase(base))) {
           openAdminDashboard("static");
           return;
         }
-        const base = apiBaseUrl();
         if (base) {
           try {
             const response = await apiRequest("/auth/login", {

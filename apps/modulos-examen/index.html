@@ -9,10 +9,20 @@
     <script src="../../js/config.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-        
+        :root {
+            --ms-navy: #102136;
+            --ms-navy-deep: #081626;
+            --ms-blue: #1559c7;
+            --ms-soft-blue: rgba(16, 33, 54, 0.08);
+            --ms-soft-border: rgba(16, 33, 54, 0.2);
+            --ms-bg-image: url("../../assets/images/equipo-multiservicios.jpg");
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
+            background:
+                linear-gradient(180deg, rgba(8, 22, 38, 0.95), rgba(8, 22, 38, 0.84)),
+                var(--ms-bg-image) center / cover fixed;
         }
         .fade-in {
             animation: fadeIn 0.5s ease-in-out;
@@ -21,9 +31,9 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .primary-blue { color: #2563eb; }
-        .bg-primary-blue { background-color: #2563eb; }
-        .border-primary-blue { border-color: #2563eb; }
+        .primary-blue { color: var(--ms-navy); }
+        .bg-primary-blue { background-color: var(--ms-navy); }
+        .border-primary-blue { border-color: var(--ms-navy); }
         video {
             width: 100%;
             height: auto;
@@ -58,12 +68,12 @@
             justify-content: space-between;
             margin-top: 0.85rem;
             padding: 0.9rem 1rem;
-            border: 1px solid #dbeafe;
+            border: 1px solid var(--ms-soft-border);
             border-radius: 0.75rem;
-            background: #eff6ff;
+            background: var(--ms-soft-blue);
         }
         .video-actions a {
-            color: #1d4ed8;
+            color: var(--ms-navy);
             font-weight: 700;
             text-decoration: none;
         }
@@ -71,14 +81,62 @@
             text-decoration: underline;
         }
         .certificate-bg {
-            background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
-            border: 10px solid #2563eb;
+            background: linear-gradient(135deg, #ffffff 0%, rgba(16, 33, 54, 0.08) 100%);
+            border: 10px solid var(--ms-navy);
             position: relative;
         }
         .certificate-border {
             border: 2px solid #fbbf24;
             margin: 5px;
             height: calc(100% - 10px);
+        }
+        nav.bg-blue-600,
+        footer.bg-gray-800 {
+            background:
+                linear-gradient(90deg, rgba(8, 22, 38, 0.98), rgba(8, 22, 38, 0.9)),
+                var(--ms-bg-image) center / cover no-repeat !important;
+        }
+        footer.bg-gray-800 {
+            color: #d9e3ef !important;
+        }
+        .bg-blue-600,
+        .bg-primary-blue,
+        .hover\:bg-blue-700:hover {
+            background-color: var(--ms-navy) !important;
+        }
+        .bg-blue-50,
+        .bg-blue-100,
+        .hover\:bg-blue-50:hover {
+            background-color: var(--ms-soft-blue) !important;
+        }
+        .text-blue-600,
+        .text-blue-700,
+        .text-blue-800,
+        .text-blue-900,
+        .hover\:text-blue-800:hover,
+        .group:hover .group-hover\:text-blue-900,
+        .primary-blue {
+            color: var(--ms-navy) !important;
+        }
+        .border-blue-600,
+        .border-blue-400,
+        .border-blue-300,
+        .border-blue-200,
+        .border-blue-100,
+        .hover\:border-blue-400:hover,
+        .hover\:border-blue-300:hover,
+        .border-primary-blue {
+            border-color: var(--ms-navy) !important;
+        }
+        .group:hover .group-hover\:bg-blue-600 {
+            background-color: var(--ms-navy) !important;
+        }
+        .focus\:ring-blue-500:focus {
+            --tw-ring-color: rgba(16, 33, 54, 0.34) !important;
+        }
+        input.text-blue-600,
+        input[type="radio"] {
+            accent-color: var(--ms-navy);
         }
         @media print {
             body * {
@@ -98,7 +156,7 @@
                 border: none;
             }
             .certificate-bg {
-                 border: 5px solid #2563eb !important;
+                 border: 5px solid var(--ms-navy) !important;
                  -webkit-print-color-adjust: exact;
                  print-color-adjust: exact;
             }

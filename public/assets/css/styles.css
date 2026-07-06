@@ -12,6 +12,7 @@
   --success: #11835f;
   --radius: 8px;
   --shadow: 0 18px 45px rgba(16, 33, 54, 0.12);
+  --brand-bg-image: url("../images/equipo-multiservicios.jpg");
 }
 
 * {
@@ -231,7 +232,7 @@ button.button {
   position: absolute;
   inset: 0;
   content: "";
-  background-image: var(--hero-image);
+  background-image: var(--hero-image, url("../images/equipo-multiservicios.jpg"));
   background-position: center;
   background-size: cover;
   transform: scale(1.02);
@@ -352,7 +353,9 @@ h1 {
 }
 
 .section.dark {
-  background: var(--navy);
+  background:
+    linear-gradient(90deg, rgba(8, 22, 38, 0.96), rgba(8, 22, 38, 0.84)),
+    var(--brand-bg-image) center / cover no-repeat;
   color: #fff;
 }
 
@@ -744,7 +747,9 @@ th {
 }
 
 .footer {
-  background: #0d1828;
+  background:
+    linear-gradient(90deg, rgba(8, 22, 38, 0.97), rgba(8, 22, 38, 0.88)),
+    var(--brand-bg-image) center / cover no-repeat;
   color: #d8e1eb;
   padding: 54px 0 24px;
 }
@@ -804,7 +809,9 @@ th {
   justify-content: space-between;
   gap: 16px;
   padding: 14px 20px;
-  background: var(--navy);
+  background:
+    linear-gradient(90deg, rgba(16, 33, 54, 0.98), rgba(16, 33, 54, 0.88)),
+    var(--brand-bg-image) center / cover no-repeat;
   color: #fff;
 }
 
@@ -832,7 +839,9 @@ th {
   display: grid;
   place-items: center;
   padding: 24px;
-  background: #edf2f7;
+  background:
+    linear-gradient(90deg, rgba(8, 22, 38, 0.94), rgba(8, 22, 38, 0.78)),
+    var(--brand-bg-image) center / cover no-repeat;
 }
 
 .login-card {
@@ -845,7 +854,9 @@ th {
 }
 
 .flyer-page {
-  background: #0d1828;
+  background:
+    linear-gradient(90deg, rgba(8, 22, 38, 0.97), rgba(8, 22, 38, 0.88)),
+    var(--brand-bg-image) center / cover no-repeat;
   color: #fff;
 }
 
