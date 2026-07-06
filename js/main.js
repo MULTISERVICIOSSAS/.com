@@ -223,10 +223,14 @@
           try {
             const response = await apiRequest("/auth/login", {
               method: "POST",
-              body: JSON.stringify({ clave: phrase })
+              body: JSON.stringify({ clave: phrase.toUpperCase() })
             });
             if (!response || !response.ok) {
-              showInlineMessage(loginForm, "Clave administrativa incorrecta.", "invalid");
+              if (response && response.status === 404) {
+                showInlineMessage(loginForm, "El admin necesita el backend local. Abre http://127.0.0.1:8090/admin/ con el servidor encendido.", "invalid");
+              } else {
+                showInlineMessage(loginForm, "Clave administrativa incorrecta. Usa MULTISERVICIOS en mayusculas.", "invalid");
+              }
               return;
             }
             sessionStorage.setItem("msAdminAcknowledged", "true");

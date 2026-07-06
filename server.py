@@ -1057,7 +1057,12 @@ class MultiserviciosHandler(BaseHTTPRequestHandler):
         password = clean_text(payload.get("password") or payload.get("clave") or payload.get("frase"), 200)
         with db() as conn:
             admin = conn.execute("SELECT * FROM admins WHERE email = ? AND estado = 'activo'", (ADMIN_EMAIL,)).fetchone()
-            if not admin or not verify_password(password, admin["password_salt"], admin["password_hash"]):
+            valid_password = bool(admin) and verify_password(password, admin["password_salt"], admin["password_hash"])
+            if not valid_password and password:
+                normalized_password = password.upper()
+                if normalized_password != password:
+                    valid_password = bool(admin) and verify_password(normalized_password, admin["password_salt"], admin["password_hash"])
+            if not admin or not valid_password:
                 self.send_json({"ok": False, "error": "Clave incorrecta"}, 401)
                 return
             token = secrets.token_urlsafe(36)

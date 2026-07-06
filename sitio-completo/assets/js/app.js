@@ -119,10 +119,14 @@
         try {
           const response = await api("/auth/login", {
             method: "POST",
-            body: JSON.stringify({ password })
+            body: JSON.stringify({ password: password.toUpperCase() })
           });
           if (!response.ok) {
-            setStatus("Clave administrativa incorrecta.", "invalid");
+            if (response.status === 404) {
+              setStatus("El admin necesita el backend local. Abre http://127.0.0.1:8090/admin/ con el servidor encendido.", "invalid");
+            } else {
+              setStatus("Clave administrativa incorrecta. Usa MULTISERVICIOS en mayusculas.", "invalid");
+            }
             return;
           }
           const session = await response.json();
