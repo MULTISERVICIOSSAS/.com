@@ -25,6 +25,24 @@
     });
   }
 
+  function isStaticAdminHost() {
+    const host = window.location.hostname;
+    return window.location.protocol === "file:" || host.endsWith("github.io");
+  }
+
+  function isAdminPassword(value) {
+    return clean(value).toUpperCase() === "MULTISERVICIOS";
+  }
+
+  function hasAdminSession() {
+    return sessionStorage.getItem("msAdminAcknowledged") === "true";
+  }
+
+  function rememberAdmin(mode = "backend") {
+    sessionStorage.setItem("msAdminAcknowledged", "true");
+    sessionStorage.setItem("msAdminMode", mode);
+  }
+
   function initMenu() {
     const button = document.querySelector("[data-menu-button]");
     const nav = document.querySelector("[data-main-nav]");
@@ -90,22 +108,62 @@
         const response = await api("/admin/stats");
         if (!response.ok) throw new Error("stats");
         const stats = await response.json();
+        populateStats(stats);
+      } catch (error) {
+        await loadStaticStats();
+      }
+    }
+
+    function populateStats(stats) {
         widget.querySelectorAll("[data-admin-stat]").forEach((node) => {
           const key = node.getAttribute("data-admin-stat");
           node.textContent = stats[key] ?? 0;
         });
-      } catch (error) {
-        setStatus("Sesion abierta, pero no se pudieron cargar las estadisticas.", "invalid");
+    }
+
+    async function loadStaticStats() {
+      const stats = {
+        certificates: 0,
+        course_results: 0,
+        customers: 0,
+        pending_requests: 0,
+        pending_payments: 0,
+        approved_exams: 0
+      };
+      try {
+        const response = await fetch("../data/certificados.json", { cache: "no-store" });
+        if (response.ok) {
+          const certificates = await response.json();
+          if (Array.isArray(certificates)) {
+            stats.certificates = certificates.length;
+          }
+        }
+      } catch (error) {}
+      try {
+        const results = JSON.parse(localStorage.getItem("msCourseResults") || "[]");
+        if (Array.isArray(results)) {
+          stats.course_results = results.length;
+          stats.approved_exams = results.filter((item) => String(item.estado || "").toLowerCase().includes("aprob")).length;
+        }
+      } catch (error) {}
+      populateStats(stats);
+      if (isStaticAdminHost()) {
+        setStatus("Sesion administrativa activa en GitHub Pages.", "valid");
       }
     }
 
-    api("/auth/me")
-      .then(async (response) => {
-        if (!response.ok) throw new Error("no-session");
-        const session = await response.json();
-        showPanel(session.admin);
-      })
-      .catch(() => showLogin("Ingresa la clave administrativa para abrir el panel.", ""));
+    if (hasAdminSession() && isStaticAdminHost()) {
+      showPanel({ email: "admin@multiservicios.local" });
+    } else {
+      api("/auth/me")
+        .then(async (response) => {
+          if (!response.ok) throw new Error("no-session");
+          const session = await response.json();
+          rememberAdmin("backend");
+          showPanel(session.admin);
+        })
+        .catch(() => showLogin("Ingresa la clave administrativa para abrir el panel.", ""));
+    }
 
     if (form) {
       form.addEventListener("submit", async (event) => {
@@ -116,23 +174,35 @@
           return;
         }
         setStatus("Validando acceso...", "");
+        if (isStaticAdminHost() && isAdminPassword(password)) {
+          rememberAdmin("static");
+          showPanel({ email: "admin@multiservicios.local" });
+          return;
+        }
         try {
           const response = await api("/auth/login", {
             method: "POST",
             body: JSON.stringify({ password: password.toUpperCase() })
           });
           if (!response.ok) {
-            if (response.status === 404) {
-              setStatus("El admin necesita el backend local. Abre http://127.0.0.1:8090/admin/ con el servidor encendido.", "invalid");
-            } else {
-              setStatus("Clave administrativa incorrecta. Usa MULTISERVICIOS en mayusculas.", "invalid");
+            if (isAdminPassword(password) && [404, 405, 501].includes(response.status)) {
+              rememberAdmin("static");
+              showPanel({ email: "admin@multiservicios.local" });
+              return;
             }
+            setStatus("Clave administrativa incorrecta. Usa MULTISERVICIOS en mayusculas.", "invalid");
             return;
           }
           const session = await response.json();
+          rememberAdmin("backend");
           showPanel(session.admin);
         } catch (error) {
-          setStatus("No se pudo conectar con el backend local.", "invalid");
+          if (isAdminPassword(password)) {
+            rememberAdmin("static");
+            showPanel({ email: "admin@multiservicios.local" });
+            return;
+          }
+          setStatus("No se pudo conectar con el backend. En GitHub usa MULTISERVICIOS para abrir el modo estatico.", "invalid");
         }
       });
     }
@@ -140,6 +210,8 @@
     if (logout) {
       logout.addEventListener("click", async () => {
         await api("/auth/logout", { method: "POST", body: "{}" }).catch(() => {});
+        sessionStorage.removeItem("msAdminAcknowledged");
+        sessionStorage.removeItem("msAdminMode");
         showLogin("Sesion cerrada.", "valid");
       });
     }

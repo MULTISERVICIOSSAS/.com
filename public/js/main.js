@@ -198,18 +198,42 @@
     return response;
   }
 
+  function isStaticAdminHost() {
+    const host = window.location.hostname;
+    return window.location.protocol === "file:" || host.endsWith("github.io");
+  }
+
+  function isAdminPassword(value) {
+    return clean(value).toUpperCase() === "MULTISERVICIOS";
+  }
+
+  function hasAdminSession() {
+    return sessionStorage.getItem("msAdminAcknowledged") === "true";
+  }
+
+  function openAdminDashboard(mode = "backend") {
+    sessionStorage.setItem("msAdminAcknowledged", "true");
+    sessionStorage.setItem("msAdminMode", mode);
+    window.location.href = "dashboard.html";
+  }
+
   function initAdminGuard() {
     const protectedPage = document.body.dataset.adminProtected === "true";
     const base = apiBaseUrl();
     if (protectedPage && base) {
       apiRequest("/auth/me")
         .then((response) => {
-          if (!response || !response.ok) window.location.href = "login.html";
+          if (response && response.ok) {
+            sessionStorage.setItem("msAdminAcknowledged", "true");
+            sessionStorage.setItem("msAdminMode", "backend");
+            return;
+          }
+          if (!hasAdminSession()) window.location.href = "login.html";
         })
         .catch(() => {
-          window.location.href = "login.html";
+          if (!hasAdminSession()) window.location.href = "login.html";
         });
-    } else if (protectedPage && sessionStorage.getItem("msAdminAcknowledged") !== "true") {
+    } else if (protectedPage && !hasAdminSession()) {
       window.location.href = "login.html";
     }
 
@@ -218,6 +242,10 @@
       loginForm.addEventListener("submit", async (event) => {
         event.preventDefault();
         const phrase = clean(new FormData(loginForm).get("frase"));
+        if (isStaticAdminHost() && isAdminPassword(phrase)) {
+          openAdminDashboard("static");
+          return;
+        }
         const base = apiBaseUrl();
         if (base) {
           try {
@@ -226,27 +254,29 @@
               body: JSON.stringify({ clave: phrase.toUpperCase() })
             });
             if (!response || !response.ok) {
-              if (response && response.status === 404) {
-                showInlineMessage(loginForm, "El admin necesita el backend local. Abre http://127.0.0.1:8090/admin/ con el servidor encendido.", "invalid");
-              } else {
-                showInlineMessage(loginForm, "Clave administrativa incorrecta. Usa MULTISERVICIOS en mayusculas.", "invalid");
+              if (isAdminPassword(phrase) && (!response || [404, 405, 501].includes(response.status))) {
+                openAdminDashboard("static");
+                return;
               }
+              showInlineMessage(loginForm, "Clave administrativa incorrecta. Usa MULTISERVICIOS en mayusculas.", "invalid");
               return;
             }
-            sessionStorage.setItem("msAdminAcknowledged", "true");
-            window.location.href = "dashboard.html";
+            openAdminDashboard("backend");
             return;
           } catch (error) {
-            showInlineMessage(loginForm, "No se pudo conectar con el backend.", "invalid");
+            if (isAdminPassword(phrase)) {
+              openAdminDashboard("static");
+              return;
+            }
+            showInlineMessage(loginForm, "No se pudo conectar con el backend. En GitHub usa MULTISERVICIOS para abrir el modo estatico.", "invalid");
             return;
           }
         }
-        if (phrase.toUpperCase() !== "MULTISERVICIOS") {
+        if (!isAdminPassword(phrase)) {
           showInlineMessage(loginForm, "Escribe MULTISERVICIOS para continuar.", "invalid");
           return;
         }
-        sessionStorage.setItem("msAdminAcknowledged", "true");
-        window.location.href = "dashboard.html";
+        openAdminDashboard("static");
       });
     }
 
@@ -255,6 +285,7 @@
       logout.addEventListener("click", async () => {
         await apiRequest("/auth/logout", { method: "POST", body: "{}" }).catch(() => {});
         sessionStorage.removeItem("msAdminAcknowledged");
+        sessionStorage.removeItem("msAdminMode");
         window.location.href = "login.html";
       });
     }
