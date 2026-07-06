@@ -68,6 +68,23 @@ bash /tmp/vps_setup_ubuntu.sh
 
 El script instala Nginx, Git, Python, Certbot, Code-Server, clona el proyecto en `/var/www/multiservicios`, crea `/etc/multiservicios.env`, configura systemd y solicita SSL.
 
+### Opcion con cloud-init
+
+Si el proveedor del VPS permite pegar **User Data / cloud-init**, puedes usar:
+
+```text
+deploy/cloud-init.multiservicios.yaml
+```
+
+Antes de crear el VPS, reemplaza:
+
+- `REEMPLAZA_DOMINIO`
+- `REEMPLAZA_CLAVE_ADMIN_SEGURA`
+- `REEMPLAZA_CLAVE_CODE_SERVER_SEGURA`
+- `REEMPLAZA_CORREO_SSL`
+
+Usa esta opcion solo cuando los registros DNS `A`, `www` y `code` ya apunten a la IP del VPS, porque `ENABLE_SSL=1` solicita certificados Let's Encrypt durante el primer arranque.
+
 ## 4. Verificacion
 
 En el VPS:
@@ -137,6 +154,7 @@ Luego ejecuta el workflow manual **Deploy VPS** desde GitHub Actions.
 ## 7. Archivos importantes
 
 - `deploy/vps_setup_ubuntu.sh`: instalacion inicial en Ubuntu.
+- `deploy/cloud-init.multiservicios.yaml`: instalacion automatica al crear VPS.
 - `deploy/deploy_pull.sh`: actualizacion por Git en servidor.
 - `deploy/nginx/multiservicios.conf`: proxy Nginx para el sitio.
 - `deploy/nginx/code-server.conf`: proxy Nginx para el editor.

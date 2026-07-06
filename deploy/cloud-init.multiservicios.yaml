@@ -1,0 +1,42 @@
+#cloud-config
+package_update: true
+package_upgrade: false
+
+packages:
+  - curl
+  - ca-certificates
+  - git
+  - openssl
+
+write_files:
+  - path: /root/install-multiservicios.sh
+    owner: root:root
+    permissions: "0700"
+    content: |
+      #!/usr/bin/env bash
+      set -euo pipefail
+
+      export DOMAIN="REEMPLAZA_DOMINIO"
+      export WWW_DOMAIN="www.REEMPLAZA_DOMINIO"
+      export CODE_DOMAIN="code.REEMPLAZA_DOMINIO"
+      export REPO_URL="https://github.com/MULTISERVICIOSSAS/.com.git"
+      export ADMIN_EMAIL="admin@REEMPLAZA_DOMINIO"
+      export ADMIN_PASSWORD="REEMPLAZA_CLAVE_ADMIN_SEGURA"
+      export CODE_SERVER_PASSWORD="REEMPLAZA_CLAVE_CODE_SERVER_SEGURA"
+      export LETSENCRYPT_EMAIL="REEMPLAZA_CORREO_SSL"
+      export ENABLE_SSL="1"
+      export INSTALL_CODE_SERVER="1"
+
+      if [[ "$DOMAIN" == "REEMPLAZA_DOMINIO" ]]; then
+        echo "Edita deploy/cloud-init.multiservicios.yaml antes de crear el VPS." >&2
+        exit 1
+      fi
+
+      curl -fsSL https://raw.githubusercontent.com/MULTISERVICIOSSAS/.com/main/deploy/vps_setup_ubuntu.sh -o /tmp/vps_setup_ubuntu.sh
+      chmod +x /tmp/vps_setup_ubuntu.sh
+      bash /tmp/vps_setup_ubuntu.sh
+
+runcmd:
+  - [bash, /root/install-multiservicios.sh]
+
+final_message: "Multiservicios cloud-init finalizo. Revisa /var/log/cloud-init-output.log"
