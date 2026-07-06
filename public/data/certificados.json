@@ -1,5 +1,22 @@
 [
   {
+    "codigo": "MS-G4D682E7",
+    "codigo_unico": "MS-G4D682E7",
+    "nombre": "No publicado",
+    "nombre_estudiante": "No publicado",
+    "documento_parcial": "****5555",
+    "curso": "Manipulacion de Alimentos",
+    "intensidad_horaria": "",
+    "fecha_emision": "2026-07-06",
+    "fecha_vencimiento": "2027-07-06",
+    "estado": "Activo",
+    "url_pdf": "",
+    "archivo_pdf_url": "",
+    "qr": "",
+    "qr_url": "",
+    "validation_url": "https://multiserviciossas.github.io/.com/validar-certificado.html?codigo=MS-G4D682E7"
+  },
+  {
     "codigo": "MS-D3EC4TP5",
     "codigo_unico": "MS-D3EC4TP5",
     "nombre": "ssssss",
