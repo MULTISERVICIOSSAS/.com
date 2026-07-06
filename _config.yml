@@ -1,0 +1,18 @@
+title: Multiservicios
+description: Sitio publico de Multiservicios
+
+exclude:
+  - public
+  - storage
+  - __pycache__
+  - server.py
+  - requirements.txt
+  - .env.example
+  - INICIAR_MULTISERVICIOS.bat
+  - ABRIR_LINKS_MULTISERVICIOS.bat
+  - start_backend.bat
+  - start_backend.ps1
+  - README_BACKEND.md
+  - README_PROYECTO_COMPLETO.md
+  - DATABASE_SCHEMA.md
+  - SECURITY_CHECKLIST.md
