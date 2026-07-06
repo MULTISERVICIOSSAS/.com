@@ -1,5 +1,11 @@
 # DEPLOYMENT_GUIDE
 
+Para el despliegue completo en VPS con dominio, Nginx, HTTPS y Code-Server, usa:
+
+- `DEPLOY_VPS_DOMINIO.md`
+- `deploy/vps_setup_ubuntu.sh`
+- `.github/workflows/deploy-vps.yml`
+
 ## Abrir localmente
 
 Desde la raiz de `Multiservicios_backend_verificado`:

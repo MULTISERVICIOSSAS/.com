@@ -1,0 +1,24 @@
+name: Deploy VPS
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Pull and restart on VPS
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_APP_DIR: ${{ secrets.VPS_APP_DIR }}
+        run: |
+          APP_DIR="${VPS_APP_DIR:-/var/www/multiservicios}"
+          ssh "$VPS_USER@$VPS_HOST" "cd '$APP_DIR' && git pull --ff-only origin main && sudo systemctl restart multiservicios && sudo nginx -t && sudo systemctl reload nginx"

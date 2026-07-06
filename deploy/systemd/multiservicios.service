@@ -1,0 +1,20 @@
+[Unit]
+Description=Multiservicios web app
+After=network.target
+
+[Service]
+Type=simple
+User=multiservicios
+Group=www-data
+WorkingDirectory=/var/www/multiservicios
+EnvironmentFile=/etc/multiservicios.env
+ExecStart=/usr/bin/python3 /var/www/multiservicios/server.py
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ReadWritePaths=/var/www/multiservicios/storage /var/www/multiservicios/data /var/www/multiservicios/public/data
+
+[Install]
+WantedBy=multi-user.target
