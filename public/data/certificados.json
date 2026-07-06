@@ -31,7 +31,7 @@
     "archivo_pdf_url": "",
     "qr": "",
     "qr_url": "",
-    "validation_url": "http://127.0.0.1:8090/validar-certificado.html?codigo=MS-D3EC4TP5"
+    "validation_url": "https://multiserviciossas.github.io/.com/validar-certificado.html?codigo=MS-D3EC4TP5"
   },
   {
     "codigo": "MS-2026-ANULADO",

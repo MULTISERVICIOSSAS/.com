@@ -13,7 +13,6 @@ No publiques `storage/` como carpeta publica.
 Rutas publicas nuevas:
 
 - `registro.html`
-- `precios.html`
 - `empresas.html`
 - `mi-certificado.html`
 - `preguntas-frecuentes.html`

@@ -101,7 +101,6 @@
                 <span class="badge green">${escapeHtml(item.modalidad || "Servicio")}</span>
                 <h3>${escapeHtml(item.nombre)}</h3>
                 <p>${escapeHtml(item.descripcion)}</p>
-                <p><strong>Precio:</strong> ${escapeHtml(item.precio || "Solicitar precio")}</p>
                 <p><strong>Duracion:</strong> ${escapeHtml(item.duracion || "Segun alcance")}</p>
               </article>`
           )
@@ -121,8 +120,13 @@
   }
 
   function serviceImage(item) {
-    const slug = String(item.slug || "").toLowerCase();
+    const slug = String(item.id || item.slug || "").toLowerCase();
     const images = {
+      "capacitacion-manipulacion-higienica-alimentos": "assets/images/capacitacion-alimentos-certificado.jpg",
+      "certificacion-medica-manipuladores-alimentos": "assets/images/cliente-restaurante.jpg",
+      "plan-saneamiento-basico-empresas": "assets/images/servicio-saneamiento-cocina.jpg",
+      "fumigacion-control-integral-plagas": "assets/images/servicio-control-plagas.jpg",
+      "recarga-mantenimiento-venta-extintores": "assets/images/servicio-extintores-recarga.jpg",
       "certificado-manipulacion-alimentos": "assets/images/capacitacion-alimentos-certificado.jpg",
       "capacitacion-extintores": "assets/images/servicio-extintores-recarga.jpg",
       "lavado-desinfeccion-tanques": "assets/images/servicio-saneamiento-cocina.jpg",

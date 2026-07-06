@@ -46,7 +46,7 @@ Antes de publicar cambia `MS_ADMIN_PASSWORD` y `MS_SECRET_KEY`.
 
 ## Paginas principales
 
-- Publicas: `/`, `/cursos.html`, `/registro.html`, `/precios.html`, `/servicios.html`, `/empresas.html`, `/extintores.html`, `/validar-certificado.html`, `/mi-certificado.html`, `/preguntas-frecuentes.html`, `/tratamiento-datos.html`, `/contacto.html`.
+- Publicas: `/`, `/cursos.html`, `/registro.html`, `/servicios.html`, `/empresas.html`, `/extintores.html`, `/validar-certificado.html`, `/mi-certificado.html`, `/preguntas-frecuentes.html`, `/tratamiento-datos.html`, `/contacto.html`.
 - Curso/examen: `/apps/modulos-examen/index.html`.
 - Admin: `/admin/`, `/admin/dashboard.html`, `/admin/gestion.html`, `/admin/certificados-admin.html`, `/admin/generador-certificados/index.html`.
 

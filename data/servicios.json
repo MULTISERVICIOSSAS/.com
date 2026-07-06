@@ -1,13 +1,33 @@
 [
   {
-    "id": "certificacion-alimentos",
-    "nombre": "Certificacion en Manipulacion de Alimentos",
-    "tipo": "digital",
-    "descripcion": "Curso, examen y certificado digital verificable para personas, negocios y empresas.",
-    "beneficios": ["Proceso acompanado", "Certificado con codigo unico", "Validacion publica"],
-    "requisitos": ["Datos del titular", "Aprobacion del examen", "Confirmacion administrativa"],
-    "duracion": "Segun avance del estudiante",
-    "modalidad": "Digital acompanada"
+    "id": "capacitacion-manipulacion-higienica-alimentos",
+    "nombre": "Capacitacion en manipulacion higienica de alimentos",
+    "tipo": "formacion",
+    "descripcion": "Formacion para buenas practicas, higiene y manejo seguro de alimentos.",
+    "beneficios": ["Capacitacion guiada", "Enfoque para manipuladores de alimentos", "Ruta hacia certificacion"],
+    "requisitos": ["Datos del participante", "Disponibilidad para completar el proceso"],
+    "duracion": "Segun alcance",
+    "modalidad": "Digital o acompanada"
+  },
+  {
+    "id": "certificacion-medica-manipuladores-alimentos",
+    "nombre": "Certificacion medica para manipuladores de alimentos",
+    "tipo": "gestion",
+    "descripcion": "Solicitud asistida para certificados medicos orientados a manipuladores de alimentos.",
+    "beneficios": ["Acompanamiento comercial", "Proceso para personas y equipos", "Registro de solicitud"],
+    "requisitos": ["Datos del titular", "Informacion de contacto"],
+    "duracion": "Segun gestion",
+    "modalidad": "Solicitud asistida"
+  },
+  {
+    "id": "plan-saneamiento-basico-empresas",
+    "nombre": "Plan de saneamiento basico para empresas",
+    "tipo": "empresarial",
+    "descripcion": "Apoyo para organizar medidas basicas de saneamiento y seguimiento empresarial.",
+    "beneficios": ["Organizacion del proceso", "Enfoque empresarial", "Cotizacion por alcance"],
+    "requisitos": ["Tipo de empresa", "Ubicacion", "Alcance requerido"],
+    "duracion": "Segun diagnostico",
+    "modalidad": "Empresarial"
   },
   {
     "id": "lavado-desinfeccion-tanques",
@@ -30,33 +50,23 @@
     "modalidad": "Presencial o mixta"
   },
   {
-    "id": "manejo-extintores",
-    "nombre": "Manejo de extintores",
+    "id": "fumigacion-control-integral-plagas",
+    "nombre": "Fumigacion y control integral de plagas",
+    "tipo": "presencial",
+    "descripcion": "Atencion para control integral de plagas en espacios residenciales, comerciales y empresariales.",
+    "beneficios": ["Control preventivo y correctivo", "Cotizacion por caso", "Atencion por WhatsApp"],
+    "requisitos": ["Tipo de plaga", "Ubicacion", "Alcance requerido"],
+    "duracion": "Segun diagnostico",
+    "modalidad": "Presencial"
+  },
+  {
+    "id": "recarga-mantenimiento-venta-extintores",
+    "nombre": "Recarga, mantenimiento y venta de extintores",
     "tipo": "presencial-mixto",
-    "descripcion": "Capacitacion o servicio relacionado con extintores segun disponibilidad comercial.",
+    "descripcion": "Cotizacion para venta, recarga, revision y mantenimiento de extintores segun disponibilidad.",
     "beneficios": ["Apoyo para negocios", "Cotizacion por caso", "Atencion por WhatsApp"],
-    "requisitos": ["Ubicacion", "Tipo de servicio", "Cantidad o necesidad"],
+    "requisitos": ["Ubicacion", "Cantidad", "Servicio requerido"],
     "duracion": "Por definir segun alcance",
     "modalidad": "Presencial o mixta"
-  },
-  {
-    "id": "certificados-digitales",
-    "nombre": "Generacion de certificados digitales",
-    "tipo": "administrativo",
-    "descripcion": "Sistema interno para emitir certificados PDF con logo, codigo unico, QR y estado.",
-    "beneficios": ["PDF descargable", "Codigo unico", "Base publica verificable"],
-    "requisitos": ["Acceso administrativo", "Datos completos", "Validacion del proceso"],
-    "duracion": "Inmediata despues de revisar datos",
-    "modalidad": "Administrativa"
-  },
-  {
-    "id": "capacitaciones",
-    "nombre": "Capacitaciones empresariales",
-    "tipo": "mixto",
-    "descripcion": "Formacion para equipos de trabajo, emprendimientos y negocios.",
-    "beneficios": ["Escalable por equipo", "Material digital", "Acompanamiento comercial"],
-    "requisitos": ["Tema", "Numero de participantes", "Modalidad esperada"],
-    "duracion": "Por definir segun alcance",
-    "modalidad": "Digital, presencial o mixta"
   }
 ]

@@ -4,7 +4,6 @@
     ["index.html", "Inicio"],
     ["cursos.html", "Curso"],
     ["registro.html", "Registro"],
-    ["precios.html", "Precios"],
     ["servicios.html", "Servicios"],
     ["empresas.html", "Empresas"],
     ["extintores.html", "Extintores"],
@@ -88,7 +87,6 @@
               <strong>Servicios</strong>
               <ul>
                 <li><a href="servicios.html">Portafolio</a></li>
-                <li><a href="precios.html">Planes y pagos</a></li>
                 <li><a href="empresas.html">Empresas</a></li>
                 <li><a href="extintores.html">Extintores</a></li>
                 <li><a href="volante-digital.html">Volante digital</a></li>
