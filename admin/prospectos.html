@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prospectos | Multiservicios</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+  <style>
+    .prospect-toolbar { display:grid; grid-template-columns:minmax(220px,1fr) auto auto; gap:12px; align-items:end; }
+    .prospect-summary { display:flex; justify-content:space-between; gap:16px; align-items:center; margin:18px 0 10px; }
+    .prospect-table { min-width:1180px; }
+    .prospect-table td { vertical-align:top; max-width:260px; }
+    .prospect-table .phones { white-space:nowrap; }
+    .icon-command { width:40px; height:40px; padding:0; display:inline-grid; place-items:center; }
+    .prospect-pagination { display:flex; justify-content:flex-end; align-items:center; gap:10px; margin-top:16px; }
+    .prospect-dialog { width:min(900px,calc(100vw - 32px)); max-height:85vh; border:0; border-radius:8px; padding:0; color:var(--ink); }
+    .prospect-dialog::backdrop { background:rgba(16,33,54,.65); }
+    .prospect-dialog__head { display:flex; justify-content:space-between; gap:16px; align-items:center; padding:20px 24px; border-bottom:1px solid #dce4eb; }
+    .prospect-dialog__body { padding:24px; overflow:auto; }
+    .prospect-detail { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px 24px; }
+    .prospect-detail dt { color:var(--muted); font-size:.78rem; font-weight:800; text-transform:uppercase; }
+    .prospect-detail dd { margin:4px 0 0; overflow-wrap:anywhere; }
+    @media (max-width:720px) {
+      .prospect-toolbar { grid-template-columns:1fr; }
+      .prospect-summary { align-items:flex-start; flex-direction:column; }
+      .prospect-detail { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body class="app-shell" data-admin-protected="true">
+  <header class="app-topbar">
+    <div class="app-brand">
+      <img src="../assets/logos/logo-horizontal.png" alt="Multiservicios" />
+      <strong>Base de prospectos</strong>
+    </div>
+    <nav class="section-actions">
+      <a class="button small secondary" href="dashboard.html"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+      <a class="button small secondary" href="gestion.html"><i data-lucide="settings-2"></i> Gestion</a>
+      <button class="button small warning" data-admin-logout type="button"><i data-lucide="log-out"></i> Salir</button>
+    </nav>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <span class="section-kicker">CRM privado</span>
+      <h1 style="color:var(--ink);font-size:clamp(2rem,4vw,3.4rem);margin:8px 0">Clientes potenciales</h1>
+      <p class="section-lead">Consulta los contactos comerciales importados en una base independiente.</p>
+
+      <form class="admin-tile prospect-toolbar" data-prospect-search>
+        <div class="field">
+          <label for="prospect-query">Buscar</label>
+          <input id="prospect-query" name="q" type="search" placeholder="Establecimiento, telefono, ciudad, actividad o agente" />
+        </div>
+        <button class="button success" type="submit"><i data-lucide="search"></i> Buscar</button>
+        <button class="button secondary" type="button" data-prospect-reset><i data-lucide="rotate-ccw"></i> Limpiar</button>
+      </form>
+
+      <div class="prospect-summary">
+        <div>
+          <strong data-prospect-total>0 prospectos</strong>
+          <p class="section-lead" data-prospect-page>Pagina 1</p>
+        </div>
+        <span class="badge green">Base separada de certificados</span>
+      </div>
+
+      <div data-prospect-status class="validation-result" aria-live="polite"></div>
+      <div data-prospect-list></div>
+
+      <div class="prospect-pagination">
+        <button class="button small secondary" type="button" data-prospect-prev><i data-lucide="chevron-left"></i> Anterior</button>
+        <span data-prospect-page-label>1 / 1</span>
+        <button class="button small secondary" type="button" data-prospect-next>Siguiente <i data-lucide="chevron-right"></i></button>
+      </div>
+    </div>
+  </main>
+
+  <dialog class="prospect-dialog" data-prospect-dialog>
+    <div class="prospect-dialog__head">
+      <div>
+        <span class="section-kicker">Detalle del prospecto</span>
+        <h2 data-prospect-dialog-title style="margin:4px 0 0">Prospecto</h2>
+      </div>
+      <button class="button secondary icon-command" type="button" data-prospect-close aria-label="Cerrar" title="Cerrar"><i data-lucide="x"></i></button>
+    </div>
+    <div class="prospect-dialog__body" data-prospect-dialog-body></div>
+  </dialog>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../js/config.js?v=20260706-admin-static"></script>
+  <script src="../js/main.js?v=20260706-admin-static"></script>
+  <script src="../js/prospectos.js?v=20260711-prospectos-2"></script>
+</body>
+</html>

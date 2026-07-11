@@ -47,6 +47,7 @@ class StaticAssetTests(unittest.TestCase):
             PUBLIC / "admin" / "dashboard.html",
             PUBLIC / "admin" / "gestion.html",
             PUBLIC / "admin" / "certificados-admin.html",
+            PUBLIC / "admin" / "prospectos.html",
             PUBLIC / "admin" / "generador-certificados" / "index.html",
         ]
         for page in pages:

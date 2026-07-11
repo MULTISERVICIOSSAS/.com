@@ -282,11 +282,37 @@ async function stats(env) {
     (SELECT COUNT(*) FROM course_results) course_results,
     (SELECT COUNT(*) FROM certificates WHERE estado='Anulado') annulled,
     (SELECT COUNT(*) FROM customers) customers,
+    (SELECT COUNT(*) FROM prospects) prospects,
     ((SELECT COUNT(*) FROM contact_requests WHERE estado='Pendiente') + (SELECT COUNT(*) FROM company_requests WHERE estado='Pendiente')) pending_requests,
     (SELECT COUNT(*) FROM payments WHERE estado='Pendiente') pending_payments,
     (SELECT COUNT(*) FROM course_results WHERE estado='Aprobado') approved_exams,
     (SELECT COUNT(*) FROM services WHERE estado='Activo') active_services`).first();
   return json({ ok: true, ...result });
+}
+
+async function listProspects(env, url) {
+  const query = cleanText(url.searchParams.get("q"), 120);
+  const page = Math.max(1, integer(url.searchParams.get("page"), 1));
+  const limit = Math.max(10, Math.min(100, integer(url.searchParams.get("limit"), 50)));
+  const offset = (page - 1) * limit;
+  const where = query ? `WHERE establecimiento LIKE ? OR telefono_1 LIKE ? OR telefono_2 LIKE ? OR telefono_3 LIKE ?
+    OR telefono_4 LIKE ? OR correo LIKE ? OR ciudad LIKE ? OR actividad LIKE ? OR encargado LIKE ?
+    OR titular_servicio LIKE ? OR resultado_gestion LIKE ? OR direccion LIKE ? OR agente LIKE ?` : "";
+  const bindings = query ? Array(13).fill(`%${query}%`) : [];
+  const count = await env.DB.prepare(`SELECT COUNT(*) total FROM prospects ${where}`).bind(...bindings).first();
+  const data = await rows(env.DB,
+    `SELECT * FROM prospects ${where} ORDER BY id ASC LIMIT ? OFFSET ?`,
+    [...bindings, limit, offset]
+  );
+  const total = Number(count?.total || 0);
+  return json({
+    ok: true,
+    prospectos: data,
+    total,
+    page,
+    limit,
+    pages: Math.max(1, Math.ceil(total / limit))
+  });
 }
 
 async function listCertificates(env) {
@@ -417,6 +443,7 @@ async function handleApi(request, env, url) {
   if (["POST", "PATCH", "PUT", "DELETE"].includes(method) && !sameOrigin(request)) return error("Origen no permitido", 403);
   if (method === "POST" && path === "/api/auth/logout") return logout(request, env);
   if (method === "GET" && path === "/api/admin/stats") return stats(env);
+  if (method === "GET" && path === "/api/admin/prospectos") return listProspects(env, url);
   if (method === "GET" && path === "/api/admin/certificados") return listCertificates(env);
   if (method === "POST" && path === "/api/admin/certificados") {
     const response = await createCertificate(request, env);
