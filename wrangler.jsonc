@@ -14,7 +14,7 @@
     {
       "binding": "DB",
       "database_name": "multiservicios",
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      "database_id": "f9fcc6ed-7654-4e46-86f9-bbc8d32c90ec",
       "migrations_dir": "cloudflare/migrations"
     }
   ],
