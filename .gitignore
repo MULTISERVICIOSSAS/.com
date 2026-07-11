@@ -5,8 +5,11 @@ __pycache__/
 
 # Local environment
 .env
+.dev.vars
 .venv/
 venv/
+node_modules/
+.wrangler/
 
 # Temporary QA/server artifacts
 .tools/

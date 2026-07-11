@@ -1112,6 +1112,8 @@ class MultiserviciosHandler(BaseHTTPRequestHandler):
                 self.api_create_contact_request()
             elif method == "POST" and path == "/api/empresas":
                 self.api_create_company_request()
+            elif method == "POST" and path == "/api/resultados":
+                self.api_create_result()
             elif method == "GET" and path == "/api/admin/stats":
                 self.api_stats()
             elif method == "GET" and path == "/api/admin/clientes":

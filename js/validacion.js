@@ -236,7 +236,7 @@
     target.className = "validation-result show invalid";
     target.innerHTML = `
       <h3>No encontramos ese certificado</h3>
-      <p>Verifica el codigo y los ultimos digitos del documento. Si es un certificado nuevo en GitHub Pages, escanea el QR del certificado o actualiza la base publica desde el panel administrativo.</p>
+      <p>Verifica el codigo y los ultimos digitos del documento. Si el problema continua, comunicate con Multiservicios para revisar el registro.</p>
     `;
   }
 

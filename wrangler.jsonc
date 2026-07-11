@@ -1,0 +1,36 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "multiservicios",
+  "main": "cloudflare/src/index.js",
+  "compatibility_date": "2026-07-11",
+  "workers_dev": true,
+  "preview_urls": true,
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "multiservicios",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "cloudflare/migrations"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "CERTIFICATES",
+      "bucket_name": "multiservicios-certificados",
+      "preview_bucket_name": "multiservicios-certificados-preview"
+    }
+  ],
+  "vars": {
+    "ENVIRONMENT": "production",
+    "PUBLIC_URL": "https://multiservicios.website",
+    "ADMIN_EMAIL": "admin@multiservicios.website"
+  },
+  "observability": {
+    "enabled": true
+  }
+}

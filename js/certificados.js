@@ -332,7 +332,7 @@
           });
           if (!payload || !payload.ok) throw new Error("Backend no disponible");
           const total = payload?.total ?? 0;
-          if (exportStatus) exportStatus.textContent = `Base publica actualizada con ${total} certificado(s). Sube el commit a GitHub para que funcione en todos los dispositivos.`;
+          if (exportStatus) exportStatus.textContent = `Base D1 verificada con ${total} certificado(s). La validacion ya funciona en todos los dispositivos.`;
         } catch (error) {
           const data = await buildPublicCertificatesJson();
           try {

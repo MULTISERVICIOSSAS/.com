@@ -970,7 +970,7 @@
             const cfg = window.MULTISERVICIOS_CONFIG || {};
             const base = String(cfg.certificadosAdminApiUrl || cfg.certificadosApiUrl || '').replace(/\/$/, '');
             if (!base) return;
-            fetch(base + '/admin/resultados', {
+            fetch(base + '/resultados', {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
