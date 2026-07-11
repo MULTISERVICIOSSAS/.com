@@ -14,6 +14,7 @@ import {
 } from "./utils.js";
 
 const MAX_PDF_BYTES = 15 * 1024 * 1024;
+const PDF_CHUNK_BYTES = 256 * 1024;
 const LIST_LIMIT = 500;
 
 function error(message, status = 400) {
@@ -320,9 +321,50 @@ async function uploadPdf(request, env, code) {
   if (bytes.byteLength > MAX_PDF_BYTES) return error("El PDF supera 15 MB", 413);
   if (new TextDecoder().decode(bytes.slice(0, 5)) !== "%PDF-") return error("El archivo no parece ser PDF");
   const key = `certificates/${code.replace(/[^A-Z0-9_-]/g, "")}.pdf`;
-  await env.CERTIFICATES.put(key, bytes, { httpMetadata: { contentType: "application/pdf" }, customMetadata: { certificate: code } });
-  await env.DB.prepare("UPDATE certificates SET pdf_key=?,fecha_actualizacion=? WHERE codigo_unico=?").bind(key, nowIso(), code).run();
+  if (env.CERTIFICATES) {
+    await env.CERTIFICATES.put(key, bytes, { httpMetadata: { contentType: "application/pdf" }, customMetadata: { certificate: code } });
+    await env.DB.prepare("UPDATE certificates SET pdf_key=?,fecha_actualizacion=? WHERE codigo_unico=?").bind(key, nowIso(), code).run();
+  } else {
+    const statements = [env.DB.prepare("DELETE FROM certificate_pdf_chunks WHERE certificate_code=?").bind(code)];
+    const createdAt = nowIso();
+    for (let offset = 0, index = 0; offset < bytes.byteLength; offset += PDF_CHUNK_BYTES, index += 1) {
+      const chunk = bytes.slice(offset, Math.min(offset + PDF_CHUNK_BYTES, bytes.byteLength));
+      statements.push(env.DB.prepare(
+        "INSERT INTO certificate_pdf_chunks (certificate_code,chunk_index,content,fecha_creacion) VALUES (?,?,?,?)"
+      ).bind(code, index, chunk.buffer, createdAt));
+    }
+    statements.push(env.DB.prepare("UPDATE certificates SET pdf_key=?,fecha_actualizacion=? WHERE codigo_unico=?")
+      .bind(`d1://${key}`, createdAt, code));
+    await env.DB.batch(statements);
+  }
   return json({ ok: true, archivo: key.split("/").pop(), privado: true });
+}
+
+async function downloadPdf(env, code) {
+  const certificate = await env.DB.prepare("SELECT pdf_key FROM certificates WHERE codigo_unico=?").bind(code).first();
+  if (!certificate?.pdf_key) return error("PDF no encontrado", 404);
+  if (!certificate.pdf_key.startsWith("d1://") && env.CERTIFICATES) {
+    const object = await env.CERTIFICATES.get(certificate.pdf_key);
+    if (!object) return error("PDF no encontrado", 404);
+    return new Response(object.body, {
+      headers: {
+        "Content-Type": "application/pdf",
+        "Content-Disposition": `attachment; filename="${code}.pdf"`,
+        "Cache-Control": "private, no-store"
+      }
+    });
+  }
+  const chunks = await rows(env.DB,
+    "SELECT content FROM certificate_pdf_chunks WHERE certificate_code=? ORDER BY chunk_index", [code]);
+  if (!chunks.length) return error("PDF no encontrado", 404);
+  const parts = chunks.map((row) => row.content instanceof ArrayBuffer ? row.content : new Uint8Array(row.content));
+  return new Response(new Blob(parts, { type: "application/pdf" }), {
+    headers: {
+      "Content-Type": "application/pdf",
+      "Content-Disposition": `attachment; filename="${code}.pdf"`,
+      "Cache-Control": "private, no-store"
+    }
+  });
 }
 
 async function patchRecord(request, env, table, id, fields) {
@@ -380,6 +422,7 @@ async function handleApi(request, env, url) {
     const code = cleanText(decodeURIComponent(certAction[1]), 80).toUpperCase();
     if (method === "PATCH" && certAction[2] === "anular") return annulCertificate(request, env, code);
     if (method === "POST" && certAction[2] === "pdf") return uploadPdf(request, env, code);
+    if (method === "GET" && certAction[2] === "pdf") return downloadPdf(env, code);
   }
   const patch = path.match(/^\/api\/admin\/(pagos|solicitudes)\/(\d+)$/);
   if (method === "PATCH" && patch) {

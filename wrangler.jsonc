@@ -18,13 +18,6 @@
       "migrations_dir": "cloudflare/migrations"
     }
   ],
-  "r2_buckets": [
-    {
-      "binding": "CERTIFICATES",
-      "bucket_name": "multiservicios-certificados",
-      "preview_bucket_name": "multiservicios-certificados-preview"
-    }
-  ],
   "vars": {
     "ENVIRONMENT": "production",
     "PUBLIC_URL": "https://multiservicios.website",

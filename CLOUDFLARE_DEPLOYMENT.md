@@ -1,12 +1,11 @@
 # Despliegue en Cloudflare sin VPS
 
-La plataforma usa Cloudflare Workers + Static Assets, D1 para los datos y R2 para los PDF privados.
+La plataforma usa Cloudflare Workers + Static Assets y D1 para los datos. Los PDF se guardan de forma privada en bloques D1 y solo se descargan con sesion administrativa.
 
 ## Recursos
 
 - Worker: `multiservicios`
 - D1: `multiservicios`
-- R2: `multiservicios-certificados`
 - Dominio: `multiservicios.website`
 
 ## Primera publicacion
@@ -14,13 +13,12 @@ La plataforma usa Cloudflare Workers + Static Assets, D1 para los datos y R2 par
 1. Autenticar Wrangler con `npx wrangler login`.
 2. Crear D1 con `npx wrangler d1 create multiservicios`.
 3. Reemplazar el `database_id` de `wrangler.jsonc` por el identificador devuelto.
-4. Crear R2 con `npx wrangler r2 bucket create multiservicios-certificados`.
-5. Aplicar el esquema con `npx wrangler d1 migrations apply multiservicios --remote`.
-6. Configurar `ADMIN_PASSWORD_HASH` con el SHA-256 de una clave larga y unica.
-7. Configurar `DOCUMENT_HASH_KEY` con un secreto aleatorio de al menos 32 bytes.
-8. Publicar con `npx wrangler deploy`.
-9. Agregar `multiservicios.website` como Custom Domain del Worker.
-10. Cambiar en GoDaddy los nameservers por los asignados por Cloudflare cuando la zona lo solicite.
+4. Aplicar el esquema con `npx wrangler d1 migrations apply multiservicios --remote`.
+5. Configurar `ADMIN_PASSWORD_HASH` con el SHA-256 de una clave larga y unica.
+6. Configurar `DOCUMENT_HASH_KEY` con un secreto aleatorio de al menos 32 bytes.
+7. Publicar con `npx wrangler deploy`.
+8. Agregar `multiservicios.website` como Custom Domain del Worker.
+9. Cambiar en GoDaddy los nameservers por los asignados por Cloudflare cuando la zona lo solicite.
 
 Los secretos se cargan con `npx wrangler secret put NOMBRE` y nunca se guardan en Git.
 
