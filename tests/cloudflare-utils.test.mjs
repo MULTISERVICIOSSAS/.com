@@ -3,6 +3,7 @@ import test from "node:test";
 import {
   constantTimeEqual,
   documentLast4,
+  extractCertificateCode,
   hmacHex,
   maskDocument,
   publicCertificateUrls,
@@ -23,6 +24,16 @@ test("genera rutas publicas del dominio oficial", () => {
   assert.equal(urls.validationUrl, "https://multiservicios.website/validar-certificado.html?codigo=MS-123");
   assert.match(urls.qrUrl, /^https:\/\/api\.qrserver\.com/);
   assert.match(urls.qrUrl, /MS-123/);
+});
+
+test("extrae codigos desde texto, parametros y URLs del QR", () => {
+  assert.equal(extractCertificateCode("ms-bfskze0e"), "MS-BFSKZE0E");
+  assert.equal(extractCertificateCode("codigo=MS-BFSKZE0E"), "MS-BFSKZE0E");
+  assert.equal(
+    extractCertificateCode("https://multiservicios.website/validar-certificado.html?codigo=MS-BFSKZE0E"),
+    "MS-BFSKZE0E"
+  );
+  assert.equal(extractCertificateCode("  escanea MS-BFSKZE0E ahora  "), "MS-BFSKZE0E");
 });
 
 test("utilidades comparan y crean slugs estables", () => {

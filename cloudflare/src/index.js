@@ -3,6 +3,7 @@ import {
   cleanText,
   decodeBase64,
   documentLast4,
+  extractCertificateCode,
   hmacHex,
   integer,
   json,
@@ -77,13 +78,26 @@ function adminCertificate(row, env) {
 }
 
 async function validateCertificate(request, env, url) {
-  const code = cleanText(url.searchParams.get("codigo"), 80).toUpperCase();
+  const code = extractCertificateCode(url.searchParams.get("codigo"));
   const document = cleanText(url.searchParams.get("documento"), 80);
   if (!code && !document) return error("Ingresa codigo o documento");
 
   let row;
   if (code) {
     row = await env.DB.prepare("SELECT * FROM certificates WHERE codigo_unico = ?").bind(code).first();
+    if (!row && /[O0]/.test(code)) {
+      const equivalentCode = code.replace(/O/g, "0");
+      const candidates = await rows(
+        env.DB,
+        "SELECT * FROM certificates WHERE REPLACE(codigo_unico, 'O', '0') = ? ORDER BY id DESC LIMIT 2",
+        [equivalentCode]
+      );
+      if (candidates.length === 1) row = candidates[0];
+      if (candidates.length > 1 && document) {
+        const last4 = documentLast4(document);
+        row = candidates.find((candidate) => candidate.documento_last4 === last4);
+      }
+    }
   } else {
     const last4 = documentLast4(document);
     const hash = await hmacHex(env.DOCUMENT_HASH_KEY || "local-development", document.replace(/\D/g, ""));
@@ -282,7 +296,7 @@ async function listCertificates(env) {
 
 async function createCertificate(request, env) {
   const data = await body(request);
-  const code = cleanText(data.codigo_unico || data.codigo || data.code, 80).toUpperCase();
+  const code = extractCertificateCode(data.codigo_unico || data.codigo || data.code);
   const name = cleanText(data.nombre_estudiante || data.nombre || data.titular, 180);
   const course = cleanText(data.curso || "Manipulacion de Alimentos", 180);
   if (!code || !name || !course) return error("codigo, nombre y curso requeridos");

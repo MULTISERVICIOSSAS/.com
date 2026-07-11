@@ -4,6 +4,27 @@ export function cleanText(value, limit = 240) {
   return String(value ?? "").replace(/\0/g, "").trim().slice(0, limit);
 }
 
+export function extractCertificateCode(value) {
+  let text = cleanText(value, 500);
+  if (!text) return "";
+  try {
+    text = decodeURIComponent(text);
+  } catch (error) {
+    // Keep the original value when it is not valid URI-encoded text.
+  }
+
+  try {
+    const url = new URL(text);
+    text = url.searchParams.get("codigo") || url.searchParams.get("code") || text;
+  } catch (error) {
+    // Plain certificate codes are expected here too.
+  }
+
+  const parameterMatch = text.match(/(?:codigo|code)\s*=\s*(MS-[A-Z0-9-]{4,80})/i);
+  const codeMatch = parameterMatch || text.match(/(MS-[A-Z0-9-]{4,80})/i);
+  return cleanText(codeMatch ? codeMatch[1] : text, 80).toUpperCase();
+}
+
 export function onlyDigits(value) {
   return String(value ?? "").replace(/\D/g, "");
 }

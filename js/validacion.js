@@ -21,6 +21,21 @@
       .replace(/[\u0300-\u036f]/g, "");
   }
 
+  function extractCertificateCode(value) {
+    let text = String(value || "").trim();
+    if (!text) return "";
+    try {
+      text = decodeURIComponent(text);
+    } catch (error) {}
+    try {
+      const url = new URL(text);
+      text = url.searchParams.get("codigo") || url.searchParams.get("code") || text;
+    } catch (error) {}
+    const parameterMatch = text.match(/(?:codigo|code)\s*=\s*(MS-[A-Z0-9-]{4,80})/i);
+    const codeMatch = parameterMatch || text.match(/(MS-[A-Z0-9-]{4,80})/i);
+    return normalize(codeMatch ? codeMatch[1] : text).slice(0, 80);
+  }
+
   function isStaticPublicHost() {
     const host = window.location.hostname;
     return window.location.protocol === "file:" || host.endsWith("github.io");
@@ -172,7 +187,7 @@
     const base = apiBaseUrl();
     if (!base) return null;
     const params = new URLSearchParams();
-    if (code) params.set("codigo", code);
+    if (code) params.set("codigo", extractCertificateCode(code));
     if (documentValue) params.set("documento", documentValue);
     const response = await fetch(base + "/certificados/validar?" + params.toString(), { cache: "no-store" });
     if ([404, 405, 501].includes(response.status)) return null;
@@ -184,9 +199,12 @@
 
   async function validateLocally(code, documentValue) {
     const certificates = await loadCertificates();
-    const normalizedCode = normalize(code);
+    const normalizedCode = extractCertificateCode(code);
     if (normalizedCode) {
-      const cert = certificates.find((item) => normalize(item.codigo) === normalizedCode);
+      const cert = certificates.find((item) => {
+        const storedCode = extractCertificateCode(item.codigo);
+        return storedCode === normalizedCode || storedCode.replace(/O/g, "0") === normalizedCode.replace(/O/g, "0");
+      });
       return cert ? { found: true, cert } : { found: false };
     }
     const doc = onlyDigits(documentValue).slice(-4);
@@ -262,7 +280,8 @@
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       const data = new FormData(form);
-      const code = String(data.get("codigo") || "").trim();
+      const rawCode = String(data.get("codigo") || "").trim();
+      const code = extractCertificateCode(rawCode);
       const documentValue = String(data.get("documento") || "").trim();
       if (!code && !documentValue) {
         renderNotFound(result);
@@ -282,7 +301,7 @@
 
     const params = new URLSearchParams(window.location.search);
     const certFromUrl = loadCertificateFromUrl()[0];
-    const codeFromUrl = params.get("codigo") || params.get("code") || (certFromUrl && certFromUrl.codigo);
+    const codeFromUrl = extractCertificateCode(params.get("codigo") || params.get("code") || (certFromUrl && certFromUrl.codigo));
     if (codeFromUrl) {
       const input = form.querySelector("[name='codigo']");
       if (input) input.value = codeFromUrl;
