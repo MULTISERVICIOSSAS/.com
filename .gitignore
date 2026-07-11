@@ -14,6 +14,9 @@ storage/*.log
 storage/*cookies*.txt
 storage/server-*.out.log
 storage/server-*.err.log
+storage/db/
+storage/pdfs/
+storage/backups/
 
 # OS/editor noise
 .DS_Store

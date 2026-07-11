@@ -28,6 +28,11 @@ if [ -z "$DOMAIN" ]; then
   exit 1
 fi
 
+if [ "$ADMIN_EMAIL" = "admin@multiservicios.local" ]; then
+  echo "Falta ADMIN_EMAIL con el correo administrativo real." >&2
+  exit 1
+fi
+
 if [ -z "$ADMIN_PASSWORD" ]; then
   ADMIN_PASSWORD="$(openssl rand -base64 24)"
   echo "ADMIN_PASSWORD generado: $ADMIN_PASSWORD"
@@ -59,11 +64,14 @@ chown -R "$APP_USER:www-data" "$APP_DIR"
 chmod -R u+rwX,g+rwX,o-rwx "$APP_DIR/storage"
 
 cat >/etc/multiservicios.env <<EOF
+MS_ENV=production
 MS_HOST=127.0.0.1
 MS_PORT=$APP_PORT
 MS_ADMIN_EMAIL=$ADMIN_EMAIL
 MS_ADMIN_PASSWORD=$ADMIN_PASSWORD
 MS_SECRET_KEY=$MS_SECRET_KEY
+MS_COOKIE_SECURE=true
+MS_PUBLIC_URL=https://$DOMAIN
 EOF
 chmod 640 /etc/multiservicios.env
 chown root:www-data /etc/multiservicios.env
@@ -86,6 +94,20 @@ rm -f /etc/nginx/sites-enabled/default
 systemctl daemon-reload
 systemctl enable --now multiservicios
 systemctl enable --now multiservicios-backup.timer
+
+backend_ready=0
+for _ in $(seq 1 30); do
+  if curl --fail --silent "http://127.0.0.1:$APP_PORT/api/health" | grep -q '"ok": true'; then
+    backend_ready=1
+    break
+  fi
+  sleep 1
+done
+if [ "$backend_ready" -ne 1 ]; then
+  journalctl -u multiservicios --no-pager -n 80 >&2
+  echo "El backend no inicio correctamente." >&2
+  exit 1
+fi
 
 if [ "$INSTALL_CODE_SERVER" = "1" ]; then
   curl -fsSL https://code-server.dev/install.sh | sh
@@ -129,6 +151,7 @@ if [ "$ENABLE_SSL" = "1" ]; then
   if [ "$INSTALL_CODE_SERVER" = "1" ]; then
     certbot --nginx --non-interactive --agree-tos --redirect -m "$LETSENCRYPT_EMAIL" -d "$CODE_DOMAIN"
   fi
+  python3 "$APP_DIR/deploy/verify_production.py" --base-url "https://$DOMAIN"
 fi
 
 cat <<EOF

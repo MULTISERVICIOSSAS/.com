@@ -25,19 +25,6 @@
     });
   }
 
-  function isStaticAdminHost() {
-    const host = window.location.hostname;
-    return window.location.protocol === "file:" || host.endsWith("github.io");
-  }
-
-  function isAdminPassword(value) {
-    return clean(value).toUpperCase() === "MULTISERVICIOS";
-  }
-
-  function hasAdminSession() {
-    return sessionStorage.getItem("msAdminAcknowledged") === "true";
-  }
-
   function rememberAdmin(mode = "backend") {
     sessionStorage.setItem("msAdminAcknowledged", "true");
     sessionStorage.setItem("msAdminMode", mode);
@@ -155,23 +142,16 @@
         }
       } catch (error) {}
       populateStats(stats);
-      if (isStaticAdminHost()) {
-        setStatus("Sesion administrativa activa en GitHub Pages.", "valid");
-      }
     }
 
-    if (hasAdminSession() && isStaticAdminHost()) {
-      showPanel({ email: "admin@multiservicios.local" });
-    } else {
-      api("/auth/me")
-        .then(async (response) => {
-          if (!response.ok) throw new Error("no-session");
-          const session = await response.json();
-          rememberAdmin("backend");
-          showPanel(session.admin);
-        })
-        .catch(() => showLogin("Ingresa la clave administrativa para abrir el panel.", ""));
-    }
+    api("/auth/me")
+      .then(async (response) => {
+        if (!response.ok) throw new Error("no-session");
+        const session = await response.json();
+        rememberAdmin("backend");
+        showPanel(session.admin);
+      })
+      .catch(() => showLogin("Ingresa la clave administrativa para abrir el panel.", ""));
 
     if (form) {
       form.addEventListener("submit", async (event) => {
@@ -182,35 +162,21 @@
           return;
         }
         setStatus("Validando acceso...", "");
-        if (isStaticAdminHost() && isAdminPassword(password)) {
-          rememberAdmin("static");
-          showPanel({ email: "admin@multiservicios.local" });
-          return;
-        }
         try {
           const response = await api("/auth/login", {
             method: "POST",
-            body: JSON.stringify({ password: password.toUpperCase() })
+            body: JSON.stringify({ password })
           });
           if (!response.ok) {
-            if (isAdminPassword(password) && [404, 405, 501].includes(response.status)) {
-              rememberAdmin("static");
-              showPanel({ email: "admin@multiservicios.local" });
-              return;
-            }
-            setStatus("Clave administrativa incorrecta. Usa MULTISERVICIOS en mayusculas.", "invalid");
+            const data = await response.json().catch(() => ({}));
+            setStatus(data.error || "No fue posible iniciar sesion.", "invalid");
             return;
           }
           const session = await response.json();
           rememberAdmin("backend");
           showPanel(session.admin);
         } catch (error) {
-          if (isAdminPassword(password)) {
-            rememberAdmin("static");
-            showPanel({ email: "admin@multiservicios.local" });
-            return;
-          }
-          setStatus("No se pudo conectar con el backend. En GitHub usa MULTISERVICIOS para abrir el modo estatico.", "invalid");
+          setStatus("No se pudo conectar con el servidor administrativo.", "invalid");
         }
       });
     }

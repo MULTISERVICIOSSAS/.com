@@ -7,6 +7,19 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout verifier
+        uses: actions/checkout@v4
+
+      - name: Validate deployment secrets
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_PUBLIC_URL: ${{ secrets.VPS_PUBLIC_URL }}
+        run: |
+          test -n "$VPS_HOST" || { echo "Falta VPS_HOST"; exit 1; }
+          test -n "$VPS_USER" || { echo "Falta VPS_USER"; exit 1; }
+          test -n "$VPS_PUBLIC_URL" || { echo "Falta VPS_PUBLIC_URL"; exit 1; }
+
       - name: Configure SSH
         run: |
           mkdir -p ~/.ssh
@@ -21,4 +34,15 @@ jobs:
           VPS_APP_DIR: ${{ secrets.VPS_APP_DIR }}
         run: |
           APP_DIR="${VPS_APP_DIR:-/var/www/multiservicios}"
-          ssh "$VPS_USER@$VPS_HOST" "cd '$APP_DIR' && git pull --ff-only origin main && sudo systemctl restart multiservicios && sudo nginx -t && sudo systemctl reload nginx"
+          ssh "$VPS_USER@$VPS_HOST" "cd '$APP_DIR' && BRANCH=main bash deploy/deploy_pull.sh"
+
+      - name: Verify public HTTPS deployment
+        env:
+          VPS_PUBLIC_URL: ${{ secrets.VPS_PUBLIC_URL }}
+          CERTIFICATE_CODE: ${{ secrets.PRODUCTION_CERTIFICATE_CODE }}
+        run: |
+          args=(--base-url "$VPS_PUBLIC_URL")
+          if [ -n "$CERTIFICATE_CODE" ]; then
+            args+=(--certificate-code "$CERTIFICATE_CODE")
+          fi
+          python3 deploy/verify_production.py "${args[@]}"

@@ -138,6 +138,17 @@ Desde Windows local:
 powershell -ExecutionPolicy Bypass -File .\deploy\local_publish_to_vps.ps1 -HostName IP_PUBLICA_DEL_VPS -User root
 ```
 
+Para comprobar tambien HTTPS y un certificado real:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\deploy\local_publish_to_vps.ps1 `
+  -HostName IP_PUBLICA_DEL_VPS -User root `
+  -PublicUrl https://tudominio.com `
+  -CertificateCode MS-CODIGO-REAL
+```
+
+El script remoto espera hasta 20 segundos por `/api/health`. Si el backend nuevo no responde, restaura automaticamente el commit anterior y reinicia el servicio.
+
 ## 6. GitHub Actions opcional
 
 El workflow manual esta en `.github/workflows/deploy-vps.yml`.
@@ -148,6 +159,8 @@ Configura estos secretos en GitHub:
 - `VPS_USER`: usuario SSH, por ejemplo `root`.
 - `VPS_SSH_KEY`: llave privada autorizada en el VPS.
 - `VPS_APP_DIR`: opcional, por defecto `/var/www/multiservicios`.
+- `VPS_PUBLIC_URL`: URL HTTPS final, por ejemplo `https://tudominio.com`.
+- `PRODUCTION_CERTIFICATE_CODE`: opcional, codigo real que deba validar publicamente.
 
 Luego ejecuta el workflow manual **Deploy VPS** desde GitHub Actions.
 
@@ -161,6 +174,7 @@ Luego ejecuta el workflow manual **Deploy VPS** desde GitHub Actions.
 - `deploy/systemd/multiservicios.service`: servicio systemd de la app.
 - `deploy/systemd/multiservicios-backup.timer`: backup diario de base y PDFs.
 - `deploy/env.production.example`: variables de entorno de produccion.
+- `deploy/verify_production.py`: prueba HTTPS, frontend, backend, admin, logo y certificado.
 
 ## 8. Seguridad minima
 
