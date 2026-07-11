@@ -1,0 +1,4 @@
+.htaccess
+**/.htaccess
+**/*.md
+admin/generador-certificados/base64_images.txt
