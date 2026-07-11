@@ -196,24 +196,6 @@
     return response;
   }
 
-  function isStaticAdminHost() {
-    const host = window.location.hostname;
-    return window.location.protocol === "file:" || host.endsWith("github.io");
-  }
-
-  function isLocalAdminHost() {
-    const host = window.location.hostname;
-    return host === "localhost" || host === "127.0.0.1" || host === "";
-  }
-
-  function isRelativeApiBase(base) {
-    return Boolean(base) && base.startsWith("/");
-  }
-
-  function isAdminPassword(value) {
-    return clean(value).toUpperCase() === "MULTISERVICIOS";
-  }
-
   function hasAdminSession() {
     return sessionStorage.getItem("msAdminAcknowledged") === "true";
   }
@@ -250,40 +232,25 @@
         event.preventDefault();
         const phrase = clean(new FormData(loginForm).get("frase"));
         const base = apiBaseUrl();
-        if (isAdminPassword(phrase) && (isStaticAdminHost() || isLocalAdminHost() || !base || isRelativeApiBase(base))) {
-          openAdminDashboard("static");
-          return;
-        }
         if (base) {
           try {
             const response = await apiRequest("/auth/login", {
               method: "POST",
-              body: JSON.stringify({ clave: phrase.toUpperCase() })
+              body: JSON.stringify({ clave: phrase })
             });
             if (!response || !response.ok) {
-              if (isAdminPassword(phrase) && (!response || [404, 405, 501].includes(response.status))) {
-                openAdminDashboard("static");
-                return;
-              }
-              showInlineMessage(loginForm, "Clave administrativa incorrecta. Usa MULTISERVICIOS en mayusculas.", "invalid");
+              const data = response ? await response.json().catch(() => ({})) : {};
+              showInlineMessage(loginForm, data.error || "No fue posible iniciar sesion.", "invalid");
               return;
             }
             openAdminDashboard("backend");
             return;
           } catch (error) {
-            if (isAdminPassword(phrase)) {
-              openAdminDashboard("static");
-              return;
-            }
-            showInlineMessage(loginForm, "No se pudo conectar con el backend. En GitHub usa MULTISERVICIOS para abrir el modo estatico.", "invalid");
+            showInlineMessage(loginForm, "No se pudo conectar con el servidor administrativo.", "invalid");
             return;
           }
         }
-        if (!isAdminPassword(phrase)) {
-          showInlineMessage(loginForm, "Escribe MULTISERVICIOS para continuar.", "invalid");
-          return;
-        }
-        openAdminDashboard("static");
+        showInlineMessage(loginForm, "El panel requiere el servidor administrativo.", "invalid");
       });
     }
 

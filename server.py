@@ -26,8 +26,11 @@ import posixpath
 import secrets
 import sqlite3
 import sys
+import threading
+import time
 import unicodedata
 import urllib.parse
+from contextlib import contextmanager
 from http import HTTPStatus
 from http.cookies import SimpleCookie
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -37,9 +40,9 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parent
 PUBLIC_DIR = ROOT / "public"
-STORAGE_DIR = ROOT / "storage"
+STORAGE_DIR = Path(os.environ.get("MS_STORAGE_DIR") or ROOT / "storage").resolve()
 PDF_DIR = STORAGE_DIR / "pdfs"
-DB_PATH = STORAGE_DIR / "db" / "multiservicios.sqlite3"
+DB_PATH = Path(os.environ.get("MS_DB_PATH") or STORAGE_DIR / "db" / "multiservicios.sqlite3").resolve()
 
 SESSION_COOKIE = "ms_admin_session"
 SESSION_DAYS = 7
@@ -48,6 +51,56 @@ MAX_JSON_BODY = 60 * 1024 * 1024
 SECRET_KEY = os.environ.get("MS_SECRET_KEY") or "multiservicios-local-secret-change-me"
 ADMIN_EMAIL = os.environ.get("MS_ADMIN_EMAIL") or "admin@multiservicios.local"
 ADMIN_PASSWORD = os.environ.get("MS_ADMIN_PASSWORD") or "MULTISERVICIOS"
+ENVIRONMENT = (os.environ.get("MS_ENV") or "development").strip().lower()
+COOKIE_SECURE = ENVIRONMENT == "production" or (os.environ.get("MS_COOKIE_SECURE") or "").strip().lower() in {"1", "true", "yes"}
+
+LOGIN_WINDOW_SECONDS = 15 * 60
+LOGIN_MAX_ATTEMPTS = 5
+LOGIN_BLOCK_SECONDS = 15 * 60
+_login_attempts: dict[str, list[float]] = {}
+_login_blocked_until: dict[str, float] = {}
+_login_lock = threading.Lock()
+
+
+def validate_runtime_config() -> None:
+    if ENVIRONMENT != "production":
+        return
+    errors = []
+    if SECRET_KEY == "multiservicios-local-secret-change-me" or len(SECRET_KEY) < 32:
+        errors.append("MS_SECRET_KEY debe ser unica y tener al menos 32 caracteres")
+    if ADMIN_PASSWORD == "MULTISERVICIOS" or len(ADMIN_PASSWORD) < 12:
+        errors.append("MS_ADMIN_PASSWORD debe ser una clave nueva de al menos 12 caracteres")
+    if ADMIN_EMAIL == "admin@multiservicios.local":
+        errors.append("MS_ADMIN_EMAIL debe usar el correo administrativo real")
+    if errors:
+        raise RuntimeError("Configuracion de produccion insegura: " + "; ".join(errors))
+
+
+def login_retry_after(ip: str, now: float | None = None) -> int:
+    now = time.monotonic() if now is None else now
+    with _login_lock:
+        blocked_until = _login_blocked_until.get(ip, 0)
+        if blocked_until <= now:
+            _login_blocked_until.pop(ip, None)
+            return 0
+        return max(1, int(blocked_until - now) + 1)
+
+
+def register_failed_login(ip: str, now: float | None = None) -> None:
+    now = time.monotonic() if now is None else now
+    with _login_lock:
+        recent = [stamp for stamp in _login_attempts.get(ip, []) if now - stamp < LOGIN_WINDOW_SECONDS]
+        recent.append(now)
+        _login_attempts[ip] = recent
+        if len(recent) >= LOGIN_MAX_ATTEMPTS:
+            _login_blocked_until[ip] = now + LOGIN_BLOCK_SECONDS
+            _login_attempts.pop(ip, None)
+
+
+def clear_failed_logins(ip: str) -> None:
+    with _login_lock:
+        _login_attempts.pop(ip, None)
+        _login_blocked_until.pop(ip, None)
 
 
 def utc_now() -> str:
@@ -95,15 +148,23 @@ def verify_password(password: str, salt: str, expected: str) -> bool:
     return hmac.compare_digest(candidate, expected)
 
 
-def db() -> sqlite3.Connection:
+@contextmanager
+def db():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
-    return conn
+    try:
+        yield conn
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
 
 
 def init_db() -> None:
-    (STORAGE_DIR / "db").mkdir(parents=True, exist_ok=True)
+    DB_PATH.parent.mkdir(parents=True, exist_ok=True)
     PDF_DIR.mkdir(parents=True, exist_ok=True)
     with db() as conn:
         conn.executescript(
@@ -403,15 +464,28 @@ def init_db() -> None:
             CREATE INDEX IF NOT EXISTS idx_questions_course_id ON questions(course_id);
             """
         )
-        admin_count = conn.execute("SELECT COUNT(*) FROM admins").fetchone()[0]
-        if admin_count == 0:
+        admin = conn.execute("SELECT * FROM admins WHERE email = ?", (ADMIN_EMAIL,)).fetchone()
+        if admin is None:
+            existing = conn.execute("SELECT * FROM admins ORDER BY id LIMIT 1").fetchone()
+            salt, digest = password_hash(ADMIN_PASSWORD)
+            if existing:
+                conn.execute(
+                    "UPDATE admins SET email = ?, password_salt = ?, password_hash = ?, estado = 'activo' WHERE id = ?",
+                    (ADMIN_EMAIL, salt, digest, existing["id"]),
+                )
+            else:
+                conn.execute(
+                    """
+                    INSERT INTO admins (nombre, email, password_salt, password_hash, rol, estado, fecha_creacion)
+                    VALUES (?, ?, ?, ?, 'admin', 'activo', ?)
+                    """,
+                    ("Administrador Multiservicios", ADMIN_EMAIL, salt, digest, utc_now()),
+                )
+        elif not verify_password(ADMIN_PASSWORD, admin["password_salt"], admin["password_hash"]):
             salt, digest = password_hash(ADMIN_PASSWORD)
             conn.execute(
-                """
-                INSERT INTO admins (nombre, email, password_salt, password_hash, rol, estado, fecha_creacion)
-                VALUES (?, ?, ?, ?, 'admin', 'activo', ?)
-                """,
-                ("Administrador Multiservicios", ADMIN_EMAIL, salt, digest, utc_now()),
+                "UPDATE admins SET password_salt = ?, password_hash = ? WHERE id = ?",
+                (salt, digest, admin["id"]),
             )
         cert_count = conn.execute("SELECT COUNT(*) FROM certificates").fetchone()[0]
         if cert_count == 0:
@@ -955,6 +1029,8 @@ class MultiserviciosHandler(BaseHTTPRequestHandler):
         self.send_header("Content-Length", str(len(body)))
         self.send_header("X-Content-Type-Options", "nosniff")
         self.send_header("Referrer-Policy", "strict-origin-when-cross-origin")
+        self.send_header("X-Frame-Options", "DENY")
+        self.send_header("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
         for key, value in (headers or {}).items():
             self.send_header(key, value)
         self.end_headers()
@@ -986,14 +1062,34 @@ class MultiserviciosHandler(BaseHTTPRequestHandler):
             return None
         return admin
 
+    def require_same_origin(self) -> bool:
+        origin = self.headers.get("Origin")
+        host = self.headers.get("Host")
+        if origin and host:
+            parsed = urllib.parse.urlparse(origin)
+            if parsed.netloc.lower() == host.lower() and parsed.scheme in {"http", "https"}:
+                return True
+        referer = self.headers.get("Referer")
+        if not origin and referer and host:
+            parsed = urllib.parse.urlparse(referer)
+            if parsed.netloc.lower() == host.lower() and parsed.scheme in {"http", "https"}:
+                return True
+        self.send_json({"ok": False, "error": "Origen de solicitud no permitido"}, 403)
+        return False
+
     def handle_api(self, method: str, path: str, parsed: urllib.parse.ParseResult) -> None:
         try:
+            if method in {"POST", "PATCH"} and (path.startswith("/api/admin/") or path == "/api/auth/logout"):
+                if not self.require_same_origin():
+                    return
             if method == "POST" and path == "/api/auth/login":
                 self.api_login()
             elif method == "POST" and path == "/api/auth/logout":
                 self.api_logout()
             elif method == "GET" and path == "/api/auth/me":
                 self.api_me()
+            elif method == "GET" and path == "/api/health":
+                self.send_json({"ok": True, "service": "multiservicios", "environment": ENVIRONMENT})
             elif method == "GET" and path == "/api/certificados/validar":
                 self.api_validate_certificate(parsed)
             elif method == "GET" and path == "/api/public/catalogo":
@@ -1073,24 +1169,32 @@ class MultiserviciosHandler(BaseHTTPRequestHandler):
             self.send_json({"ok": False, "error": "Error interno"}, 500)
 
     def api_login(self) -> None:
+        ip = self.client_address[0]
+        retry_after = login_retry_after(ip)
+        if retry_after:
+            self.send_json(
+                {"ok": False, "error": "Demasiados intentos. Intenta mas tarde."},
+                429,
+                {"Retry-After": str(retry_after)},
+            )
+            return
         payload = self.read_json()
         password = clean_text(payload.get("password") or payload.get("clave") or payload.get("frase"), 200)
         with db() as conn:
             admin = conn.execute("SELECT * FROM admins WHERE email = ? AND estado = 'activo'", (ADMIN_EMAIL,)).fetchone()
             valid_password = bool(admin) and verify_password(password, admin["password_salt"], admin["password_hash"])
-            if not valid_password and password:
-                normalized_password = password.upper()
-                if normalized_password != password:
-                    valid_password = bool(admin) and verify_password(normalized_password, admin["password_salt"], admin["password_hash"])
             if not admin or not valid_password:
+                register_failed_login(ip)
                 self.send_json({"ok": False, "error": "Clave incorrecta"}, 401)
                 return
+            clear_failed_logins(ip)
             token = secrets.token_urlsafe(36)
             expires = (dt.datetime.now(dt.timezone.utc) + dt.timedelta(days=SESSION_DAYS)).isoformat(timespec="seconds")
             conn.execute("INSERT INTO sessions (token, admin_id, fecha_creacion, expires_at) VALUES (?, ?, ?, ?)", (token, admin["id"], utc_now(), expires))
             conn.execute("UPDATE admins SET ultimo_login = ? WHERE id = ?", (utc_now(), admin["id"]))
-            log_action(conn, admin["id"], "login", "Inicio de sesion admin", self.client_address[0])
-        cookie = f"{SESSION_COOKIE}={token}; Path=/; Max-Age={SESSION_DAYS * 86400}; HttpOnly; SameSite=Lax"
+            log_action(conn, admin["id"], "login", "Inicio de sesion admin", ip)
+        secure = "; Secure" if COOKIE_SECURE else ""
+        cookie = f"{SESSION_COOKIE}={token}; Path=/; Max-Age={SESSION_DAYS * 86400}; HttpOnly; SameSite=Strict{secure}"
         self.send_json({"ok": True, "admin": {"email": ADMIN_EMAIL, "rol": "admin"}}, headers={"Set-Cookie": cookie})
 
     def api_logout(self) -> None:
@@ -1099,7 +1203,8 @@ class MultiserviciosHandler(BaseHTTPRequestHandler):
         if morsel:
             with db() as conn:
                 conn.execute("DELETE FROM sessions WHERE token = ?", (morsel.value,))
-        expired = f"{SESSION_COOKIE}=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax"
+        secure = "; Secure" if COOKIE_SECURE else ""
+        expired = f"{SESSION_COOKIE}=; Path=/; Max-Age=0; HttpOnly; SameSite=Strict{secure}"
         self.send_json({"ok": True}, headers={"Set-Cookie": expired})
 
     def api_me(self) -> None:
@@ -1790,6 +1895,8 @@ class MultiserviciosHandler(BaseHTTPRequestHandler):
         path = urllib.parse.unquote(request_path)
         if path in ("", "/"):
             path = "/index.html"
+        elif path == "/favicon.ico":
+            path = "/assets/logos/logo-horizontal.png"
         if path == "/admin":
             self.redirect("/admin/")
             return
@@ -1827,6 +1934,8 @@ class MultiserviciosHandler(BaseHTTPRequestHandler):
         self.send_header("Content-Length", str(len(body)))
         self.send_header("X-Content-Type-Options", "nosniff")
         self.send_header("Referrer-Policy", "strict-origin-when-cross-origin")
+        self.send_header("X-Frame-Options", "DENY")
+        self.send_header("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
         if target.suffix.lower() in {".html", ".json", ".js", ".css"}:
             self.send_header("Cache-Control", "no-store")
         self.end_headers()
@@ -1840,6 +1949,7 @@ class MultiserviciosHandler(BaseHTTPRequestHandler):
 
 
 def main() -> None:
+    validate_runtime_config()
     init_db()
     host = os.environ.get("MS_HOST", "127.0.0.1")
     port = int(os.environ.get("MS_PORT", "8080"))

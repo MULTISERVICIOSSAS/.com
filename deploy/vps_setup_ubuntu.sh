@@ -28,6 +28,11 @@ if [ -z "$DOMAIN" ]; then
   exit 1
 fi
 
+if [ "$ADMIN_EMAIL" = "admin@multiservicios.local" ]; then
+  echo "Falta ADMIN_EMAIL con el correo administrativo real." >&2
+  exit 1
+fi
+
 if [ -z "$ADMIN_PASSWORD" ]; then
   ADMIN_PASSWORD="$(openssl rand -base64 24)"
   echo "ADMIN_PASSWORD generado: $ADMIN_PASSWORD"
@@ -59,11 +64,13 @@ chown -R "$APP_USER:www-data" "$APP_DIR"
 chmod -R u+rwX,g+rwX,o-rwx "$APP_DIR/storage"
 
 cat >/etc/multiservicios.env <<EOF
+MS_ENV=production
 MS_HOST=127.0.0.1
 MS_PORT=$APP_PORT
 MS_ADMIN_EMAIL=$ADMIN_EMAIL
 MS_ADMIN_PASSWORD=$ADMIN_PASSWORD
 MS_SECRET_KEY=$MS_SECRET_KEY
+MS_COOKIE_SECURE=true
 EOF
 chmod 640 /etc/multiservicios.env
 chown root:www-data /etc/multiservicios.env
