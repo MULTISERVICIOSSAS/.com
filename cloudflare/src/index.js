@@ -461,6 +461,10 @@ export default {
   async fetch(request, env) {
     try {
       const url = new URL(request.url);
+      if (url.protocol === "http:") {
+        url.protocol = "https:";
+        return Response.redirect(url.toString(), 308);
+      }
       const response = url.pathname.startsWith("/api/") ? await handleApi(request, env, url) : await serveStatic(request, env, url);
       return withSecurityHeaders(response);
     } catch (caught) {
