@@ -16,4 +16,4 @@ Disallow: /Certificados%20generados%202026/
 Disallow: /Certificados generados 2026/
 Disallow: /assets/certificates/
 
-Sitemap: https://multiserviciossas.github.io/.com/sitemap.xml
+Sitemap: https://multiservicios.website/sitemap.xml

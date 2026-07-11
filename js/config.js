@@ -8,7 +8,7 @@ window.MULTISERVICIOS_CONFIG = {
   correo: "info@multiservicios.com",
   ciudad: "[PONER CIUDAD]",
   pais: "Colombia",
-  sitioWeb: /^https?:$/.test(window.location.protocol) ? window.location.origin + "/" : "https://multiserviciossas.github.io/.com/",
+  sitioWeb: /^https?:$/.test(window.location.protocol) ? window.location.origin + "/" : "https://multiservicios.website/",
   instagram: "",
   facebook: "",
   tiktok: "",
