@@ -53,6 +53,7 @@ ADMIN_EMAIL = os.environ.get("MS_ADMIN_EMAIL") or "admin@multiservicios.local"
 ADMIN_PASSWORD = os.environ.get("MS_ADMIN_PASSWORD") or "MULTISERVICIOS"
 ENVIRONMENT = (os.environ.get("MS_ENV") or "development").strip().lower()
 COOKIE_SECURE = ENVIRONMENT == "production" or (os.environ.get("MS_COOKIE_SECURE") or "").strip().lower() in {"1", "true", "yes"}
+PUBLIC_URL = (os.environ.get("MS_PUBLIC_URL") or "").strip().rstrip("/")
 
 LOGIN_WINDOW_SECONDS = 15 * 60
 LOGIN_MAX_ATTEMPTS = 5
@@ -72,6 +73,9 @@ def validate_runtime_config() -> None:
         errors.append("MS_ADMIN_PASSWORD debe ser una clave nueva de al menos 12 caracteres")
     if ADMIN_EMAIL == "admin@multiservicios.local":
         errors.append("MS_ADMIN_EMAIL debe usar el correo administrativo real")
+    public_url = urllib.parse.urlparse(PUBLIC_URL)
+    if public_url.scheme != "https" or not public_url.hostname:
+        errors.append("MS_PUBLIC_URL debe contener el dominio publico con HTTPS")
     if errors:
         raise RuntimeError("Configuracion de produccion insegura: " + "; ".join(errors))
 
@@ -135,6 +139,14 @@ def hash_document(value: Any) -> str:
     if not digits:
         return ""
     return hmac.new(SECRET_KEY.encode("utf-8"), digits.encode("utf-8"), hashlib.sha256).hexdigest()
+
+
+def certificate_public_urls(code: str) -> tuple[str, str]:
+    if not PUBLIC_URL or not code:
+        return "", ""
+    validation_url = f"{PUBLIC_URL}/validar-certificado.html?codigo={urllib.parse.quote(code)}"
+    qr_url = "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=" + urllib.parse.quote(validation_url, safe="")
+    return validation_url, qr_url
 
 
 def password_hash(password: str, salt: str | None = None) -> tuple[str, str]:
@@ -751,6 +763,7 @@ def normalize_certificate_payload(payload: dict[str, Any]) -> dict[str, str]:
         last4 = document_last4(documento_masked)
         masked = documento_masked or "No publicado"
         doc_hash = ""
+    generated_validation_url, generated_qr_url = certificate_public_urls(codigo)
     return {
         "codigo_unico": codigo,
         "nombre_estudiante": nombre or "No publicado",
@@ -763,12 +776,13 @@ def normalize_certificate_payload(payload: dict[str, Any]) -> dict[str, str]:
         "fecha_vencimiento": clean_text(payload.get("fecha_vencimiento") or payload.get("fechaVencimientoISO") or "", 40),
         "estado": clean_text(payload.get("estado") or "Activo", 40),
         "archivo_pdf_url": clean_text(payload.get("archivo_pdf_url") or payload.get("url_pdf") or "", 260),
-        "qr_url": clean_text(payload.get("qr_url") or payload.get("qr") or "", 260),
-        "validation_url": clean_text(payload.get("validation_url") or payload.get("validationUrl") or "", 260),
+        "qr_url": clean_text(generated_qr_url or payload.get("qr_url") or payload.get("qr") or "", 500),
+        "validation_url": clean_text(generated_validation_url or payload.get("validation_url") or payload.get("validationUrl") or "", 500),
     }
 
 
 def certificate_to_public(row: sqlite3.Row) -> dict[str, Any]:
+    generated_validation_url, generated_qr_url = certificate_public_urls(row["codigo_unico"])
     return {
         "codigo": row["codigo_unico"],
         "codigo_unico": row["codigo_unico"],
@@ -782,9 +796,9 @@ def certificate_to_public(row: sqlite3.Row) -> dict[str, Any]:
         "estado": row["estado"],
         "url_pdf": "",
         "archivo_pdf_url": "",
-        "qr": row["qr_url"] or "",
-        "qr_url": row["qr_url"] or "",
-        "validation_url": row["validation_url"] or "",
+        "qr": generated_qr_url or row["qr_url"] or "",
+        "qr_url": generated_qr_url or row["qr_url"] or "",
+        "validation_url": generated_validation_url or row["validation_url"] or "",
     }
 
 

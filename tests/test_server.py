@@ -3,6 +3,7 @@ import json
 import tempfile
 import threading
 import unittest
+import urllib.parse
 from pathlib import Path
 
 import server
@@ -102,6 +103,16 @@ class SecurityUnitTests(unittest.TestCase):
     def test_document_is_masked(self):
         self.assertEqual(server.mask_document("1.234.567.890"), "****7890")
         self.assertNotIn("1234567890", server.hash_document("1.234.567.890"))
+
+    def test_certificate_urls_use_public_domain(self):
+        previous = server.PUBLIC_URL
+        try:
+            server.PUBLIC_URL = "https://multiservicios.example"
+            validation_url, qr_url = server.certificate_public_urls("MS-PRUEBA-1")
+        finally:
+            server.PUBLIC_URL = previous
+        self.assertEqual(validation_url, "https://multiservicios.example/validar-certificado.html?codigo=MS-PRUEBA-1")
+        self.assertIn(urllib.parse.quote(validation_url, safe=""), qr_url)
 
 
 if __name__ == "__main__":
