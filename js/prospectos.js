@@ -28,6 +28,12 @@
     return [row.telefono_1, row.telefono_2, row.telefono_3, row.telefono_4].map((value) => String(value || "").trim()).filter(Boolean);
   }
 
+  function renderPhones(row) {
+    const values = phones(row);
+    if (!values.length) return "Sin dato";
+    return `<div class="phone-list">${values.map((value) => `<span>${escapeHtml(value)}</span>`).join("")}</div>`;
+  }
+
   function formatDate(value) {
     const raw = String(value || "").trim();
     const match = raw.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);
@@ -45,7 +51,7 @@
           </tr></thead>
           <tbody>${rows.map((row) => `<tr>
             <td><strong>${escapeHtml(text(row.establecimiento))}</strong></td>
-            <td class="phones">${escapeHtml(phones(row).join(" / ") || "Sin dato")}</td>
+            <td class="phones">${renderPhones(row)}</td>
             <td>${escapeHtml(text(row.correo))}</td>
             <td>${escapeHtml(text(row.ciudad))}</td>
             <td>${escapeHtml(text(row.actividad))}</td>

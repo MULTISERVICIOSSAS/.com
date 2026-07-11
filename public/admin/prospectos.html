@@ -12,8 +12,10 @@
     .prospect-toolbar { display:grid; grid-template-columns:minmax(220px,1fr) auto auto; gap:12px; align-items:end; }
     .prospect-summary { display:flex; justify-content:space-between; gap:16px; align-items:center; margin:18px 0 10px; }
     .prospect-table { min-width:1180px; }
-    .prospect-table td { vertical-align:top; max-width:260px; }
-    .prospect-table .phones { white-space:nowrap; }
+    .prospect-table td { vertical-align:top; max-width:260px; overflow-wrap:anywhere; }
+    .prospect-table .phones { width:150px; min-width:150px; white-space:normal; }
+    .phone-list { display:grid; gap:4px; }
+    .phone-list span { display:block; line-height:1.35; white-space:nowrap; }
     .icon-command { width:40px; height:40px; padding:0; display:inline-grid; place-items:center; }
     .prospect-pagination { display:flex; justify-content:flex-end; align-items:center; gap:10px; margin-top:16px; }
     .prospect-dialog { width:min(900px,calc(100vw - 32px)); max-height:85vh; border:0; border-radius:8px; padding:0; color:var(--ink); }
@@ -91,6 +93,6 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="../js/config.js?v=20260706-admin-static"></script>
   <script src="../js/main.js?v=20260706-admin-static"></script>
-  <script src="../js/prospectos.js?v=20260711-prospectos-2"></script>
+  <script src="../js/prospectos.js?v=20260711-prospectos-3"></script>
 </body>
 </html>
