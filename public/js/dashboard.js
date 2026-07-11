@@ -137,6 +137,7 @@
       statKeys.forEach((key) => {
         stats[key] = toNumber(apiStats[key]);
       });
+      return stats;
     }
 
     const [certificates, results, customers, requests, companies, payments, apiServices, staticServices] = await Promise.all([
