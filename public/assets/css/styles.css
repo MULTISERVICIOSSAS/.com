@@ -307,6 +307,38 @@ h1 {
   font-size: clamp(1.05rem, 2vw, 1.28rem);
 }
 
+.hero-offers {
+  display: grid;
+  gap: 8px;
+  max-width: 700px;
+  margin: -8px 0 22px;
+}
+
+.hero .hero-offer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: none;
+  margin: 0;
+  padding: 9px 12px;
+  border-left: 3px solid var(--gold);
+  border-radius: 4px;
+  background: rgba(8, 22, 38, 0.68);
+  color: #fff;
+  font-size: 0.93rem;
+  line-height: 1.35;
+}
+
+.hero-offer svg {
+  width: 20px;
+  min-width: 20px;
+  color: #ffd36b;
+}
+
+.hero-offer strong {
+  color: #ffd36b;
+}
+
 .hero-actions,
 .section-actions {
   display: flex;
