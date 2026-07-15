@@ -130,7 +130,6 @@
       "certificado-manipulacion-alimentos": "assets/images/capacitacion-alimentos-certificado.jpg",
       "capacitacion-extintores": "assets/images/servicio-extintores-recarga.jpg",
       "lavado-desinfeccion-tanques": "assets/images/servicio-saneamiento-cocina.jpg",
-      "plan-saneamiento-control-plagas": "assets/images/servicio-control-plagas.jpg",
       "paquetes-empresariales": "assets/images/equipo-multiservicios.jpg"
     };
     const src = images[slug];

@@ -40,16 +40,6 @@
     "modalidad": "Presencial"
   },
   {
-    "id": "plan-saneamiento-control-plagas",
-    "nombre": "Plan de saneamiento para control de plagas",
-    "tipo": "presencial-mixto",
-    "descripcion": "Plan preventivo y correctivo para control de plagas, saneamiento y seguimiento del espacio.",
-    "beneficios": ["Diagnostico", "Programacion", "Trazabilidad del servicio"],
-    "requisitos": ["Tipo de espacio", "Necesidad", "Ubicacion"],
-    "duracion": "Segun diagnostico",
-    "modalidad": "Presencial o mixta"
-  },
-  {
     "id": "fumigacion-control-integral-plagas",
     "nombre": "Fumigacion y control integral de plagas",
     "tipo": "presencial",

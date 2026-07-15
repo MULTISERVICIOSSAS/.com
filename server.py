@@ -609,17 +609,6 @@ def seed_business_tables(conn: sqlite3.Connection) -> None:
             3,
         ),
         (
-            "Plan de saneamiento para control de plagas",
-            "plan-saneamiento-control-plagas",
-            "Plan preventivo y correctivo para control de plagas, saneamiento y seguimiento del espacio.",
-            "Diagnostico, programacion y trazabilidad para negocios, hogares y empresas.",
-            "Tipo de espacio, necesidad, ubicacion y alcance esperado.",
-            "Segun diagnostico",
-            "Presencial o mixta",
-            "Cotizar",
-            4,
-        ),
-        (
             "Paquetes empresariales",
             "paquetes-empresariales",
             "Gestion para grupos de trabajadores, restaurantes, cafeterias, colegios y empresas.",
@@ -642,6 +631,10 @@ def seed_business_tables(conn: sqlite3.Connection) -> None:
         )
     for order, slug in enumerate([row[1] for row in services], start=1):
         conn.execute("UPDATE services SET orden = ?, fecha_actualizacion = ? WHERE slug = ?", (order, now, slug))
+    conn.execute(
+        "UPDATE services SET estado = 'Inactivo', fecha_actualizacion = ? WHERE slug = ?",
+        (now, "plan-saneamiento-control-plagas"),
+    )
 
     conn.execute(
         """
