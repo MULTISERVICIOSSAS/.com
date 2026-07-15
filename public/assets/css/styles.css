@@ -263,6 +263,49 @@ button.button {
   padding: 82px 0 70px;
 }
 
+.hero-service-badge {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 0 18px;
+  padding: 12px 15px;
+  border-left: 4px solid #ffd36b;
+  border-radius: 4px;
+  background: rgba(8, 22, 38, 0.86);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.24);
+  color: #fff;
+  font-size: 0.94rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.hero-service-badge svg {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  color: #ffd36b;
+}
+
+.hero-service-badge strong {
+  display: inline-block;
+  color: #ffd36b;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+@media (min-width: 1460px) {
+  .hero-service-badge {
+    position: absolute;
+    top: 48%;
+    right: calc(100% + 38px);
+    width: 245px;
+    margin: 0;
+    transform: translateY(-50%);
+  }
+}
+
 .hero-grid {
   position: relative;
   z-index: 1;
