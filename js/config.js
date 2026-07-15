@@ -6,7 +6,7 @@ window.MULTISERVICIOS_CONFIG = {
   telefonoVisible: "3222166831",
   telefonoSecundario: "3222166831",
   correo: "info@multiservicios.com",
-  ciudad: "[PONER CIUDAD]",
+  ciudad: "Bogotá",
   pais: "Colombia",
   sitioWeb: /^https?:$/.test(window.location.protocol) ? window.location.origin + "/" : "https://multiservicios.website/",
   instagram: "",
