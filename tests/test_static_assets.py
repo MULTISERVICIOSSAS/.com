@@ -62,6 +62,12 @@ class StaticAssetTests(unittest.TestCase):
         self.assertIn("drawCarnetCutMarks", generator)
         self.assertIn("pdf.addPage('a4', 'landscape')", generator)
 
+    def test_course_randomizes_options_without_changing_answer_ids(self):
+        course = (PUBLIC / "apps" / "modulos-examen" / "index.html").read_text(encoding="utf-8")
+        self.assertIn("function shuffledOptions(options)", course)
+        self.assertIn("checkModuleAnswer(${option.originalIndex})", course)
+        self.assertIn('value="${option.originalIndex}"', course)
+
 
 if __name__ == "__main__":
     unittest.main()

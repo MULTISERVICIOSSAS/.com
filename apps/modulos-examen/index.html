@@ -519,6 +519,15 @@
 
         const app = document.getElementById('app');
 
+        function shuffledOptions(options) {
+            const shuffled = options.map((text, originalIndex) => ({ text, originalIndex }));
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
         // Helper: robust embedded video with direct fallback link.
         function getVideoHTML(module) {
             if (module.youtubeId) {
@@ -688,12 +697,12 @@
             div.className = 'fade-in bg-white p-8 rounded-xl shadow-md max-w-3xl mx-auto border-t-4 border-blue-600';
             
             let optionsHtml = '';
-            module.quiz.options.forEach((opt, idx) => {
+            shuffledOptions(module.quiz.options).forEach((option, idx) => {
                 optionsHtml += `
-                    <button onclick="checkModuleAnswer(${idx})" class="w-full text-left p-5 border border-gray-200 rounded-xl mb-4 hover:bg-blue-50 hover:border-blue-400 transition duration-200 group shadow-sm relative overflow-hidden">
+                    <button onclick="checkModuleAnswer(${option.originalIndex})" class="w-full text-left p-5 border border-gray-200 rounded-xl mb-4 hover:bg-blue-50 hover:border-blue-400 transition duration-200 group shadow-sm relative overflow-hidden">
                         <div class="flex items-center">
                             <span class="flex-shrink-0 w-10 h-10 bg-gray-100 text-gray-600 rounded-full flex items-center justify-center mr-4 group-hover:bg-blue-600 group-hover:text-white font-bold transition-colors">${String.fromCharCode(65+idx)}</span>
-                            <span class="text-lg text-gray-700 font-medium group-hover:text-blue-900">${opt}</span>
+                            <span class="text-lg text-gray-700 font-medium group-hover:text-blue-900">${option.text}</span>
                         </div>
                     </button>
                 `;
@@ -751,11 +760,11 @@
             let questionsHtml = '';
             courseData.finalExam.forEach((q, qIdx) => {
                 let optionsHtml = '';
-                q.options.forEach((opt, oIdx) => {
+                shuffledOptions(q.options).forEach((option) => {
                     optionsHtml += `
                         <label class="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-blue-50 hover:border-blue-300 transition duration-150 mb-2">
-                            <input type="radio" name="q${qIdx}" value="${oIdx}" class="form-radio h-5 w-5 text-blue-600 border-gray-300 focus:ring-blue-500 mr-4">
-                            <span class="text-gray-700">${opt}</span>
+                            <input type="radio" name="q${qIdx}" value="${option.originalIndex}" class="form-radio h-5 w-5 text-blue-600 border-gray-300 focus:ring-blue-500 mr-4">
+                            <span class="text-gray-700">${option.text}</span>
                         </label>
                     `;
                 });
