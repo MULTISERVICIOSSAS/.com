@@ -732,7 +732,7 @@
                     <h3 class="font-bold mb-3 text-purple-800 flex items-center"><i class="fas fa-info-circle mr-2"></i> Detalles del Examen:</h3>
                     <ul class="space-y-3">
                         <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i> Total de preguntas: <strong>${courseData.finalExam.length}</strong></li>
-                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i> Nota mínima: <strong>70% (14 correctas)</strong></li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i> Nota mínima: <strong>95% (19 correctas)</strong></li>
                         <li class="flex items-center"><i class="fas fa-check text-green-500 mr-3"></i> Intentos ilimitados</li>
                     </ul>
                 </div>
@@ -825,7 +825,7 @@
         }
 
         function renderResult() {
-            const passingScore = Math.ceil(courseData.finalExam.length * 0.7);
+            const passingScore = Math.ceil(courseData.finalExam.length * 0.95);
             const passed = state.score >= passingScore;
             const percentage = Math.round((state.score / courseData.finalExam.length) * 100);
             
@@ -873,7 +873,7 @@
                         <h2 class="text-3xl font-bold text-gray-800 mb-4">No has aprobado</h2>
                         <div class="bg-red-50 p-6 rounded-lg mb-8">
                             <p class="text-gray-800 mb-2 text-xl font-semibold">Tu resultado: <span class="text-red-600">${percentage}%</span></p>
-                            <p class="text-gray-600">Necesitas un mínimo de 70% para aprobar el examen.</p>
+                            <p class="text-gray-600">Necesitas un mínimo de 95% para aprobar el examen.</p>
                             <p class="text-sm text-gray-500 mt-2">Respuestas correctas: ${state.score} / ${courseData.finalExam.length}</p>
                         </div>
                         
@@ -930,7 +930,7 @@
 
         function saveCourseResult() {
             const percentage = Math.round((state.score / courseData.finalExam.length) * 100);
-            const passed = state.score >= Math.ceil(courseData.finalExam.length * 0.7);
+            const passed = state.score >= Math.ceil(courseData.finalExam.length * 0.95);
             const record = {
                 nombre: state.userName,
                 documento: state.userDocument,
@@ -941,7 +941,9 @@
                 total: courseData.finalExam.length,
                 porcentaje: percentage,
                 estado: passed ? 'Aprobado' : 'No aprobado',
-                fecha: new Date().toISOString()
+                fecha: new Date().toISOString(),
+                version_examen: 1,
+                respuestas: state.answers.slice()
             };
             const current = JSON.parse(localStorage.getItem('msCourseResults') || '[]');
             current.unshift(record);

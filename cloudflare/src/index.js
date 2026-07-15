@@ -1,4 +1,5 @@
 import { audit, consumeRateLimit, currentAdmin, login, logout, sameOrigin } from "./auth.js";
+import { buildExamEvidence, EXAM_PASS_PERCENTAGE, parseExamEvidence } from "./exam.js";
 import {
   cleanText,
   decodeBase64,
@@ -71,6 +72,7 @@ function adminCertificate(row, env) {
     id: row.id,
     documento: row.documento_masked || "",
     pdf_privado: Boolean(row.pdf_key),
+    resultado_id: row.course_result_id || null,
     motivo_anulacion: row.motivo_anulacion || "",
     fecha_creacion: row.fecha_creacion,
     fecha_actualizacion: row.fecha_actualizacion
@@ -177,18 +179,56 @@ async function createResult(request, env) {
   const data = await body(request);
   const name = cleanText(data.nombre, 180);
   const document = cleanText(data.documento, 80).replace(/\D/g, "");
-  const score = Math.max(0, integer(data.puntaje));
-  const total = Math.max(0, integer(data.total));
-  const percentage = Math.max(0, Math.min(100, integer(data.porcentaje, total ? Math.round(score / total * 100) : 0)));
+  const evidence = data.respuestas === undefined ? null : buildExamEvidence(data.respuestas);
+  if (data.respuestas !== undefined && !evidence) return error("Las respuestas del examen estan incompletas o son invalidas");
+  const score = evidence ? evidence.puntaje : Math.max(0, integer(data.puntaje));
+  const total = evidence ? evidence.total : Math.max(0, integer(data.total));
+  const percentage = evidence
+    ? evidence.porcentaje
+    : Math.max(0, Math.min(100, integer(data.porcentaje, total ? Math.round(score / total * 100) : 0)));
   if (!name || document.length < 4 || total < 1 || score > total) return error("Resultado incompleto o invalido");
   const now = nowIso();
-  await env.DB.prepare(`INSERT INTO course_results
-    (nombre,documento_hash,documento_last4,documento_masked,correo,telefono,curso,puntaje,total,porcentaje,estado,fecha,fecha_creacion)
-    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`)
+  const result = await env.DB.prepare(`INSERT INTO course_results
+    (nombre,documento_hash,documento_last4,documento_masked,correo,telefono,curso,puntaje,total,porcentaje,estado,fecha,fecha_creacion,respuestas_json)
+    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)`)
     .bind(name, await hmacHex(env.DOCUMENT_HASH_KEY || "local-development", document), documentLast4(document), maskDocument(document),
       cleanText(data.correo, 160), cleanText(data.telefono, 80), cleanText(data.curso || "Manipulacion de Alimentos", 180),
-      score, total, percentage, percentage >= 70 ? "Aprobado" : "No aprobado", cleanText(data.fecha || now, 80), now).run();
-  return json({ ok: true }, 201);
+      score, total, percentage, percentage >= EXAM_PASS_PERCENTAGE ? "Aprobado" : "No aprobado", cleanText(data.fecha || now, 80), now,
+      evidence ? JSON.stringify(evidence) : null).run();
+  return json({ ok: true, resultado_id: result.meta?.last_row_id || null, puntaje: score, total, porcentaje: percentage }, 201);
+}
+
+async function findApprovedResult(request, env) {
+  const data = await body(request);
+  const document = cleanText(data.documento, 80).replace(/\D/g, "");
+  if (document.length < 4) return error("Documento invalido");
+  const hash = await hmacHex(env.DOCUMENT_HASH_KEY || "local-development", document);
+  const row = await env.DB.prepare(`SELECT * FROM course_results
+    WHERE documento_hash=? AND estado='Aprobado' AND porcentaje>=? AND respuestas_json IS NOT NULL
+    ORDER BY id DESC LIMIT 1`).bind(hash, EXAM_PASS_PERCENTAGE).first();
+  if (!row) return json({ ok: false, found: false, error: "No existe un examen completo aprobado con 95% o mas para este documento" }, 404);
+  const evidence = parseExamEvidence(row.respuestas_json);
+  if (!evidence || evidence.porcentaje < EXAM_PASS_PERCENTAGE) {
+    return json({ ok: false, found: false, error: "El resultado no contiene evidencia completa verificable" }, 409);
+  }
+  return json({
+    ok: true,
+    found: true,
+    resultado: {
+      id: row.id,
+      nombre: row.nombre,
+      documento: row.documento_masked,
+      correo: row.correo || "",
+      telefono: row.telefono || "",
+      curso: row.curso,
+      puntaje: row.puntaje,
+      total: row.total,
+      porcentaje: row.porcentaje,
+      estado: row.estado,
+      fecha: row.fecha,
+      evidencia: evidence
+    }
+  });
 }
 
 const lists = {
@@ -327,14 +367,22 @@ async function createCertificate(request, env) {
   const course = cleanText(data.curso || "Manipulacion de Alimentos", 180);
   if (!code || !name || !course) return error("codigo, nombre y curso requeridos");
   const document = cleanText(data.documento, 80).replace(/\D/g, "");
+  const resultId = Math.max(0, integer(data.resultado_id));
+  if (!document || !resultId) return error("Se requiere un resultado de examen aprobado y vinculado");
+  const documentHash = await hmacHex(env.DOCUMENT_HASH_KEY || "local-development", document);
+  const examResult = await env.DB.prepare("SELECT * FROM course_results WHERE id=? AND documento_hash=?").bind(resultId, documentHash).first();
+  const evidence = parseExamEvidence(examResult?.respuestas_json);
+  if (!examResult || examResult.estado !== "Aprobado" || Number(examResult.porcentaje) < EXAM_PASS_PERCENTAGE || !evidence) {
+    return error("El certificado requiere un examen completo aprobado con 95% o mas", 409);
+  }
   const now = nowIso();
   const urls = publicCertificateUrls(env.PUBLIC_URL || "https://multiservicios.website", code);
   await env.DB.prepare(`INSERT INTO certificates
-    (codigo_unico,nombre_estudiante,documento_hash,documento_last4,documento_masked,curso,intensidad_horaria,fecha_emision,fecha_vencimiento,estado,qr_url,validation_url,fecha_creacion,fecha_actualizacion)
-    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(codigo_unico) DO UPDATE SET nombre_estudiante=excluded.nombre_estudiante,documento_hash=excluded.documento_hash,documento_last4=excluded.documento_last4,documento_masked=excluded.documento_masked,curso=excluded.curso,intensidad_horaria=excluded.intensidad_horaria,fecha_emision=excluded.fecha_emision,fecha_vencimiento=excluded.fecha_vencimiento,estado=excluded.estado,qr_url=excluded.qr_url,validation_url=excluded.validation_url,fecha_actualizacion=excluded.fecha_actualizacion`)
-    .bind(code, name, document ? await hmacHex(env.DOCUMENT_HASH_KEY || "local-development", document) : "", documentLast4(document), maskDocument(document), course,
+    (codigo_unico,nombre_estudiante,documento_hash,documento_last4,documento_masked,curso,intensidad_horaria,fecha_emision,fecha_vencimiento,estado,qr_url,validation_url,fecha_creacion,fecha_actualizacion,course_result_id)
+    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(codigo_unico) DO UPDATE SET nombre_estudiante=excluded.nombre_estudiante,documento_hash=excluded.documento_hash,documento_last4=excluded.documento_last4,documento_masked=excluded.documento_masked,curso=excluded.curso,intensidad_horaria=excluded.intensidad_horaria,fecha_emision=excluded.fecha_emision,fecha_vencimiento=excluded.fecha_vencimiento,estado=excluded.estado,qr_url=excluded.qr_url,validation_url=excluded.validation_url,fecha_actualizacion=excluded.fecha_actualizacion,course_result_id=excluded.course_result_id`)
+    .bind(code, examResult.nombre || name, documentHash, documentLast4(document), maskDocument(document), course,
       cleanText(data.intensidad_horaria, 80), cleanText(data.fecha_emision || now.slice(0, 10), 20), cleanText(data.fecha_vencimiento, 20),
-      cleanText(data.estado || "Activo", 40), urls.qrUrl, urls.validationUrl, now, now).run();
+      cleanText(data.estado || "Activo", 40), urls.qrUrl, urls.validationUrl, now, now, resultId).run();
   const row = await env.DB.prepare("SELECT * FROM certificates WHERE codigo_unico=?").bind(code).first();
   return json({ ok: true, certificado: adminCertificate(row, env) }, 201);
 }
@@ -445,6 +493,7 @@ async function handleApi(request, env, url) {
   if (method === "GET" && path === "/api/admin/stats") return stats(env);
   if (method === "GET" && path === "/api/admin/prospectos") return listProspects(env, url);
   if (method === "GET" && path === "/api/admin/certificados") return listCertificates(env);
+  if (method === "POST" && path === "/api/admin/resultados/buscar") return findApprovedResult(request, env);
   if (method === "POST" && path === "/api/admin/certificados") {
     const response = await createCertificate(request, env);
     if (response.ok) await audit(env, admin.email, "certificado_guardado", "Certificado creado o actualizado", ip(request));
@@ -481,10 +530,6 @@ async function handleApi(request, env, url) {
 }
 
 async function serveStatic(request, env, url) {
-  if (url.pathname === "/favicon.ico") {
-    const logoUrl = new URL("/assets/logos/logo-horizontal.png", url);
-    return env.ASSETS.fetch(new Request(logoUrl, request));
-  }
   if (url.pathname === "/admin") return Response.redirect(`${url.origin}/admin/`, 302);
   if (url.pathname === "/admin/") {
     const admin = await currentAdmin(request, env);
@@ -502,7 +547,8 @@ export default {
   async fetch(request, env) {
     try {
       const url = new URL(request.url);
-      if (url.protocol === "http:") {
+      const localRequest = request.url.includes("127.0.0.1:") || request.url.includes("localhost:") || request.url.includes("[::1]:");
+      if (url.protocol === "http:" && request.headers.has("CF-Ray") && !localRequest) {
         url.protocol = "https:";
         return Response.redirect(url.toString(), 308);
       }
