@@ -68,6 +68,15 @@ class StaticAssetTests(unittest.TestCase):
         self.assertIn("checkModuleAnswer(${option.originalIndex})", course)
         self.assertIn('value="${option.originalIndex}"', course)
 
+    def test_final_exam_includes_colombian_study_library(self):
+        course = (PUBLIC / "apps" / "modulos-examen" / "index.html").read_text(encoding="utf-8")
+        self.assertIn("Biblioteca de repaso", course)
+        self.assertIn("exam-study-layout", course)
+        self.assertIn("Resolución 2674 de 2013", course)
+        self.assertIn("www.minsalud.gov.co", course)
+        self.assertIn("normograma.invima.gov.co", course)
+        self.assertIn("temperature-scale", course)
+
 
 if __name__ == "__main__":
     unittest.main()

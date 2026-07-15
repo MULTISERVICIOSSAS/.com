@@ -128,6 +128,112 @@
         input[type="radio"] {
             accent-color: var(--ms-navy);
         }
+        .exam-study-layout {
+            display: grid;
+            grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
+            gap: 1.5rem;
+            align-items: start;
+        }
+        .study-library {
+            position: sticky;
+            top: 1.5rem;
+            max-height: calc(100vh - 3rem);
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.24);
+            border-radius: 0.75rem;
+            background: #ffffff;
+            box-shadow: 0 16px 36px rgba(8, 22, 38, 0.2);
+        }
+        .study-library__hero {
+            position: relative;
+            min-height: 170px;
+            overflow: hidden;
+            border-radius: 0.7rem 0.7rem 0 0;
+            background: var(--ms-navy);
+        }
+        .study-library__hero img {
+            width: 100%;
+            height: 170px;
+            object-fit: cover;
+        }
+        .study-library__hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(8, 22, 38, 0.12), rgba(8, 22, 38, 0.92));
+        }
+        .study-library__title {
+            position: absolute;
+            z-index: 1;
+            left: 1rem;
+            right: 1rem;
+            bottom: 0.9rem;
+            color: #ffffff;
+        }
+        .study-library__content { padding: 1rem; }
+        .study-topic { border-top: 1px solid #dce3ea; }
+        .study-topic summary {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            padding: 0.9rem 0;
+            color: var(--ms-navy);
+            font-weight: 700;
+            cursor: pointer;
+            list-style: none;
+        }
+        .study-topic summary::-webkit-details-marker { display: none; }
+        .study-topic summary::after {
+            content: '+';
+            margin-left: auto;
+            font-size: 1.1rem;
+            color: #1559c7;
+        }
+        .study-topic[open] summary::after { content: '-'; }
+        .study-topic ul {
+            margin: 0 0 1rem;
+            padding-left: 1.25rem;
+            color: #465568;
+            font-size: 0.9rem;
+            line-height: 1.55;
+            list-style: disc;
+        }
+        .temperature-scale {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            margin: 0 0 1rem;
+            overflow: hidden;
+            border-radius: 0.4rem;
+            color: #ffffff;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-align: center;
+        }
+        .temperature-scale span { padding: 0.6rem 0.25rem; }
+        .temperature-scale__cold { background: #1479b8; }
+        .temperature-scale__risk { background: #c0392b; }
+        .temperature-scale__hot { background: #d08412; }
+        .study-official-link {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            margin-top: 0.75rem;
+            padding: 0.7rem 0.8rem;
+            border: 1px solid #c8d5e3;
+            border-radius: 0.45rem;
+            color: var(--ms-navy);
+            font-size: 0.82rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+        .study-official-link:hover { background: #eef5fb; }
+        @media (max-width: 900px) {
+            .exam-study-layout { grid-template-columns: 1fr; }
+            .study-library {
+                position: static;
+                max-height: none;
+            }
+        }
     </style>
     <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png?v=3">
     <link rel="shortcut icon" href="/favicon.ico?v=3">
@@ -147,7 +253,7 @@
         </div>
     </nav>
     <!-- Main Content Area -->
-    <main id="app" class="flex-grow container mx-auto px-4 py-8 max-w-4xl">
+    <main id="app" class="flex-grow container mx-auto px-4 py-8 max-w-7xl">
     </main>
     <!-- Footer -->
     <footer class="bg-gray-800 text-gray-400 py-6 text-center text-sm">
@@ -725,10 +831,88 @@
             app.appendChild(div);
         }
 
+        function getStudyLibraryHTML() {
+            return `
+                <aside class="study-library" aria-label="Biblioteca de repaso sobre manipulación de alimentos">
+                    <div class="study-library__hero">
+                        <img src="../../assets/images/capacitacion-alimentos-certificado.jpg" alt="Capacitación en manipulación segura de alimentos">
+                        <div class="study-library__title">
+                            <p class="text-xs font-bold uppercase tracking-wide text-yellow-300">Consulta mientras respondes</p>
+                            <h2 class="text-2xl font-bold">Biblioteca de repaso</h2>
+                        </div>
+                    </div>
+                    <div class="study-library__content">
+                        <p class="text-sm text-gray-600 mb-3">Abre cada tema para recordar los puntos clave antes y durante el examen.</p>
+
+                        <details class="study-topic" open>
+                            <summary><i class="fas fa-hands-wash text-blue-600" aria-hidden="true"></i> Higiene personal</summary>
+                            <ul>
+                                <li>Lava las manos con agua y jabón y frótalas durante al menos 20 segundos.</li>
+                                <li>Usa uniforme limpio, cabello recogido y evita joyas u objetos que puedan caer.</li>
+                                <li>Reporta vómito, diarrea, fiebre o heridas infectadas; no manipules alimentos enfermo.</li>
+                                <li>Los guantes no reemplazan el lavado de manos.</li>
+                            </ul>
+                        </details>
+
+                        <details class="study-topic">
+                            <summary><i class="fas fa-temperature-high text-red-600" aria-hidden="true"></i> Temperaturas seguras</summary>
+                            <div class="temperature-scale" aria-label="Escala visual de temperaturas">
+                                <span class="temperature-scale__cold">Frío<br>hasta 5 °C</span>
+                                <span class="temperature-scale__risk">Riesgo<br>5 a 60 °C</span>
+                                <span class="temperature-scale__hot">Caliente<br>desde 60 °C</span>
+                            </div>
+                            <ul>
+                                <li>Mantén los alimentos fríos refrigerados y los calientes a 60 °C o más.</li>
+                                <li>Cocina el pollo y recalienta preparaciones hasta 74 °C en el centro.</li>
+                                <li>Descongela en refrigeración, nunca sobre el mesón ni al sol.</li>
+                            </ul>
+                        </details>
+
+                        <details class="study-topic">
+                            <summary><i class="fas fa-shield-alt text-green-700" aria-hidden="true"></i> Contaminación cruzada</summary>
+                            <ul>
+                                <li>Separa alimentos crudos de los cocidos o listos para consumir.</li>
+                                <li>Guarda carnes crudas en recipientes cerrados, en la parte inferior del refrigerador.</li>
+                                <li>Usa utensilios y tablas diferenciados; lava y desinfecta superficies entre tareas.</li>
+                                <li>Evita tocar alimentos listos para servir directamente con las manos.</li>
+                            </ul>
+                        </details>
+
+                        <details class="study-topic">
+                            <summary><i class="fas fa-boxes-stacked text-amber-600" aria-hidden="true"></i> Almacenamiento y peligros</summary>
+                            <ul>
+                                <li>Aplica PEPS: primero en entrar, primero en salir.</li>
+                                <li>Separa productos químicos de alimentos, utensilios y empaques.</li>
+                                <li>Rechaza latas abolladas, infladas, con fuga u óxido severo.</li>
+                                <li>Controla peligros biológicos, químicos y físicos como vidrio o cabello.</li>
+                            </ul>
+                        </details>
+
+                        <details class="study-topic">
+                            <summary><i class="fas fa-landmark text-blue-700" aria-hidden="true"></i> Marco colombiano</summary>
+                            <ul>
+                                <li>La Resolución 2674 de 2013 establece requisitos sanitarios y prácticas higiénicas para quienes manipulan alimentos en Colombia.</li>
+                                <li>La capacitación, el estado de salud del manipulador y la prevención de contaminación son responsabilidades permanentes.</li>
+                            </ul>
+                            <a class="study-official-link" href="https://www.minsalud.gov.co/sites/rid/Lists/BibliotecaDigital/RIDE/DE/DIJ/resolucion-2674-de-2013.pdf" target="_blank" rel="noopener">
+                                <i class="fas fa-file-pdf" aria-hidden="true"></i> Leer Resolución 2674 de 2013
+                            </a>
+                            <a class="study-official-link" href="https://normograma.invima.gov.co/compilacion/docs/resolucion_minsaludps_2674_2013.htm" target="_blank" rel="noopener">
+                                <i class="fas fa-up-right-from-square" aria-hidden="true"></i> Consultar compilación de INVIMA
+                            </a>
+                        </details>
+                    </div>
+                </aside>
+            `;
+        }
+
         function renderExamIntro() {
+            const studyLibrary = getStudyLibraryHTML();
             const div = document.createElement('div');
-            div.className = 'fade-in bg-white p-10 rounded-xl shadow-lg text-center max-w-2xl mx-auto border-t-4 border-purple-600';
+            div.className = 'fade-in exam-study-layout';
             div.innerHTML = `
+                ${studyLibrary}
+                <section class="bg-white p-6 md:p-10 rounded-xl shadow-lg text-center border-t-4 border-purple-600">
                 <div class="mb-6 inline-block p-6 rounded-full bg-purple-50">
                     <i class="fas fa-clipboard-list text-6xl text-purple-600"></i>
                 </div>
@@ -749,13 +933,14 @@
                     <span>Comenzar Examen</span>
                     <i class="fas fa-arrow-right ml-3"></i>
                 </button>
+                </section>
             `;
             app.appendChild(div);
         }
 
         function renderExam() {
             const div = document.createElement('div');
-            div.className = 'fade-in max-w-4xl mx-auto';
+            div.className = 'fade-in exam-study-layout';
             
             let questionsHtml = '';
             courseData.finalExam.forEach((q, qIdx) => {
@@ -783,18 +968,21 @@
             });
 
             div.innerHTML = `
-                <div class="text-center mb-10">
-                    <h2 class="text-3xl font-bold text-gray-800">Evaluación Final</h2>
-                    <p class="text-gray-500 mt-2">Responde todas las preguntas cuidadosamente.</p>
-                </div>
-                <form id="examForm" onsubmit="submitExam(event)">
-                    ${questionsHtml}
-                    <div class="text-center mt-12 mb-12">
-                        <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-16 rounded-full shadow-xl text-xl transition transform hover:scale-105 flex items-center mx-auto">
-                            <i class="fas fa-check-circle mr-3"></i> Enviar Respuestas
-                        </button>
+                ${getStudyLibraryHTML()}
+                <section class="min-w-0">
+                    <div class="bg-white rounded-xl p-6 text-center mb-8 shadow-md">
+                        <h2 class="text-3xl font-bold text-gray-800">Evaluación Final</h2>
+                        <p class="text-gray-500 mt-2">Responde todas las preguntas cuidadosamente. Puedes consultar la biblioteca de repaso.</p>
                     </div>
-                </form>
+                    <form id="examForm" onsubmit="submitExam(event)">
+                        ${questionsHtml}
+                        <div class="text-center mt-12 mb-12">
+                            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-16 rounded-full shadow-xl text-xl transition transform hover:scale-105 flex items-center mx-auto">
+                                <i class="fas fa-check-circle mr-3"></i> Enviar Respuestas
+                            </button>
+                        </div>
+                    </form>
+                </section>
             `;
             app.appendChild(div);
         }
