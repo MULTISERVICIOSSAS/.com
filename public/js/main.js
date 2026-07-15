@@ -6,8 +6,7 @@
     ["registro.html", "Registro"],
     ["servicios.html", "Servicios"],
     ["empresas.html", "Empresas"],
-    ["extintores.html", "Extintores"],
-    ["validar-certificado.html", "Validar"],
+    ["validar-certificado.html", "Validar certificado"],
     ["contacto.html", "Contacto"]
   ];
 
