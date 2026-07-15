@@ -198,17 +198,17 @@ async function createResult(request, env) {
   return json({ ok: true, resultado_id: result.meta?.last_row_id || null, puntaje: score, total, porcentaje: percentage }, 201);
 }
 
-async function findApprovedResult(request, env) {
+async function findCompletedResult(request, env) {
   const data = await body(request);
   const document = cleanText(data.documento, 80).replace(/\D/g, "");
   if (document.length < 4) return error("Documento invalido");
   const hash = await hmacHex(env.DOCUMENT_HASH_KEY || "local-development", document);
   const row = await env.DB.prepare(`SELECT * FROM course_results
-    WHERE documento_hash=? AND estado='Aprobado' AND porcentaje>=? AND respuestas_json IS NOT NULL
-    ORDER BY id DESC LIMIT 1`).bind(hash, EXAM_PASS_PERCENTAGE).first();
-  if (!row) return json({ ok: false, found: false, error: "No existe un examen completo aprobado con 95% o mas para este documento" }, 404);
+    WHERE documento_hash=? AND respuestas_json IS NOT NULL
+    ORDER BY id DESC LIMIT 1`).bind(hash).first();
+  if (!row) return json({ ok: false, found: false, error: "No existe un examen completo registrado para este documento" }, 404);
   const evidence = parseExamEvidence(row.respuestas_json);
-  if (!evidence || evidence.porcentaje < EXAM_PASS_PERCENTAGE) {
+  if (!evidence) {
     return json({ ok: false, found: false, error: "El resultado no contiene evidencia completa verificable" }, 409);
   }
   return json({
@@ -368,12 +368,12 @@ async function createCertificate(request, env) {
   if (!code || !name || !course) return error("codigo, nombre y curso requeridos");
   const document = cleanText(data.documento, 80).replace(/\D/g, "");
   const resultId = Math.max(0, integer(data.resultado_id));
-  if (!document || !resultId) return error("Se requiere un resultado de examen aprobado y vinculado");
+  if (!document || !resultId) return error("Se requiere un resultado de examen completo y vinculado");
   const documentHash = await hmacHex(env.DOCUMENT_HASH_KEY || "local-development", document);
   const examResult = await env.DB.prepare("SELECT * FROM course_results WHERE id=? AND documento_hash=?").bind(resultId, documentHash).first();
   const evidence = parseExamEvidence(examResult?.respuestas_json);
-  if (!examResult || examResult.estado !== "Aprobado" || Number(examResult.porcentaje) < EXAM_PASS_PERCENTAGE || !evidence) {
-    return error("El certificado requiere un examen completo aprobado con 95% o mas", 409);
+  if (!examResult || !evidence) {
+    return error("El certificado requiere un examen completo registrado", 409);
   }
   const now = nowIso();
   const urls = publicCertificateUrls(env.PUBLIC_URL || "https://multiservicios.website", code);
@@ -493,7 +493,7 @@ async function handleApi(request, env, url) {
   if (method === "GET" && path === "/api/admin/stats") return stats(env);
   if (method === "GET" && path === "/api/admin/prospectos") return listProspects(env, url);
   if (method === "GET" && path === "/api/admin/certificados") return listCertificates(env);
-  if (method === "POST" && path === "/api/admin/resultados/buscar") return findApprovedResult(request, env);
+  if (method === "POST" && path === "/api/admin/resultados/buscar") return findCompletedResult(request, env);
   if (method === "POST" && path === "/api/admin/certificados") {
     const response = await createCertificate(request, env);
     if (response.ok) await audit(env, admin.email, "certificado_guardado", "Certificado creado o actualizado", ip(request));

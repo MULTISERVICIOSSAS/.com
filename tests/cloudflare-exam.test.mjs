@@ -62,3 +62,14 @@ test("parses only complete evidence documents", () => {
   assert.equal(parseExamEvidence('{"preguntas":[]}'), null);
   assert.equal(parseExamEvidence("not-json"), null);
 });
+
+test("keeps complete evidence available below the passing percentage", () => {
+  const answers = correctAnswers();
+  answers[0] = answers[0] === 0 ? 1 : 0;
+  answers[1] = answers[1] === 0 ? 1 : 0;
+  const evidence = buildExamEvidence(answers);
+
+  assert.equal(evidence.porcentaje, 90);
+  assert.equal(evidence.aprobado, false);
+  assert.deepEqual(parseExamEvidence(JSON.stringify(evidence)), evidence);
+});
