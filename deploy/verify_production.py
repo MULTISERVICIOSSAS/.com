@@ -43,9 +43,9 @@ def main() -> int:
 
     checks = [
         ("inicio", "/", {200}),
-        ("cursos", "/cursos.html", {200}),
-        ("modulos", "/apps/modulos-examen/index.html", {200}),
-        ("validacion", "/validar-certificado.html", {200}),
+        ("cursos", "/cursos", {200}),
+        ("modulos", "/apps/modulos-examen/", {200}),
+        ("validacion", "/validar-certificado", {200}),
         ("logo", "/assets/logos/logo-horizontal.png", {200}),
         ("admin protegido", "/admin/", {302}),
     ]
