@@ -55,6 +55,13 @@ class StaticAssetTests(unittest.TestCase):
             with self.subTest(page=page.name):
                 self.assertIn("logo-horizontal.png", content)
 
+    def test_carnet_pdf_uses_printable_a4_layout(self):
+        generator = (PUBLIC / "admin" / "generador-certificados" / "index.html").read_text(encoding="utf-8")
+        self.assertIn("orientation: 'portrait'", generator)
+        self.assertIn("var carnetWidth = 85.6", generator)
+        self.assertIn("drawCarnetCutMarks", generator)
+        self.assertIn("pdf.addPage('a4', 'landscape')", generator)
+
 
 if __name__ == "__main__":
     unittest.main()
