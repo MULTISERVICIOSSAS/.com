@@ -7,6 +7,7 @@ import {
   FINAL_EXAM,
   parseExamEvidence
 } from "../cloudflare/src/exam.js";
+import { createCertificate } from "../cloudflare/src/index.js";
 
 const correctAnswers = () => FINAL_EXAM.map((question) => question.answer);
 
@@ -72,4 +73,74 @@ test("keeps complete evidence available below the passing percentage", () => {
   assert.equal(evidence.porcentaje, 90);
   assert.equal(evidence.aprobado, false);
   assert.deepEqual(parseExamEvidence(JSON.stringify(evidence)), evidence);
+});
+
+test("creates a certificate without an exam result", async () => {
+  const executedSql = [];
+  let storedCertificate = null;
+  const db = {
+    prepare(sql) {
+      executedSql.push(sql);
+      return {
+        values: [],
+        bind(...values) {
+          this.values = values;
+          return this;
+        },
+        async run() {
+          const [code, name, documentHash, last4, masked, course, intensity, issued, expires, state, qrUrl,
+            validationUrl, createdAt, updatedAt, resultId] = this.values;
+          storedCertificate = {
+            id: 1,
+            codigo_unico: code,
+            nombre_estudiante: name,
+            documento_hash: documentHash,
+            documento_last4: last4,
+            documento_masked: masked,
+            curso: course,
+            intensidad_horaria: intensity,
+            fecha_emision: issued,
+            fecha_vencimiento: expires,
+            estado: state,
+            qr_url: qrUrl,
+            validation_url: validationUrl,
+            fecha_creacion: createdAt,
+            fecha_actualizacion: updatedAt,
+            course_result_id: resultId,
+            pdf_key: null,
+            motivo_anulacion: null
+          };
+          return { meta: { changes: 1, last_row_id: 1 } };
+        },
+        async first() {
+          return storedCertificate;
+        }
+      };
+    }
+  };
+  const request = new Request("https://multiservicios.website/api/admin/certificados", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      codigo: "MS-SINEXAMEN",
+      nombre: "Persona Sin Examen",
+      documento: "123456789",
+      curso: "Manipulacion de Alimentos",
+      fecha_emision: "2026-07-15",
+      fecha_vencimiento: "2027-07-15"
+    })
+  });
+
+  const response = await createCertificate(request, {
+    DB: db,
+    DOCUMENT_HASH_KEY: "test-secret",
+    PUBLIC_URL: "https://multiservicios.website"
+  });
+  const payload = await response.json();
+
+  assert.equal(response.status, 201);
+  assert.equal(payload.ok, true);
+  assert.equal(payload.certificado.resultado_id, null);
+  assert.equal(storedCertificate.nombre_estudiante, "Persona Sin Examen");
+  assert.equal(executedSql.some((sql) => sql.includes("course_results")), false);
 });

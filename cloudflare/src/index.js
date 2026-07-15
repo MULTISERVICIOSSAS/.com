@@ -360,7 +360,7 @@ async function listCertificates(env) {
   return json({ ok: true, certificados: data.map((row) => adminCertificate(row, env)) });
 }
 
-async function createCertificate(request, env) {
+export async function createCertificate(request, env) {
   const data = await body(request);
   const code = extractCertificateCode(data.codigo_unico || data.codigo || data.code);
   const name = cleanText(data.nombre_estudiante || data.nombre || data.titular, 180);
@@ -368,21 +368,24 @@ async function createCertificate(request, env) {
   if (!code || !name || !course) return error("codigo, nombre y curso requeridos");
   const document = cleanText(data.documento, 80).replace(/\D/g, "");
   const resultId = Math.max(0, integer(data.resultado_id));
-  if (!document || !resultId) return error("Se requiere un resultado de examen completo y vinculado");
+  if (!document) return error("Documento requerido");
   const documentHash = await hmacHex(env.DOCUMENT_HASH_KEY || "local-development", document);
-  const examResult = await env.DB.prepare("SELECT * FROM course_results WHERE id=? AND documento_hash=?").bind(resultId, documentHash).first();
-  const evidence = parseExamEvidence(examResult?.respuestas_json);
-  if (!examResult || !evidence) {
-    return error("El certificado requiere un examen completo registrado", 409);
+  let examResult = null;
+  if (resultId) {
+    examResult = await env.DB.prepare("SELECT * FROM course_results WHERE id=? AND documento_hash=?").bind(resultId, documentHash).first();
+    const evidence = parseExamEvidence(examResult?.respuestas_json);
+    if (!examResult || !evidence) {
+      return error("El examen seleccionado no contiene evidencia completa para este documento", 409);
+    }
   }
   const now = nowIso();
   const urls = publicCertificateUrls(env.PUBLIC_URL || "https://multiservicios.website", code);
   await env.DB.prepare(`INSERT INTO certificates
     (codigo_unico,nombre_estudiante,documento_hash,documento_last4,documento_masked,curso,intensidad_horaria,fecha_emision,fecha_vencimiento,estado,qr_url,validation_url,fecha_creacion,fecha_actualizacion,course_result_id)
     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(codigo_unico) DO UPDATE SET nombre_estudiante=excluded.nombre_estudiante,documento_hash=excluded.documento_hash,documento_last4=excluded.documento_last4,documento_masked=excluded.documento_masked,curso=excluded.curso,intensidad_horaria=excluded.intensidad_horaria,fecha_emision=excluded.fecha_emision,fecha_vencimiento=excluded.fecha_vencimiento,estado=excluded.estado,qr_url=excluded.qr_url,validation_url=excluded.validation_url,fecha_actualizacion=excluded.fecha_actualizacion,course_result_id=excluded.course_result_id`)
-    .bind(code, examResult.nombre || name, documentHash, documentLast4(document), maskDocument(document), course,
+    .bind(code, examResult?.nombre || name, documentHash, documentLast4(document), maskDocument(document), course,
       cleanText(data.intensidad_horaria, 80), cleanText(data.fecha_emision || now.slice(0, 10), 20), cleanText(data.fecha_vencimiento, 20),
-      cleanText(data.estado || "Activo", 40), urls.qrUrl, urls.validationUrl, now, now, resultId).run();
+      cleanText(data.estado || "Activo", 40), urls.qrUrl, urls.validationUrl, now, now, resultId || null).run();
   const row = await env.DB.prepare("SELECT * FROM certificates WHERE codigo_unico=?").bind(code).first();
   return json({ ok: true, certificado: adminCertificate(row, env) }, 201);
 }
