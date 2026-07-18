@@ -300,7 +300,7 @@
       <div class="form-banner">
         <img src="../../assets/logos/logo-horizontal.png" alt="Multiservicios" />
         <h2>Certificado médico de manipulación de alimentos</h2>
-        <p>Completa la valoración y el sistema prepara el documento automáticamente.</p>
+        <p>Ingresa los tres datos del paciente y el sistema completa el documento automáticamente.</p>
       </div>
       <form id="medicalForm">
         <fieldset>
@@ -310,30 +310,7 @@
             <div class="field"><label for="documentType">Tipo de documento</label><select id="documentType" name="documentType"><option>C.C.</option><option>T.I.</option><option>C.E.</option><option>Pasaporte</option></select></div>
             <div class="field"><label for="documentNumber">Número de documento</label><input id="documentNumber" name="documentNumber" required maxlength="30" inputmode="numeric" /></div>
           </div>
-          <div class="field"><label for="examDate">Fecha y hora del examen médico</label><input id="examDate" name="examDate" type="datetime-local" required /></div>
-          <div class="field-row">
-            <div class="field"><label for="result">Resultado</label><select id="result" name="result"><option value="Apto">Apto</option><option value="No apto">No apto</option></select></div>
-            <div class="field"><label for="expiryDate">Vencimiento (opcional)</label><input id="expiryDate" name="expiryDate" type="date" /></div>
-          </div>
-          <div class="field"><label for="observations">Observaciones (opcional)</label><textarea id="observations" name="observations" maxlength="260" placeholder="Incluye únicamente la información necesaria."></textarea></div>
         </fieldset>
-
-        <fieldset>
-          <legend>Profesional autorizado</legend>
-          <div class="field"><label for="doctorName">Nombre del médico</label><input id="doctorName" name="doctorName" required value="Dr. Marcos Norberto Pinto Prada" maxlength="180" /></div>
-          <div class="field-row">
-            <div class="field"><label for="specialty">Especialidad</label><input id="specialty" name="specialty" required value="Médico General" maxlength="120" /></div>
-            <div class="field"><label for="medicalRecord">Registro médico</label><input id="medicalRecord" name="medicalRecord" required value="1102372633" maxlength="100" /></div>
-          </div>
-          <div class="field">
-            <label for="signatureFile">Firma autorizada</label>
-            <img id="signatureFormPreview" class="signature-preview" src="../../assets/images/firma-medico-marcos-pinto.png" alt="Firma autorizada del médico" />
-            <input id="signatureFile" name="signatureFile" type="file" accept="image/png,image/jpeg,image/webp" />
-            <p class="help">La firma original ya está cargada. Selecciona otro archivo únicamente para actualizarla.</p>
-          </div>
-        </fieldset>
-
-        <label class="confirmation"><input id="authorization" type="checkbox" required /><span>Confirmo que el profesional indicado realizó la valoración médica y autoriza la emisión de este documento con su firma.</span></label>
         <button id="generateButton" class="generate-button" type="submit">Generar certificado médico</button>
         <p id="status" class="status" role="status" aria-live="polite"></p>
       </form>
@@ -386,11 +363,15 @@
       const status = document.getElementById('status');
       const button = document.getElementById('generateButton');
       const certificate = document.getElementById('certificate');
-      const signatureInput = document.getElementById('signatureFile');
-      const signatureFormPreview = document.getElementById('signatureFormPreview');
       const signatureCertificate = document.getElementById('signatureCertificate');
-      let signatureDataUrl = signatureCertificate.src;
       let activeCode = randomCode();
+      const medicalDefaults = Object.freeze({
+        result: 'Apto',
+        observations: '',
+        doctorName: 'Dr. Marcos Norberto Pinto Prada',
+        specialty: 'Médico General',
+        medicalRecord: '1102372633'
+      });
 
       function apiBase() {
         const cfg = window.MULTISERVICIOS_CONFIG || {};
@@ -429,13 +410,15 @@
         status.className = 'status ' + (type || '');
       }
 
-      function loadImage(file) {
-        return new Promise(function (resolve, reject) {
-          const reader = new FileReader();
-          reader.onload = function () { resolve(String(reader.result || '')); };
-          reader.onerror = reject;
-          reader.readAsDataURL(file);
-        });
+      function localDateTime(date) {
+        const local = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+        return local.toISOString().slice(0, 16);
+      }
+
+      function expiryFrom(examDate) {
+        const date = new Date(examDate);
+        date.setFullYear(date.getFullYear() + 1);
+        return localDateTime(date).slice(0, 10);
       }
 
       function renderQr(url) {
@@ -445,18 +428,19 @@
       }
 
       function collect() {
+        const examDate = localDateTime(new Date());
         return {
           code: activeCode,
           patientName: clean(form.patientName.value).toUpperCase(),
           documentType: clean(form.documentType.value),
           documentNumber: clean(form.documentNumber.value),
-          examDate: clean(form.examDate.value),
-          result: clean(form.result.value),
-          expiryDate: clean(form.expiryDate.value),
-          observations: clean(form.observations.value),
-          doctorName: clean(form.doctorName.value),
-          specialty: clean(form.specialty.value),
-          medicalRecord: clean(form.medicalRecord.value),
+          examDate: examDate,
+          result: medicalDefaults.result,
+          expiryDate: expiryFrom(examDate),
+          observations: medicalDefaults.observations,
+          doctorName: medicalDefaults.doctorName,
+          specialty: medicalDefaults.specialty,
+          medicalRecord: medicalDefaults.medicalRecord,
           url: buildValidationUrl(activeCode)
         };
       }
@@ -478,7 +462,6 @@
         document.getElementById('signatureRecord').textContent = data.medicalRecord;
         document.getElementById('certificateCode').textContent = data.code;
         document.getElementById('validationUrl').textContent = data.url.replace(/^https?:\/\//, '');
-        signatureCertificate.src = signatureDataUrl;
         renderQr(data.url);
       }
 
@@ -507,6 +490,17 @@
         if (!response.ok || payload.ok === false) throw new Error(payload.error || 'No fue posible registrar el certificado.');
       }
 
+      async function verifyPublicRecord(data) {
+        const params = new URLSearchParams({ codigo: data.code });
+        const response = await fetch(apiBase() + '/certificados/validar?' + params.toString(), { cache: 'no-store' });
+        const payload = await response.json().catch(function () { return {}; });
+        const certificateData = payload.certificado || payload.data || payload;
+        const registeredCode = clean(certificateData.codigo || certificateData.codigo_unico || certificateData.code);
+        if (!response.ok || registeredCode !== data.code) {
+          throw new Error('El certificado se registró, pero el código QR todavía no pudo validarse. Intenta nuevamente.');
+        }
+      }
+
       async function createPdf(data) {
         await new Promise(function (resolve) { setTimeout(resolve, 160); });
         const previousTransform = certificate.style.transform;
@@ -526,20 +520,6 @@
         pdf.save(filename);
       }
 
-      signatureInput.addEventListener('change', async function () {
-        const file = signatureInput.files && signatureInput.files[0];
-        if (!file) return;
-        if (file.size > 3 * 1024 * 1024) {
-          signatureInput.value = '';
-          setStatus('La firma debe pesar menos de 3 MB.', 'error');
-          return;
-        }
-        signatureDataUrl = await loadImage(file);
-        signatureFormPreview.src = signatureDataUrl;
-        signatureCertificate.src = signatureDataUrl;
-        updatePreview();
-      });
-
       form.addEventListener('input', updatePreview);
       form.addEventListener('change', updatePreview);
 
@@ -552,6 +532,7 @@
         try {
           updatePreview();
           await registerCertificate(data);
+          await verifyPublicRecord(data);
           await createPdf(data);
           setStatus('Certificado registrado, PDF privado guardado y descarga completada.', 'success');
           activeCode = randomCode();
@@ -561,10 +542,6 @@
           button.disabled = false;
         }
       });
-
-      const now = new Date();
-      now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-      form.examDate.value = now.toISOString().slice(0, 16);
 
       function resizePreview() {
         const frame = document.querySelector('.preview-frame');

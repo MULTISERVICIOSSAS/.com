@@ -49,6 +49,7 @@ class StaticAssetTests(unittest.TestCase):
             PUBLIC / "admin" / "certificados-admin.html",
             PUBLIC / "admin" / "prospectos.html",
             PUBLIC / "admin" / "generador-certificados" / "index.html",
+            PUBLIC / "admin" / "generador-certificados-medicos" / "index.html",
         ]
         for page in pages:
             content = page.read_text(encoding="utf-8")
@@ -61,6 +62,19 @@ class StaticAssetTests(unittest.TestCase):
         self.assertIn("var carnetWidth = 85.6", generator)
         self.assertIn("drawCarnetCutMarks", generator)
         self.assertIn("pdf.addPage('a4', 'landscape')", generator)
+
+    def test_medical_generator_only_requests_patient_identity(self):
+        generator = (PUBLIC / "admin" / "generador-certificados-medicos" / "index.html").read_text(encoding="utf-8")
+        parser = AssetParser()
+        parser.feed(generator)
+        form_fields = []
+        for tag in ("input", "select", "textarea"):
+            marker = f"<{tag} "
+            form_fields.extend(part.split('id="', 1)[1].split('"', 1)[0] for part in generator.split(marker)[1:] if 'id="' in part)
+        self.assertEqual(form_fields, ["patientName", "documentNumber", "documentType"])
+        self.assertIn("const medicalDefaults = Object.freeze", generator)
+        self.assertIn("expiryFrom(examDate)", generator)
+        self.assertIn("await verifyPublicRecord(data)", generator)
 
     def test_course_randomizes_options_without_changing_answer_ids(self):
         course = (PUBLIC / "apps" / "modulos-examen" / "index.html").read_text(encoding="utf-8")
