@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Generador de certificados medicos | Multiservicios</title>
+  <title>Generador de certificados médicos | Multiservicios</title>
+  <meta name="robots" content="noindex,nofollow" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet" />
@@ -11,164 +12,371 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script src="../../js/config.js?v=20260718-medical"></script>
+  <script src="../../js/config.js?v=20260718-medical-template"></script>
   <style>
     :root {
-      --navy: #082f5b;
-      --blue: #058ac8;
-      --sky: #eaf6fc;
-      --gold: #c69a2d;
-      --ink: #14243a;
-      --muted: #5d6a7a;
-      --line: #d7e1eb;
-      --green: #0b9365;
+      --navy: #0b2f58;
+      --blue: #087fbd;
+      --blue-bright: #2463eb;
+      --blue-soft: #e9f3ff;
+      --green: #0b9668;
+      --ink: #1d293d;
+      --muted: #667085;
+      --line: #dde3eb;
+      --surface: #ffffff;
     }
-    * { box-sizing: border-box; }
-    body { margin: 0; min-height: 100vh; font-family: Inter, sans-serif; color: var(--ink); background: #eef3f8; }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { min-width: 320px; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: Inter, sans-serif;
+      background: linear-gradient(135deg, #10233f 0%, #1d3f67 52%, #111d34 100%);
+    }
     button, input, select, textarea { font: inherit; }
-    .topbar { min-height: 72px; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; color: #fff; background: #0c1a2e; }
-    .topbar img { width: min(290px, 52vw); height: 48px; padding: 7px 12px; object-fit: contain; background: #fff; border-radius: 6px; }
-    .topbar a { color: #fff; text-decoration: none; border: 1px solid #8290a3; border-radius: 6px; padding: 11px 16px; font-weight: 700; }
-    .workspace { width: min(1480px, 100%); margin: 0 auto; padding: 28px; display: grid; grid-template-columns: minmax(340px, 430px) minmax(760px, 1fr); gap: 28px; align-items: start; }
-    .panel { background: #fff; border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 14px 35px rgba(16, 35, 60, .08); overflow: hidden; }
-    .panel-head { padding: 24px; color: #fff; background: var(--navy); }
-    .panel-head h1 { margin: 0 0 8px; font-size: 1.45rem; }
-    .panel-head p { margin: 0; line-height: 1.55; color: #d9e7f5; }
-    form { padding: 24px; }
-    fieldset { margin: 0 0 22px; padding: 0; border: 0; }
-    legend { width: 100%; padding-bottom: 9px; margin-bottom: 14px; border-bottom: 1px solid var(--line); font-size: .82rem; font-weight: 800; text-transform: uppercase; color: var(--navy); }
-    .field { display: grid; gap: 7px; margin-bottom: 14px; }
-    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    label { font-size: .88rem; font-weight: 700; }
-    input, select, textarea { width: 100%; border: 1px solid #bcc9d7; border-radius: 6px; padding: 11px 12px; color: var(--ink); background: #fff; }
-    input:focus, select:focus, textarea:focus { outline: 3px solid rgba(5,138,200,.18); border-color: var(--blue); }
-    textarea { min-height: 84px; resize: vertical; }
-    .signature-preview { width: 100%; height: 150px; object-fit: contain; object-position: center top; border: 1px dashed #aab9c8; border-radius: 6px; background: #f8fbfd; }
-    .confirmation { display: flex; align-items: flex-start; gap: 10px; margin: 18px 0; line-height: 1.45; color: #35445a; }
-    .confirmation input { width: 18px; height: 18px; margin-top: 2px; flex: 0 0 auto; }
-    .primary { width: 100%; min-height: 52px; border: 0; border-radius: 6px; color: #fff; background: var(--green); font-weight: 800; cursor: pointer; }
-    .primary:disabled { opacity: .6; cursor: wait; }
-    .status { min-height: 24px; margin-top: 12px; font-size: .9rem; line-height: 1.45; }
-    .status.error { color: #a61b1b; }
-    .status.success { color: #087550; }
-    .preview-shell { overflow: auto; padding: 20px; background: #dfe7ef; border: 1px solid #ccd7e3; border-radius: 8px; }
-    .certificate-page { position: relative; width: 794px; height: 1123px; margin: 0 auto; overflow: hidden; background: #fff; color: #15243a; box-shadow: 0 8px 28px rgba(12, 32, 58, .16); }
-    .certificate-page::before { content: "+"; position: absolute; inset: 310px auto auto 250px; color: rgba(5, 138, 200, .035); font: 700 500px/1 Inter, sans-serif; transform: rotate(2deg); }
-    .certificate-header { position: relative; height: 190px; display: grid; grid-template-columns: 1fr 270px; align-items: center; padding: 30px 42px; background: linear-gradient(90deg, #edf7ff 0%, #fff 72%); border-bottom: 5px solid var(--blue); }
-    .certificate-logo { width: 390px; max-height: 105px; object-fit: contain; object-position: left center; }
-    .serial { align-self: start; padding-top: 7px; text-align: right; font-size: 12px; line-height: 1.5; color: #526275; }
-    .serial strong { display: block; color: var(--navy); overflow-wrap: anywhere; }
-    .certificate-body { position: relative; z-index: 1; height: 795px; padding: 58px 62px 30px; display: flex; flex-direction: column; }
-    .eyebrow { margin: 0 0 10px; text-align: center; color: var(--blue); font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; }
-    .certificate-title { margin: 0; text-align: center; color: var(--navy); font: 700 31px/1.25 "Libre Baskerville", serif; }
-    .title-rule { width: 88px; height: 3px; margin: 19px auto 38px; background: var(--gold); }
-    .statement { margin: 0; font: 400 18px/1.72 "Libre Baskerville", serif; text-align: justify; }
-    .statement strong { color: var(--navy); }
-    .medical-result { margin: 30px auto 22px; padding: 12px 28px; border: 2px solid var(--green); color: #087451; font-weight: 800; letter-spacing: .7px; text-transform: uppercase; }
-    .observations { min-height: 64px; margin: 0; text-align: center; color: #3f5064; font-size: 14px; line-height: 1.55; }
-    .exam-date { margin-top: 18px; text-align: center; font-size: 15px; }
-    .signature-block { margin-top: auto; text-align: center; }
-    .signature-image-frame { width: 360px; height: 174px; margin: 0 auto -8px; overflow: hidden; }
-    .signature-image { width: 100%; height: auto; object-fit: contain; object-position: center top; }
-    .signature-line { width: 330px; margin: 0 auto 9px; border-top: 1.5px solid #26384e; }
-    .doctor-name { margin: 0; font-size: 17px; font-weight: 800; color: var(--navy); }
-    .doctor-meta { margin: 4px 0 0; font-size: 14px; line-height: 1.5; }
-    .certificate-footer { position: relative; z-index: 2; height: 138px; padding: 19px 38px 18px; display: grid; grid-template-columns: 105px 1fr; gap: 20px; align-items: center; color: #fff; background: var(--navy); border-top: 5px solid var(--gold); }
-    .qr-box { width: 96px; height: 96px; padding: 6px; display: grid; place-items: center; background: #fff; }
-    .qr-box img, .qr-box canvas { width: 84px !important; height: 84px !important; }
-    .validation-copy { font-size: 12px; line-height: 1.5; }
-    .validation-copy strong { display: block; margin-bottom: 3px; font-size: 14px; }
-    .validation-url { color: #d8ecff; overflow-wrap: anywhere; }
-    .legal-note { margin-top: 7px; color: #a9bfd6; font-size: 10px; }
-    @media (max-width: 1240px) {
-      .workspace { grid-template-columns: 1fr; }
-      .panel { max-width: 760px; margin: 0 auto; }
-      .preview-shell { width: 100%; }
+    .admin-bar {
+      min-height: 72px;
+      padding: 12px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      color: #fff;
+      background: #0c172b;
+      border-bottom: 1px solid rgba(255,255,255,.15);
     }
-    @media (max-width: 620px) {
-      .topbar { align-items: flex-start; flex-direction: column; }
-      .workspace { padding: 14px; }
-      .field-row { grid-template-columns: 1fr; }
-      .preview-shell { padding: 8px; }
+    .admin-bar strong { font-size: 1rem; }
+    .dashboard-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding: 0 16px;
+      color: #fff;
+      border: 1px solid #69778c;
+      border-radius: 7px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .page-shell { width: min(1180px, 100%); margin: 0 auto; padding: 38px 24px 70px; }
+    .brand-intro { text-align: center; color: #fff; }
+    .brand-plate {
+      width: min(400px, 90vw);
+      min-height: 104px;
+      margin: 0 auto 20px;
+      padding: 16px 24px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 16px 36px rgba(0,0,0,.2);
+    }
+    .brand-plate img { width: 100%; max-height: 72px; object-fit: contain; }
+    .brand-intro h1 { margin: 0; font-size: clamp(1.45rem, 3vw, 2rem); }
+    .brand-intro p { margin: 10px auto 26px; color: #c7d8ec; line-height: 1.55; }
+    .generator-card {
+      width: min(660px, 100%);
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 8px;
+      background: var(--surface);
+      box-shadow: 0 22px 55px rgba(1, 11, 28, .32);
+    }
+    .form-banner {
+      padding: 30px 30px 28px;
+      text-align: center;
+      color: #fff;
+      background: linear-gradient(135deg, #274986, #2746b8);
+    }
+    .form-banner img {
+      width: min(330px, 90%);
+      height: 88px;
+      padding: 13px 18px;
+      object-fit: contain;
+      border-radius: 7px;
+      background: #fff;
+    }
+    .form-banner h2 { margin: 17px 0 5px; font-size: 1.15rem; }
+    .form-banner p { margin: 0; color: #d7e2ff; font-size: .9rem; }
+    form { padding: 28px 36px 34px; }
+    fieldset { margin: 0 0 24px; padding: 0; border: 0; }
+    legend {
+      width: 100%;
+      padding: 0 0 10px;
+      margin: 0 0 16px;
+      color: #344054;
+      border-bottom: 1px solid var(--line);
+      font-size: .78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+    }
+    .field { display: grid; gap: 7px; margin-bottom: 15px; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+    label { color: #344054; font-size: .83rem; font-weight: 800; text-transform: uppercase; }
+    input, select, textarea {
+      width: 100%;
+      min-height: 50px;
+      padding: 12px 14px;
+      color: #27354a;
+      background: #f8fafc;
+      border: 1px solid #d7dde6;
+      border-radius: 7px;
+    }
+    input:focus, select:focus, textarea:focus { outline: 3px solid rgba(36,99,235,.18); border-color: var(--blue-bright); }
+    textarea { min-height: 86px; resize: vertical; }
+    .signature-preview {
+      width: 100%;
+      height: 155px;
+      object-fit: contain;
+      object-position: center top;
+      background: #f8fbff;
+      border: 1px dashed #aab8ca;
+      border-radius: 7px;
+    }
+    .help { margin: 0; color: var(--muted); font-size: .78rem; line-height: 1.45; text-transform: none; font-weight: 500; }
+    .confirmation {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 20px 0;
+      color: #344054;
+      font-size: .84rem;
+      font-weight: 600;
+      line-height: 1.5;
+      text-transform: none;
+    }
+    .confirmation input { width: 18px; min-height: 18px; margin-top: 2px; flex: 0 0 auto; }
+    .generate-button {
+      width: 100%;
+      min-height: 56px;
+      border: 0;
+      border-radius: 7px;
+      color: #fff;
+      background: linear-gradient(90deg, #2458df, #3783f5);
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 12px 24px rgba(36,88,223,.24);
+    }
+    .generate-button:disabled { opacity: .65; cursor: wait; }
+    .status { min-height: 24px; margin: 13px 0 0; font-size: .86rem; line-height: 1.45; }
+    .status.error { color: #b42318; }
+    .status.success { color: #087454; }
+    .preview-section { margin-top: 42px; }
+    .preview-heading { margin: 0 0 14px; color: #fff; text-align: center; font-size: 1.15rem; }
+    .preview-frame {
+      width: min(850px, 100%);
+      margin: 0 auto;
+      padding: 28px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 8px;
+      background: #dfe7f1;
+      box-shadow: 0 20px 50px rgba(0,0,0,.25);
+    }
+    .certificate-page {
+      position: relative;
+      width: 794px;
+      height: 1123px;
+      margin: 0 auto;
+      overflow: hidden;
+      color: #111;
+      background: #fff;
+      box-shadow: 0 8px 24px rgba(19,38,64,.16);
+    }
+    .template-header {
+      position: relative;
+      z-index: 3;
+      height: 154px;
+      padding: 24px 45px;
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      align-items: center;
+      gap: 28px;
+      background: linear-gradient(90deg, #e2efff 0%, #f4f8ff 58%, #fff 100%);
+    }
+    .template-logo { width: 315px; max-height: 88px; object-fit: contain; object-position: left center; }
+    .doctor-header { color: #0d6cba; line-height: 1.42; }
+    .doctor-header strong { display: block; font-size: 16px; }
+    .doctor-header span { display: block; font-size: 13px; }
+    .template-body { position: relative; height: 969px; overflow: hidden; padding: 42px 20px; }
+    .watermark {
+      position: absolute;
+      z-index: 0;
+      width: 430px;
+      height: 430px;
+      left: 182px;
+      top: 260px;
+      object-fit: contain;
+      opacity: .035;
+      filter: grayscale(1);
+    }
+    .result-title {
+      position: relative;
+      z-index: 2;
+      margin: 0;
+      text-align: center;
+      font: 700 24px/1.2 "Libre Baskerville", Georgia, serif;
+    }
+    .medical-copy {
+      position: absolute;
+      z-index: 2;
+      left: 20px;
+      right: 20px;
+      top: 305px;
+      font: 400 16px/1.48 "Libre Baskerville", Georgia, serif;
+      text-align: left;
+    }
+    .medical-copy p { margin: 0 0 20px; }
+    .medical-copy strong { font-weight: 700; }
+    .exam-line { margin-top: 25px !important; text-align: center; }
+    .signature-area {
+      position: absolute;
+      z-index: 3;
+      top: 620px;
+      left: 50%;
+      width: 370px;
+      text-align: center;
+      transform: translateX(-50%);
+    }
+    .signature-crop { width: 330px; height: 132px; margin: 0 auto 1px; overflow: hidden; }
+    .signature-crop img { width: 330px; height: auto; object-fit: contain; object-position: center top; }
+    .signature-name { margin: 0; font-size: 15px; font-weight: 800; }
+    .signature-meta { margin: 3px 0 0; font-size: 13px; line-height: 1.45; }
+    .qr-area {
+      position: absolute;
+      z-index: 4;
+      left: 20px;
+      bottom: 30px;
+      width: 290px;
+      display: grid;
+      grid-template-columns: 92px 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+    .qr-box { width: 92px; height: 92px; padding: 5px; display: grid; place-items: center; background: #fff; border: 1px solid #e2e8f0; }
+    .qr-box img, .qr-box canvas { width: 80px !important; height: 80px !important; }
+    .qr-copy { font-size: 9px; line-height: 1.45; color: #27364b; }
+    .qr-copy strong { display: block; margin-bottom: 3px; color: var(--navy); font-size: 10px; }
+    .qr-code, .qr-url { display: block; overflow-wrap: anywhere; }
+    .wave, .wave::before, .wave::after {
+      position: absolute;
+      z-index: 1;
+      left: -95px;
+      width: 980px;
+      height: 210px;
+      border-top: 2px solid rgba(96,157,230,.27);
+      border-radius: 50%;
+      content: "";
+    }
+    .wave { bottom: -144px; transform: rotate(-3deg); box-shadow: 0 -11px 0 rgba(96,157,230,.14), 0 -22px 0 rgba(96,157,230,.11), 0 -33px 0 rgba(96,157,230,.09); }
+    .wave::before { left: 0; top: -54px; transform: rotate(4deg); }
+    .wave::after { left: 0; top: -86px; transform: rotate(-2deg); }
+    @media (max-width: 730px) {
+      .admin-bar { align-items: flex-start; flex-direction: column; }
+      .page-shell { padding: 24px 14px 50px; }
+      form { padding: 24px 20px 28px; }
+      .field-row { grid-template-columns: 1fr; gap: 0; }
+      .preview-frame { padding: 8px; }
       .certificate-page { transform-origin: top left; }
     }
   </style>
 </head>
 <body>
-  <header class="topbar">
-    <img src="../../assets/logos/logo-horizontal.png" alt="Multiservicios" />
-    <a href="../dashboard.html">Volver al dashboard</a>
+  <header class="admin-bar">
+    <strong>Área administrativa · Generador de certificados médicos</strong>
+    <a class="dashboard-link" href="../dashboard.html">Volver al dashboard</a>
   </header>
 
-  <main class="workspace">
-    <section class="panel">
-      <div class="panel-head">
-        <h1>Certificado medico para manipulacion de alimentos</h1>
-        <p>Completa la valoracion realizada por el medico. El sistema genera el codigo, el QR, registra el certificado y guarda el PDF privado.</p>
+  <main class="page-shell">
+    <section class="brand-intro">
+      <div class="brand-plate"><img src="../../assets/logos/logo-horizontal.png" alt="Multiservicios" /></div>
+      <h1>Generador de certificados médicos</h1>
+      <p>Certificación médica para manipuladores de alimentos con validación pública.</p>
+    </section>
+
+    <section class="generator-card">
+      <div class="form-banner">
+        <img src="../../assets/logos/logo-horizontal.png" alt="Multiservicios" />
+        <h2>Certificado médico de manipulación de alimentos</h2>
+        <p>Completa la valoración y el sistema prepara el documento automáticamente.</p>
       </div>
       <form id="medicalForm">
         <fieldset>
-          <legend>Paciente</legend>
+          <legend>Datos del paciente</legend>
           <div class="field"><label for="patientName">Nombre completo</label><input id="patientName" name="patientName" required maxlength="180" autocomplete="name" /></div>
           <div class="field-row">
             <div class="field"><label for="documentType">Tipo de documento</label><select id="documentType" name="documentType"><option>C.C.</option><option>T.I.</option><option>C.E.</option><option>Pasaporte</option></select></div>
-            <div class="field"><label for="documentNumber">Numero de documento</label><input id="documentNumber" name="documentNumber" required maxlength="30" inputmode="numeric" /></div>
+            <div class="field"><label for="documentNumber">Número de documento</label><input id="documentNumber" name="documentNumber" required maxlength="30" inputmode="numeric" /></div>
           </div>
-          <div class="field"><label for="examDate">Fecha y hora del examen medico</label><input id="examDate" name="examDate" type="datetime-local" required /></div>
+          <div class="field"><label for="examDate">Fecha y hora del examen médico</label><input id="examDate" name="examDate" type="datetime-local" required /></div>
           <div class="field-row">
             <div class="field"><label for="result">Resultado</label><select id="result" name="result"><option value="Apto">Apto</option><option value="No apto">No apto</option></select></div>
             <div class="field"><label for="expiryDate">Vencimiento (opcional)</label><input id="expiryDate" name="expiryDate" type="date" /></div>
           </div>
-          <div class="field"><label for="observations">Observaciones medicas (opcional)</label><textarea id="observations" name="observations" maxlength="350" placeholder="Incluye solo informacion necesaria para el certificado."></textarea></div>
+          <div class="field"><label for="observations">Observaciones (opcional)</label><textarea id="observations" name="observations" maxlength="260" placeholder="Incluye únicamente la información necesaria."></textarea></div>
         </fieldset>
 
         <fieldset>
           <legend>Profesional autorizado</legend>
-          <div class="field"><label for="doctorName">Nombre del medico</label><input id="doctorName" name="doctorName" required value="Dr. Marcos Norberto Pinto Prada" maxlength="180" /></div>
+          <div class="field"><label for="doctorName">Nombre del médico</label><input id="doctorName" name="doctorName" required value="Dr. Marcos Norberto Pinto Prada" maxlength="180" /></div>
           <div class="field-row">
-            <div class="field"><label for="specialty">Especialidad</label><input id="specialty" name="specialty" required value="Medico General" maxlength="120" /></div>
-            <div class="field"><label for="medicalRecord">Registro medico</label><input id="medicalRecord" name="medicalRecord" required value="1102372633" maxlength="100" /></div>
+            <div class="field"><label for="specialty">Especialidad</label><input id="specialty" name="specialty" required value="Médico General" maxlength="120" /></div>
+            <div class="field"><label for="medicalRecord">Registro médico</label><input id="medicalRecord" name="medicalRecord" required value="1102372633" maxlength="100" /></div>
           </div>
-          <div class="field"><label for="signatureFile">Firma autorizada</label><img id="signatureFormPreview" class="signature-preview" src="../../assets/images/firma-medico-marcos-pinto.png" alt="Firma del medico autorizado" /><input id="signatureFile" name="signatureFile" type="file" accept="image/png,image/jpeg,image/webp" /></div>
+          <div class="field">
+            <label for="signatureFile">Firma autorizada</label>
+            <img id="signatureFormPreview" class="signature-preview" src="../../assets/images/firma-medico-marcos-pinto.png" alt="Firma autorizada del médico" />
+            <input id="signatureFile" name="signatureFile" type="file" accept="image/png,image/jpeg,image/webp" />
+            <p class="help">La firma original ya está cargada. Selecciona otro archivo únicamente para actualizarla.</p>
+          </div>
         </fieldset>
 
-        <label class="confirmation"><input id="authorization" type="checkbox" required /><span>Confirmo que el profesional indicado realizo la valoracion y autoriza la emision de este documento con su firma.</span></label>
-        <button id="generateButton" class="primary" type="submit">Generar, registrar y descargar PDF</button>
+        <label class="confirmation"><input id="authorization" type="checkbox" required /><span>Confirmo que el profesional indicado realizó la valoración médica y autoriza la emisión de este documento con su firma.</span></label>
+        <button id="generateButton" class="generate-button" type="submit">Generar certificado médico</button>
         <p id="status" class="status" role="status" aria-live="polite"></p>
       </form>
     </section>
 
-    <section class="preview-shell" aria-label="Vista previa del certificado medico">
-      <article id="certificate" class="certificate-page">
-        <header class="certificate-header">
-          <img class="certificate-logo" src="../../assets/logos/logo-horizontal.png" alt="Multiservicios" />
-          <div class="serial">Numero de serie del certificado<strong id="previewCode">Se genera automaticamente</strong></div>
-        </header>
-        <div class="certificate-body">
-          <p class="eyebrow">Resultado de valoracion ocupacional</p>
-          <h2 class="certificate-title">Certificado medico para<br />manipulacion de alimentos</h2>
-          <div class="title-rule"></div>
-          <p id="previewStatement" class="statement">Completa los datos del paciente para generar el certificado medico.</p>
-          <div id="previewResult" class="medical-result">Resultado pendiente</div>
-          <p id="previewObservations" class="observations"></p>
-          <p class="exam-date"><strong>Fecha y hora del examen:</strong> <span id="previewDate">Pendiente</span></p>
-          <div class="signature-block">
-            <div class="signature-image-frame"><img id="signatureCertificate" class="signature-image" src="../../assets/images/firma-medico-marcos-pinto.png" alt="Firma autorizada" /></div>
-            <div class="signature-line"></div>
-            <p id="previewDoctor" class="doctor-name">Dr. Marcos Norberto Pinto Prada</p>
-            <p class="doctor-meta"><span id="previewSpecialty">Medico General</span><br />Registro medico <span id="previewRecord">1102372633</span></p>
+    <section class="preview-section">
+      <h2 class="preview-heading">Vista previa de la plantilla original</h2>
+      <div class="preview-frame">
+        <article id="certificate" class="certificate-page" aria-label="Certificado médico">
+          <header class="template-header">
+            <img class="template-logo" src="../../assets/logos/logo-horizontal.png" alt="Multiservicios" />
+            <div class="doctor-header">
+              <strong id="headerDoctor">Dr. Marcos Norberto Pinto Prada</strong>
+              <span id="headerSpecialty">Médico General</span>
+              <span>Registro Médico <b id="headerRecord">1102372633</b></span>
+            </div>
+          </header>
+          <div class="template-body">
+            <img class="watermark" src="../../favicon.png" alt="" />
+            <h2 class="result-title">RESULTADO</h2>
+            <div class="medical-copy">
+              <p id="statement">Completa los datos del paciente para preparar el certificado médico.</p>
+              <p>Paciente <strong id="patientResult">apto</strong> para manipulación de alimentos.</p>
+              <p id="observationLine"></p>
+              <p class="exam-line"><strong>Fecha y hora del examen:</strong> <span id="formattedExamDate">Pendiente</span></p>
+            </div>
+            <div class="signature-area">
+              <div class="signature-crop"><img id="signatureCertificate" src="../../assets/images/firma-medico-marcos-pinto.png" alt="Firma autorizada" /></div>
+              <p id="signatureName" class="signature-name">Dr. Marcos Norberto Pinto Prada</p>
+              <p class="signature-meta"><span id="signatureSpecialty">Médico General</span><br />Registro Médico <span id="signatureRecord">1102372633</span></p>
+            </div>
+            <div class="qr-area">
+              <div id="qrCode" class="qr-box"></div>
+              <div class="qr-copy">
+                <strong>Validar en Multiservicios</strong>
+                <span id="certificateCode" class="qr-code">Código automático</span>
+                <span id="validationUrl" class="qr-url">multiservicios.website</span>
+              </div>
+            </div>
+            <div class="wave"></div>
           </div>
-        </div>
-        <footer class="certificate-footer">
-          <div id="qrCode" class="qr-box"></div>
-          <div class="validation-copy">
-            <strong>Validacion publica Multiservicios</strong>
-            Escanea el codigo QR para consultar autenticidad, estado y fechas del certificado.
-            <div id="previewUrl" class="validation-url">https://multiservicios.website/validar-certificado.html</div>
-            <div class="legal-note">El diagnostico y la aptitud consignados son responsabilidad exclusiva del profesional de salud firmante.</div>
-          </div>
-        </footer>
-      </article>
+        </article>
+      </div>
     </section>
   </main>
 
@@ -182,6 +390,7 @@
       const signatureFormPreview = document.getElementById('signatureFormPreview');
       const signatureCertificate = document.getElementById('signatureCertificate');
       let signatureDataUrl = signatureCertificate.src;
+      let activeCode = randomCode();
 
       function apiBase() {
         const cfg = window.MULTISERVICIOS_CONFIG || {};
@@ -190,20 +399,27 @@
 
       function clean(value) { return String(value || '').trim(); }
 
+      function escapeHtml(value) {
+        const div = document.createElement('div');
+        div.textContent = String(value || '');
+        return div.innerHTML;
+      }
+
       function randomCode() {
         const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
         const bytes = crypto.getRandomValues(new Uint8Array(10));
         return 'MS-MED-' + Array.from(bytes, function (byte) { return alphabet[byte % alphabet.length]; }).join('');
       }
 
-      function validationUrl(code) {
-        return window.location.origin + '/validar-certificado.html?codigo=' + encodeURIComponent(code);
+      function buildValidationUrl(code) {
+        const origin = window.location.origin === 'null' ? 'https://multiservicios.website' : window.location.origin;
+        return origin + '/validar-certificado.html?codigo=' + encodeURIComponent(code);
       }
 
       function formatDateTime(value) {
         const date = new Date(value);
-        if (Number.isNaN(date.getTime())) return '';
-        return new Intl.DateTimeFormat('es-CO', { dateStyle: 'long', timeStyle: 'short' }).format(date);
+        if (Number.isNaN(date.getTime())) return 'Pendiente';
+        return new Intl.DateTimeFormat('es-CO', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit' }).format(date);
       }
 
       function isoDate(value) { return clean(value).slice(0, 10); }
@@ -225,32 +441,12 @@
       function renderQr(url) {
         const target = document.getElementById('qrCode');
         target.innerHTML = '';
-        new QRCode(target, { text: url, width: 84, height: 84, colorDark: '#082f5b', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H });
+        new QRCode(target, { text: url, width: 80, height: 80, colorDark: '#0b2f58', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H });
       }
 
-      function updatePreview(data) {
-        const resultText = data.result.toUpperCase();
-        const statement = data.result === 'Apto'
-          ? 'El presente certificado medico acredita que <strong>' + data.patientName + '</strong>, identificado(a) con <strong>' + data.documentType + ' ' + data.documentNumber + '</strong>, fue valorado(a) por el profesional firmante y se considera <strong>APTO(A)</strong> para la manipulacion de alimentos.'
-          : 'El presente certificado medico acredita que <strong>' + data.patientName + '</strong>, identificado(a) con <strong>' + data.documentType + ' ' + data.documentNumber + '</strong>, fue valorado(a) por el profesional firmante y se considera <strong>NO APTO(A)</strong> para la manipulacion de alimentos.';
-        document.getElementById('previewCode').textContent = data.code;
-        document.getElementById('previewStatement').innerHTML = statement;
-        document.getElementById('previewResult').textContent = 'Paciente ' + resultText;
-        document.getElementById('previewResult').style.borderColor = data.result === 'Apto' ? '#0b9365' : '#b42318';
-        document.getElementById('previewResult').style.color = data.result === 'Apto' ? '#087451' : '#9c1c14';
-        document.getElementById('previewObservations').textContent = data.observations ? 'Observaciones: ' + data.observations : '';
-        document.getElementById('previewDate').textContent = formatDateTime(data.examDate);
-        document.getElementById('previewDoctor').textContent = data.doctorName;
-        document.getElementById('previewSpecialty').textContent = data.specialty;
-        document.getElementById('previewRecord').textContent = data.medicalRecord;
-        document.getElementById('previewUrl').textContent = data.url;
-        signatureCertificate.src = signatureDataUrl;
-        renderQr(data.url);
-      }
-
-      function collect(code) {
+      function collect() {
         return {
-          code: code,
+          code: activeCode,
           patientName: clean(form.patientName.value).toUpperCase(),
           documentType: clean(form.documentType.value),
           documentNumber: clean(form.documentNumber.value),
@@ -261,8 +457,29 @@
           doctorName: clean(form.doctorName.value),
           specialty: clean(form.specialty.value),
           medicalRecord: clean(form.medicalRecord.value),
-          url: validationUrl(code)
+          url: buildValidationUrl(activeCode)
         };
+      }
+
+      function updatePreview() {
+        const data = collect();
+        const name = data.patientName || 'NOMBRE DEL PACIENTE';
+        const documentNumber = data.documentNumber || 'DOCUMENTO PENDIENTE';
+        const resultText = data.result === 'No apto' ? 'no apto' : 'apto';
+        document.getElementById('statement').innerHTML = 'El presente certificado médico acredita que <strong>' + escapeHtml(name) + '</strong> con documento de identificación <strong>' + escapeHtml(data.documentType + ' ' + documentNumber) + '</strong>, no padece ninguna de las enfermedades susceptibles de cuarentena, ni enfermedades infectocontagiosas o de otro tipo que puedan poner en riesgo la salud pública.';
+        document.getElementById('patientResult').textContent = resultText;
+        document.getElementById('observationLine').textContent = data.observations ? 'Observaciones: ' + data.observations : '';
+        document.getElementById('formattedExamDate').textContent = formatDateTime(data.examDate);
+        document.getElementById('headerDoctor').textContent = data.doctorName;
+        document.getElementById('headerSpecialty').textContent = data.specialty;
+        document.getElementById('headerRecord').textContent = data.medicalRecord;
+        document.getElementById('signatureName').textContent = data.doctorName;
+        document.getElementById('signatureSpecialty').textContent = data.specialty;
+        document.getElementById('signatureRecord').textContent = data.medicalRecord;
+        document.getElementById('certificateCode').textContent = data.code;
+        document.getElementById('validationUrl').textContent = data.url.replace(/^https?:\/\//, '');
+        signatureCertificate.src = signatureDataUrl;
+        renderQr(data.url);
       }
 
       async function registerCertificate(data) {
@@ -274,7 +491,7 @@
             codigo: data.code,
             nombre: data.patientName,
             documento: data.documentNumber,
-            curso: 'Certificado medico para manipulacion de alimentos',
+            curso: 'Certificado médico para manipulación de alimentos',
             fecha_emision: isoDate(data.examDate),
             fecha_vencimiento: data.expiryDate,
             estado: 'Activo',
@@ -291,10 +508,13 @@
       }
 
       async function createPdf(data) {
-        await new Promise(function (resolve) { setTimeout(resolve, 180); });
+        await new Promise(function (resolve) { setTimeout(resolve, 160); });
+        const previousTransform = certificate.style.transform;
+        certificate.style.transform = 'none';
         const canvas = await html2canvas(certificate, { scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false });
+        certificate.style.transform = previousTransform;
         const pdf = new window.jspdf.jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4', compress: true });
-        pdf.addImage(canvas.toDataURL('image/jpeg', .94), 'JPEG', 0, 0, 210, 297, undefined, 'FAST');
+        pdf.addImage(canvas.toDataURL('image/jpeg', .95), 'JPEG', 0, 0, 210, 297, undefined, 'FAST');
         const filename = 'Certificado_Medico_' + data.patientName.replace(/[^A-Z0-9]+/gi, '_') + '_' + data.code + '.pdf';
         const upload = await fetch(apiBase() + '/admin/certificados/' + encodeURIComponent(data.code) + '/pdf', {
           method: 'POST',
@@ -302,7 +522,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ filename: filename, data_url: pdf.output('datauristring') })
         });
-        if (!upload.ok) throw new Error('El certificado se registro, pero el PDF privado no pudo guardarse.');
+        if (!upload.ok) throw new Error('El registro fue creado, pero no se pudo guardar el PDF privado.');
         pdf.save(filename);
       }
 
@@ -317,20 +537,24 @@
         signatureDataUrl = await loadImage(file);
         signatureFormPreview.src = signatureDataUrl;
         signatureCertificate.src = signatureDataUrl;
+        updatePreview();
       });
+
+      form.addEventListener('input', updatePreview);
+      form.addEventListener('change', updatePreview);
 
       form.addEventListener('submit', async function (event) {
         event.preventDefault();
         if (!form.reportValidity()) return;
-        const code = randomCode();
-        const data = collect(code);
+        const data = collect();
         button.disabled = true;
-        setStatus('Preparando certificado y validacion QR...', '');
+        setStatus('Registrando certificado, preparando QR y generando PDF...', '');
         try {
-          updatePreview(data);
+          updatePreview();
           await registerCertificate(data);
           await createPdf(data);
-          setStatus('Certificado medico registrado, PDF privado guardado y descarga completada.', 'success');
+          setStatus('Certificado registrado, PDF privado guardado y descarga completada.', 'success');
+          activeCode = randomCode();
         } catch (error) {
           setStatus(error instanceof Error ? error.message : 'No fue posible completar el certificado.', 'error');
         } finally {
@@ -341,16 +565,17 @@
       const now = new Date();
       now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
       form.examDate.value = now.toISOString().slice(0, 16);
-      renderQr('https://multiservicios.website/validar-certificado.html');
 
-      const resizePreview = function () {
-        if (window.innerWidth > 620) { certificate.style.transform = ''; certificate.parentElement.style.height = ''; return; }
-        const available = certificate.parentElement.clientWidth - 16;
+      function resizePreview() {
+        const frame = document.querySelector('.preview-frame');
+        const available = frame.clientWidth - (window.innerWidth <= 730 ? 16 : 56);
         const scale = Math.min(1, available / 794);
-        certificate.style.transform = 'scale(' + scale + ')';
-        certificate.parentElement.style.height = (1123 * scale + 16) + 'px';
-      };
+        certificate.style.transform = scale < 1 ? 'scale(' + scale + ')' : '';
+        frame.style.height = scale < 1 ? (1123 * scale + 16) + 'px' : '';
+      }
+
       window.addEventListener('resize', resizePreview);
+      updatePreview();
       resizePreview();
     })();
   </script>
