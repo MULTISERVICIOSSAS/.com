@@ -53,8 +53,14 @@ function publicCertificate(row, env) {
     nombre: row.nombre_estudiante,
     nombre_estudiante: row.nombre_estudiante,
     documento_parcial: row.documento_masked || maskDocument(row.documento_last4),
+    tipo_certificado: row.certificate_type || "course",
     curso: row.curso,
     intensidad_horaria: row.intensidad_horaria || "",
+    profesional_nombre: row.profesional_nombre || "",
+    profesional_especialidad: row.profesional_especialidad || "",
+    profesional_registro: row.profesional_registro || "",
+    resultado_medico: row.resultado_medico || "",
+    fecha_examen: row.fecha_examen || "",
     fecha_emision: row.fecha_emision,
     fecha_vencimiento: row.fecha_vencimiento || "",
     estado: row.estado,
@@ -381,11 +387,14 @@ export async function createCertificate(request, env) {
   const now = nowIso();
   const urls = publicCertificateUrls(env.PUBLIC_URL || "https://multiservicios.website", code);
   await env.DB.prepare(`INSERT INTO certificates
-    (codigo_unico,nombre_estudiante,documento_hash,documento_last4,documento_masked,curso,intensidad_horaria,fecha_emision,fecha_vencimiento,estado,qr_url,validation_url,fecha_creacion,fecha_actualizacion,course_result_id)
-    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(codigo_unico) DO UPDATE SET nombre_estudiante=excluded.nombre_estudiante,documento_hash=excluded.documento_hash,documento_last4=excluded.documento_last4,documento_masked=excluded.documento_masked,curso=excluded.curso,intensidad_horaria=excluded.intensidad_horaria,fecha_emision=excluded.fecha_emision,fecha_vencimiento=excluded.fecha_vencimiento,estado=excluded.estado,qr_url=excluded.qr_url,validation_url=excluded.validation_url,fecha_actualizacion=excluded.fecha_actualizacion,course_result_id=excluded.course_result_id`)
+    (codigo_unico,nombre_estudiante,documento_hash,documento_last4,documento_masked,curso,intensidad_horaria,fecha_emision,fecha_vencimiento,estado,qr_url,validation_url,fecha_creacion,fecha_actualizacion,course_result_id,certificate_type,profesional_nombre,profesional_especialidad,profesional_registro,resultado_medico,fecha_examen)
+    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(codigo_unico) DO UPDATE SET nombre_estudiante=excluded.nombre_estudiante,documento_hash=excluded.documento_hash,documento_last4=excluded.documento_last4,documento_masked=excluded.documento_masked,curso=excluded.curso,intensidad_horaria=excluded.intensidad_horaria,fecha_emision=excluded.fecha_emision,fecha_vencimiento=excluded.fecha_vencimiento,estado=excluded.estado,qr_url=excluded.qr_url,validation_url=excluded.validation_url,fecha_actualizacion=excluded.fecha_actualizacion,course_result_id=excluded.course_result_id,certificate_type=excluded.certificate_type,profesional_nombre=excluded.profesional_nombre,profesional_especialidad=excluded.profesional_especialidad,profesional_registro=excluded.profesional_registro,resultado_medico=excluded.resultado_medico,fecha_examen=excluded.fecha_examen`)
     .bind(code, examResult?.nombre || name, documentHash, documentLast4(document), maskDocument(document), course,
       cleanText(data.intensidad_horaria, 80), cleanText(data.fecha_emision || now.slice(0, 10), 20), cleanText(data.fecha_vencimiento, 20),
-      cleanText(data.estado || "Activo", 40), urls.qrUrl, urls.validationUrl, now, now, resultId || null).run();
+      cleanText(data.estado || "Activo", 40), urls.qrUrl, urls.validationUrl, now, now, resultId || null,
+      cleanText(data.tipo_certificado || data.certificate_type || "course", 40), cleanText(data.profesional_nombre, 180),
+      cleanText(data.profesional_especialidad, 120), cleanText(data.profesional_registro, 100),
+      cleanText(data.resultado_medico, 80), cleanText(data.fecha_examen, 40)).run();
   const row = await env.DB.prepare("SELECT * FROM certificates WHERE codigo_unico=?").bind(code).first();
   return json({ ok: true, certificado: adminCertificate(row, env) }, 201);
 }

@@ -1,34 +1,49 @@
-# Multiservicios Backend Verificado
+# Multiservicios
 
-Proyecto funcional con backend local, SQLite, login admin, gestion operativa, registro de clientes, validacion de certificados, resultados del curso y PDFs privados.
+Plataforma web publicada en Cloudflare Workers con frontend estatico, API segura y base de datos Cloudflare D1. Incluye curso, examen, CRM administrativo, pagos manuales, certificados PDF privados y validacion publica por codigo QR.
 
-## Inicio rapido
+## Produccion
+
+- Sitio: <https://multiservicios.website/>
+- Curso: <https://multiservicios.website/apps/modulos-examen/>
+- Validacion: <https://multiservicios.website/validar-certificado.html>
+- Administracion: <https://multiservicios.website/admin/>
+- Salud: <https://multiservicios.website/api/health>
+
+Todas las rutas administrativas, incluidos los dos generadores, requieren una sesion valida.
+
+## Generadores
+
+- `admin/generador-certificados/`: carnet y certificado de manipulacion de alimentos, anexos y PDF privado.
+- `admin/generador-certificados-medicos/`: certificado medico A4 con profesional autorizado, firma, codigo unico, QR, registro D1 y PDF privado.
+
+El generador medico precarga los datos y la firma autorizada del Dr. Marcos Norberto Pinto Prada. Antes de emitir exige confirmar que el profesional realizo la valoracion. No debe utilizarse para generar resultados que el medico no haya determinado.
+
+## Desarrollo Cloudflare
 
 ```powershell
-python .\server.py
+pnpm install
+pnpm db:migrate:local
+pnpm dev
 ```
 
-Abrir:
+Configura los secretos en `.dev.vars`; no los guardes en Git:
 
-```text
-http://127.0.0.1:8090/
+- `ADMIN_PASSWORD_HASH`: SHA-256 de la clave administrativa.
+- `DOCUMENT_HASH_KEY`: secreto aleatorio para proteger documentos.
+
+## Pruebas
+
+```powershell
+pnpm test
+python -m unittest discover -s tests
 ```
 
-Panel:
+## Despliegue
 
-```text
-http://127.0.0.1:8090/admin/
+```powershell
+pnpm db:migrate:remote
+pnpm deploy
 ```
 
-Clave local inicial: `MULTISERVICIOS`.
-
-## Lo principal
-
-- Sitio publico con logo real de Multiservicios.
-- Registro de solicitudes y empresas.
-- Catalogo de servicios/precios desde base de datos.
-- Curso con videos integrados y examen.
-- Panel privado para clientes, solicitudes, servicios, cursos, preguntas, pagos, FAQ, testimonios y auditoria.
-- Generador y validacion de certificados conectados al backend.
-
-Lee `README_BACKEND.md` para APIs, estructura de base y despliegue.
+Consulta [CLOUDFLARE_DEPLOYMENT.md](CLOUDFLARE_DEPLOYMENT.md), [SECURITY_CHECKLIST.md](SECURITY_CHECKLIST.md) y [DATABASE_SCHEMA.md](DATABASE_SCHEMA.md) para operacion, seguridad y estructura de datos. Las credenciales, bases reales, PDFs y respaldos deben permanecer fuera del repositorio.

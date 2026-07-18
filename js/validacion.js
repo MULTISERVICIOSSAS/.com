@@ -76,7 +76,13 @@
       codigo,
       nombre: item.nombre || item.nombre_estudiante || item.titular || "No publicado",
       documento_parcial: maskDocument(documentoParcial),
+      tipo_certificado: item.tipo_certificado || item.certificate_type || "course",
       curso: item.curso || item.course || "No publicado",
+      profesional_nombre: item.profesional_nombre || "",
+      profesional_especialidad: item.profesional_especialidad || "",
+      profesional_registro: item.profesional_registro || "",
+      resultado_medico: item.resultado_medico || "",
+      fecha_examen: item.fecha_examen || "",
       fecha_emision: item.fecha_emision || item.fechaEmision || item.emision || "No publicada",
       fecha_vencimiento: item.fecha_vencimiento || item.fechaVencimiento || item.vencimiento || "",
       estado: item.estado || item.status || "Activo",
@@ -228,6 +234,18 @@
     const documentNote = matches
       ? "La informacion ingresada coincide con el registro disponible."
       : "El codigo existe, pero el documento ingresado no coincide con el dato parcial registrado.";
+    const medical = cert.tipo_certificado === "medical" || normalize(cert.curso).includes("MEDICO");
+    const certificateDetails = medical
+      ? `
+        <div class="validation-detail"><dt>Tipo</dt><dd>${escapeHtml(cert.curso)}</dd></div>
+        <div class="validation-detail"><dt>Resultado</dt><dd>${escapeHtml(cert.resultado_medico || "Registrado")}</dd></div>
+        <div class="validation-detail"><dt>Profesional</dt><dd>${escapeHtml(cert.profesional_nombre || "Registrado")}</dd></div>
+        <div class="validation-detail"><dt>Registro medico</dt><dd>${escapeHtml(cert.profesional_registro || "Registrado")}</dd></div>
+        <div class="validation-detail"><dt>Fecha del examen</dt><dd>${escapeHtml(cert.fecha_examen || cert.fecha_emision)}</dd></div>`
+      : `
+        <div class="validation-detail"><dt>Curso</dt><dd>${escapeHtml(cert.curso)}</dd></div>
+        <div class="validation-detail"><dt>Fecha de emision</dt><dd>${escapeHtml(cert.fecha_emision)}</dd></div>
+        <div class="validation-detail"><dt>Fecha de vencimiento</dt><dd>${escapeHtml(cert.fecha_vencimiento || "No publicada")}</dd></div>`;
 
     target.innerHTML = `
       <h3>${title}</h3>
@@ -236,9 +254,7 @@
         <div class="validation-detail"><dt>Codigo</dt><dd>${escapeHtml(cert.codigo)}</dd></div>
         <div class="validation-detail"><dt>Titular</dt><dd>${escapeHtml(cert.nombre)}</dd></div>
         <div class="validation-detail"><dt>Documento</dt><dd>${escapeHtml(cert.documento_parcial || "No publicado")}</dd></div>
-        <div class="validation-detail"><dt>Curso</dt><dd>${escapeHtml(cert.curso)}</dd></div>
-        <div class="validation-detail"><dt>Fecha de emision</dt><dd>${escapeHtml(cert.fecha_emision)}</dd></div>
-        <div class="validation-detail"><dt>Fecha de vencimiento</dt><dd>${escapeHtml(cert.fecha_vencimiento || "No publicada")}</dd></div>
+        ${certificateDetails}
         <div class="validation-detail"><dt>Estado</dt><dd><span class="badge ${statusClass}">${escapeHtml(cert.estado)}</span></dd></div>
       </dl>
       <p>${documentNote}</p>

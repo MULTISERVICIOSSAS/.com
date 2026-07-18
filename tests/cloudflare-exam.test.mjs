@@ -93,7 +93,8 @@ test("creates a certificate without an exam result", async () => {
         },
         async run() {
           const [code, name, documentHash, last4, masked, course, intensity, issued, expires, state, qrUrl,
-            validationUrl, createdAt, updatedAt, resultId] = this.values;
+            validationUrl, createdAt, updatedAt, resultId, certificateType, professionalName, professionalSpecialty,
+            professionalRecord, medicalResult, examDate] = this.values;
           storedCertificate = {
             id: 1,
             codigo_unico: code,
@@ -111,6 +112,12 @@ test("creates a certificate without an exam result", async () => {
             fecha_creacion: createdAt,
             fecha_actualizacion: updatedAt,
             course_result_id: resultId,
+            certificate_type: certificateType,
+            profesional_nombre: professionalName,
+            profesional_especialidad: professionalSpecialty,
+            profesional_registro: professionalRecord,
+            resultado_medico: medicalResult,
+            fecha_examen: examDate,
             pdf_key: null,
             motivo_anulacion: null
           };
@@ -145,6 +152,37 @@ test("creates a certificate without an exam result", async () => {
   assert.equal(response.status, 201);
   assert.equal(payload.ok, true);
   assert.equal(payload.certificado.resultado_id, null);
+  assert.equal(payload.certificado.tipo_certificado, "course");
   assert.equal(storedCertificate.nombre_estudiante, "Persona Sin Examen");
   assert.equal(executedSql.some((sql) => sql.includes("course_results")), false);
+
+  const medicalRequest = new Request("https://multiservicios.website/api/admin/certificados", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      codigo: "MS-MED-TEST1234",
+      nombre: "Paciente Autorizado",
+      documento: "987654321",
+      curso: "Certificado medico para manipulacion de alimentos",
+      fecha_emision: "2026-07-18",
+      tipo_certificado: "medical",
+      profesional_nombre: "Dr. Marcos Norberto Pinto Prada",
+      profesional_especialidad: "Medico General",
+      profesional_registro: "1102372633",
+      resultado_medico: "Apto",
+      fecha_examen: "2026-07-18T08:30"
+    })
+  });
+  const medicalResponse = await createCertificate(medicalRequest, {
+    DB: db,
+    DOCUMENT_HASH_KEY: "test-secret",
+    PUBLIC_URL: "https://multiservicios.website"
+  });
+  const medicalPayload = await medicalResponse.json();
+
+  assert.equal(medicalResponse.status, 201);
+  assert.equal(medicalPayload.certificado.tipo_certificado, "medical");
+  assert.equal(medicalPayload.certificado.profesional_nombre, "Dr. Marcos Norberto Pinto Prada");
+  assert.equal(medicalPayload.certificado.profesional_registro, "1102372633");
+  assert.equal(medicalPayload.certificado.resultado_medico, "Apto");
 });
