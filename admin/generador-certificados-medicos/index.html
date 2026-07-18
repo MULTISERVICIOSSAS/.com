@@ -185,94 +185,35 @@
       background: #fff;
       box-shadow: 0 8px 24px rgba(19,38,64,.16);
     }
-    .template-header {
-      position: relative;
-      z-index: 3;
-      height: 154px;
-      padding: 24px 45px;
-      display: grid;
-      grid-template-columns: 320px 1fr;
-      align-items: center;
-      gap: 28px;
-      background: linear-gradient(90deg, #e2efff 0%, #f4f8ff 58%, #fff 100%);
-    }
-    .template-logo { width: 315px; max-height: 88px; object-fit: contain; object-position: left center; }
-    .doctor-header { color: #0d6cba; line-height: 1.42; }
-    .doctor-header strong { display: block; font-size: 16px; }
-    .doctor-header span { display: block; font-size: 13px; }
-    .template-body { position: relative; height: 969px; overflow: hidden; padding: 42px 20px; }
-    .watermark {
-      position: absolute;
-      z-index: 0;
-      width: 430px;
-      height: 430px;
-      left: 182px;
-      top: 260px;
-      object-fit: contain;
-      opacity: .035;
-      filter: grayscale(1);
-    }
-    .result-title {
-      position: relative;
-      z-index: 2;
-      margin: 0;
-      text-align: center;
-      font: 700 24px/1.2 "Libre Baskerville", Georgia, serif;
-    }
+    .template-background { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; object-fit: fill; }
     .medical-copy {
       position: absolute;
       z-index: 2;
       left: 20px;
       right: 20px;
-      top: 305px;
-      font: 400 16px/1.48 "Libre Baskerville", Georgia, serif;
+      top: 458px;
+      font: 400 16px/1.48 "Times New Roman", Times, serif;
       text-align: left;
     }
-    .medical-copy p { margin: 0 0 20px; }
+    .medical-copy p { margin: 0 0 18px; }
     .medical-copy strong { font-weight: 700; }
-    .exam-line { margin-top: 25px !important; text-align: center; }
-    .signature-area {
-      position: absolute;
-      z-index: 3;
-      top: 620px;
-      left: 50%;
-      width: 370px;
-      text-align: center;
-      transform: translateX(-50%);
-    }
-    .signature-crop { width: 330px; height: 132px; margin: 0 auto 1px; overflow: hidden; }
-    .signature-crop img { width: 330px; height: auto; object-fit: contain; object-position: center top; }
-    .signature-name { margin: 0; font-size: 15px; font-weight: 800; }
-    .signature-meta { margin: 3px 0 0; font-size: 13px; line-height: 1.45; }
+    .exam-line { margin-top: 23px !important; text-align: center; }
     .qr-area {
       position: absolute;
       z-index: 4;
       left: 20px;
-      bottom: 30px;
-      width: 290px;
+      bottom: 42px;
+      width: 365px;
       display: grid;
-      grid-template-columns: 92px 1fr;
+      grid-template-columns: 122px 1fr;
       gap: 12px;
       align-items: center;
     }
-    .qr-box { width: 92px; height: 92px; padding: 5px; display: grid; place-items: center; background: #fff; border: 1px solid #e2e8f0; }
-    .qr-box img, .qr-box canvas { width: 80px !important; height: 80px !important; }
-    .qr-copy { font-size: 9px; line-height: 1.45; color: #27364b; }
-    .qr-copy strong { display: block; margin-bottom: 3px; color: var(--navy); font-size: 10px; }
+    .qr-box { width: 122px; height: 122px; padding: 6px; display: grid; place-items: center; background: #fff; border: 1px solid #e2e8f0; }
+    .qr-box img, .qr-box canvas { width: 110px !important; height: 110px !important; }
+    .qr-copy { font-size: 10px; line-height: 1.45; color: #27364b; }
+    .qr-copy strong { display: block; margin-bottom: 3px; color: var(--navy); font-size: 11px; }
     .qr-code, .qr-url { display: block; overflow-wrap: anywhere; }
-    .wave, .wave::before, .wave::after {
-      position: absolute;
-      z-index: 1;
-      left: -95px;
-      width: 980px;
-      height: 210px;
-      border-top: 2px solid rgba(96,157,230,.27);
-      border-radius: 50%;
-      content: "";
-    }
-    .wave { bottom: -144px; transform: rotate(-3deg); box-shadow: 0 -11px 0 rgba(96,157,230,.14), 0 -22px 0 rgba(96,157,230,.11), 0 -33px 0 rgba(96,157,230,.09); }
-    .wave::before { left: 0; top: -54px; transform: rotate(4deg); }
-    .wave::after { left: 0; top: -86px; transform: rotate(-2deg); }
     @media (max-width: 730px) {
       .admin-bar { align-items: flex-start; flex-direction: column; }
       .page-shell { padding: 24px 14px 50px; }
@@ -320,37 +261,19 @@
       <h2 class="preview-heading">Vista previa de la plantilla original</h2>
       <div class="preview-frame">
         <article id="certificate" class="certificate-page" aria-label="Certificado médico">
-          <header class="template-header">
-            <img class="template-logo" src="../../assets/logos/logo-horizontal.png" alt="Multiservicios" />
-            <div class="doctor-header">
-              <strong id="headerDoctor">Dr. Marcos Norberto Pinto Prada</strong>
-              <span id="headerSpecialty">Médico General</span>
-              <span>Registro Médico <b id="headerRecord">1102372633</b></span>
+          <img class="template-background" src="../../assets/templates/certificado-medico-base.png" alt="Plantilla médica original" />
+          <div class="medical-copy">
+            <p id="statement">Completa los datos del paciente para preparar el certificado médico.</p>
+            <p>Paciente <strong id="patientResult">apto</strong> para manipulación de alimentos.</p>
+            <p class="exam-line"><strong>Fecha y hora del examen:</strong> <span id="formattedExamDate">Pendiente</span></p>
+          </div>
+          <div class="qr-area">
+            <div id="qrCode" class="qr-box"></div>
+            <div class="qr-copy">
+              <strong>Validar en Multiservicios</strong>
+              <span id="certificateCode" class="qr-code">Código automático</span>
+              <span id="validationUrl" class="qr-url">multiservicios.website</span>
             </div>
-          </header>
-          <div class="template-body">
-            <img class="watermark" src="../../favicon.png" alt="" />
-            <h2 class="result-title">RESULTADO</h2>
-            <div class="medical-copy">
-              <p id="statement">Completa los datos del paciente para preparar el certificado médico.</p>
-              <p>Paciente <strong id="patientResult">apto</strong> para manipulación de alimentos.</p>
-              <p id="observationLine"></p>
-              <p class="exam-line"><strong>Fecha y hora del examen:</strong> <span id="formattedExamDate">Pendiente</span></p>
-            </div>
-            <div class="signature-area">
-              <div class="signature-crop"><img id="signatureCertificate" src="../../assets/images/firma-medico-marcos-pinto.png" alt="Firma autorizada" /></div>
-              <p id="signatureName" class="signature-name">Dr. Marcos Norberto Pinto Prada</p>
-              <p class="signature-meta"><span id="signatureSpecialty">Médico General</span><br />Registro Médico <span id="signatureRecord">1102372633</span></p>
-            </div>
-            <div class="qr-area">
-              <div id="qrCode" class="qr-box"></div>
-              <div class="qr-copy">
-                <strong>Validar en Multiservicios</strong>
-                <span id="certificateCode" class="qr-code">Código automático</span>
-                <span id="validationUrl" class="qr-url">multiservicios.website</span>
-              </div>
-            </div>
-            <div class="wave"></div>
           </div>
         </article>
       </div>
@@ -363,7 +286,6 @@
       const status = document.getElementById('status');
       const button = document.getElementById('generateButton');
       const certificate = document.getElementById('certificate');
-      const signatureCertificate = document.getElementById('signatureCertificate');
       let activeCode = randomCode();
       const medicalDefaults = Object.freeze({
         result: 'Apto',
@@ -393,8 +315,7 @@
       }
 
       function buildValidationUrl(code) {
-        const origin = window.location.origin === 'null' ? 'https://multiservicios.website' : window.location.origin;
-        return origin + '/validar-certificado.html?codigo=' + encodeURIComponent(code);
+        return 'https://multiservicios.website/validar-certificado.html?codigo=' + encodeURIComponent(code);
       }
 
       function formatDateTime(value) {
@@ -424,7 +345,7 @@
       function renderQr(url) {
         const target = document.getElementById('qrCode');
         target.innerHTML = '';
-        new QRCode(target, { text: url, width: 80, height: 80, colorDark: '#0b2f58', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H });
+        new QRCode(target, { text: url, width: 110, height: 110, colorDark: '#0b2f58', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H });
       }
 
       function collect() {
@@ -452,14 +373,7 @@
         const resultText = data.result === 'No apto' ? 'no apto' : 'apto';
         document.getElementById('statement').innerHTML = 'El presente certificado médico acredita que <strong>' + escapeHtml(name) + '</strong> con documento de identificación <strong>' + escapeHtml(data.documentType + ' ' + documentNumber) + '</strong>, no padece ninguna de las enfermedades susceptibles de cuarentena, ni enfermedades infectocontagiosas o de otro tipo que puedan poner en riesgo la salud pública.';
         document.getElementById('patientResult').textContent = resultText;
-        document.getElementById('observationLine').textContent = data.observations ? 'Observaciones: ' + data.observations : '';
         document.getElementById('formattedExamDate').textContent = formatDateTime(data.examDate);
-        document.getElementById('headerDoctor').textContent = data.doctorName;
-        document.getElementById('headerSpecialty').textContent = data.specialty;
-        document.getElementById('headerRecord').textContent = data.medicalRecord;
-        document.getElementById('signatureName').textContent = data.doctorName;
-        document.getElementById('signatureSpecialty').textContent = data.specialty;
-        document.getElementById('signatureRecord').textContent = data.medicalRecord;
         document.getElementById('certificateCode').textContent = data.code;
         document.getElementById('validationUrl').textContent = data.url.replace(/^https?:\/\//, '');
         renderQr(data.url);
@@ -503,6 +417,12 @@
 
       async function createPdf(data) {
         await new Promise(function (resolve) { setTimeout(resolve, 160); });
+        await Promise.all(Array.from(certificate.querySelectorAll('img')).map(function (image) {
+          return image.complete ? Promise.resolve() : new Promise(function (resolve) {
+            image.addEventListener('load', resolve, { once: true });
+            image.addEventListener('error', resolve, { once: true });
+          });
+        }));
         const previousTransform = certificate.style.transform;
         certificate.style.transform = 'none';
         const canvas = await html2canvas(certificate, { scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false });

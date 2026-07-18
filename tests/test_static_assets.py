@@ -1,3 +1,4 @@
+import hashlib
 import unittest
 import urllib.parse
 from html.parser import HTMLParser
@@ -75,6 +76,14 @@ class StaticAssetTests(unittest.TestCase):
         self.assertIn("const medicalDefaults = Object.freeze", generator)
         self.assertIn("expiryFrom(examDate)", generator)
         self.assertIn("await verifyPublicRecord(data)", generator)
+        self.assertIn("assets/templates/certificado-medico-base.png", generator)
+        self.assertIn("https://multiservicios.website/validar-certificado.html?codigo=", generator)
+        original = PUBLIC / "assets" / "templates" / "certificado-medico-original.pdf"
+        self.assertTrue(original.exists())
+        self.assertEqual(
+            hashlib.sha256(original.read_bytes()).hexdigest(),
+            "3e18dd9aec76512f6229d260ba748f4bee465e470bf3eac5ae922e188f0a1141",
+        )
 
     def test_course_randomizes_options_without_changing_answer_ids(self):
         course = (PUBLIC / "apps" / "modulos-examen" / "index.html").read_text(encoding="utf-8")
