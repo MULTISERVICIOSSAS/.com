@@ -15,18 +15,18 @@ export async function currentAdmin(request, env) {
 
 export async function login(request, env) {
   if (!env.ADMIN_PASSWORD_HASH) return json({ ok: false, error: "Clave administrativa no configurada" }, 503);
-  const ip = request.headers.get("CF-Connecting-IP") || "unknown";
-  const limited = await consumeRateLimit(env.DB, `login:${ip}`, 5, 15 * 60);
-  if (!limited.allowed) {
-    return json({ ok: false, error: "Demasiados intentos. Intenta mas tarde." }, 429, {
-      "Retry-After": String(limited.retryAfter)
-    });
-  }
-
   const payload = await request.json().catch(() => ({}));
   const password = String(payload.password || payload.clave || payload.frase || "").slice(0, 300);
   const candidateHash = await sha256Hex(password);
-  if (!password || !constantTimeEqual(candidateHash, env.ADMIN_PASSWORD_HASH)) {
+  const validPassword = Boolean(password) && constantTimeEqual(candidateHash, env.ADMIN_PASSWORD_HASH);
+  const ip = request.headers.get("CF-Connecting-IP") || "unknown";
+  if (!validPassword) {
+    const limited = await consumeRateLimit(env.DB, `login:${ip}`, 5, 15 * 60);
+    if (!limited.allowed) {
+      return json({ ok: false, error: "Demasiados intentos. Intenta mas tarde." }, 429, {
+        "Retry-After": String(limited.retryAfter)
+      });
+    }
     return json({ ok: false, error: "Clave incorrecta" }, 401);
   }
 

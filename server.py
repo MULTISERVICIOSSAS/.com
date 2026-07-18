@@ -1184,24 +1184,25 @@ class MultiserviciosHandler(BaseHTTPRequestHandler):
 
     def api_login(self) -> None:
         ip = self.client_address[0]
-        retry_after = login_retry_after(ip)
-        if retry_after:
-            self.send_json(
-                {"ok": False, "error": "Demasiados intentos. Intenta mas tarde."},
-                429,
-                {"Retry-After": str(retry_after)},
-            )
-            return
         payload = self.read_json()
         password = clean_text(payload.get("password") or payload.get("clave") or payload.get("frase"), 200)
         with db() as conn:
             admin = conn.execute("SELECT * FROM admins WHERE email = ? AND estado = 'activo'", (ADMIN_EMAIL,)).fetchone()
             valid_password = bool(admin) and verify_password(password, admin["password_salt"], admin["password_hash"])
-            if not admin or not valid_password:
+            if valid_password:
+                clear_failed_logins(ip)
+            else:
+                retry_after = login_retry_after(ip)
+                if retry_after:
+                    self.send_json(
+                        {"ok": False, "error": "Demasiados intentos. Intenta mas tarde."},
+                        429,
+                        {"Retry-After": str(retry_after)},
+                    )
+                    return
                 register_failed_login(ip)
                 self.send_json({"ok": False, "error": "Clave incorrecta"}, 401)
                 return
-            clear_failed_logins(ip)
             token = secrets.token_urlsafe(36)
             expires = (dt.datetime.now(dt.timezone.utc) + dt.timedelta(days=SESSION_DAYS)).isoformat(timespec="seconds")
             conn.execute("INSERT INTO sessions (token, admin_id, fecha_creacion, expires_at) VALUES (?, ?, ?, ?)", (token, admin["id"], utc_now(), expires))

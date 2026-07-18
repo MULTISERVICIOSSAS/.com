@@ -88,10 +88,10 @@ class MultiserviciosServerTests(unittest.TestCase):
         for _ in range(server.LOGIN_MAX_ATTEMPTS):
             status, _, _ = self.request("POST", "/api/auth/login", {"clave": "incorrecta"})
             self.assertEqual(status, 401)
-        status, _, headers = self.request("POST", "/api/auth/login", {"clave": server.ADMIN_PASSWORD})
-        self.assertEqual(status, 429)
-        self.assertIn("Retry-After", headers)
-        server.clear_failed_logins("127.0.0.1")
+        status, data, headers = self.request("POST", "/api/auth/login", {"clave": server.ADMIN_PASSWORD})
+        self.assertEqual(status, 200)
+        self.assertTrue(data["ok"])
+        self.assertIn("Set-Cookie", headers)
 
 
 class SecurityUnitTests(unittest.TestCase):
