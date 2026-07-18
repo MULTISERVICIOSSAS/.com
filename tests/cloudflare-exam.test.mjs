@@ -11,8 +11,8 @@ import { createCertificate } from "../cloudflare/src/index.js";
 
 const correctAnswers = () => FINAL_EXAM.map((question) => question.answer);
 
-test("the required passing percentage is 95", () => {
-  assert.equal(EXAM_PASS_PERCENTAGE, 95);
+test("the required passing percentage is 80", () => {
+  assert.equal(EXAM_PASS_PERCENTAGE, 80);
 });
 
 test("builds complete evidence for a perfect exam", () => {
@@ -27,26 +27,29 @@ test("builds complete evidence for a perfect exam", () => {
   assert.equal(evidence.preguntas[0].respuesta_correcta, "Mojarse las manos");
 });
 
-test("approves exactly nineteen correct answers", () => {
+test("approves exactly sixteen correct answers", () => {
   const answers = correctAnswers();
-  answers[0] = answers[0] === 0 ? 1 : 0;
+  for (let index = 0; index < 4; index += 1) {
+    answers[index] = answers[index] === 0 ? 1 : 0;
+  }
   const evidence = buildExamEvidence(answers);
 
-  assert.equal(evidence.puntaje, 19);
-  assert.equal(evidence.porcentaje, 95);
+  assert.equal(evidence.puntaje, 16);
+  assert.equal(evidence.porcentaje, 80);
   assert.equal(evidence.aprobado, true);
   assert.equal(evidence.preguntas[0].correcta, false);
   assert.notEqual(evidence.preguntas[0].respuesta_elegida, evidence.preguntas[0].respuesta_correcta);
 });
 
-test("rejects an exam below nineteen correct answers", () => {
+test("rejects an exam below sixteen correct answers", () => {
   const answers = correctAnswers();
-  answers[0] = answers[0] === 0 ? 1 : 0;
-  answers[1] = answers[1] === 0 ? 1 : 0;
+  for (let index = 0; index < 5; index += 1) {
+    answers[index] = answers[index] === 0 ? 1 : 0;
+  }
   const evidence = buildExamEvidence(answers);
 
-  assert.equal(evidence.puntaje, 18);
-  assert.equal(evidence.porcentaje, 90);
+  assert.equal(evidence.puntaje, 15);
+  assert.equal(evidence.porcentaje, 75);
   assert.equal(evidence.aprobado, false);
 });
 
@@ -66,11 +69,12 @@ test("parses only complete evidence documents", () => {
 
 test("keeps complete evidence available below the passing percentage", () => {
   const answers = correctAnswers();
-  answers[0] = answers[0] === 0 ? 1 : 0;
-  answers[1] = answers[1] === 0 ? 1 : 0;
+  for (let index = 0; index < 5; index += 1) {
+    answers[index] = answers[index] === 0 ? 1 : 0;
+  }
   const evidence = buildExamEvidence(answers);
 
-  assert.equal(evidence.porcentaje, 90);
+  assert.equal(evidence.porcentaje, 75);
   assert.equal(evidence.aprobado, false);
   assert.deepEqual(parseExamEvidence(JSON.stringify(evidence)), evidence);
 });

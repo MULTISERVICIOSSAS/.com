@@ -1,4 +1,4 @@
-export const EXAM_PASS_PERCENTAGE = 95;
+export const EXAM_PASS_PERCENTAGE = 80;
 
 export const FINAL_EXAM = [
   { question: "¿Cuál es el primer paso para lavarse las manos?", options: ["Aplicar jabón", "Mojarse las manos", "Secarse", "Ponerse gel"], answer: 1 },
@@ -57,7 +57,10 @@ export function parseExamEvidence(value) {
   try {
     const parsed = typeof value === "string" ? JSON.parse(value) : value;
     if (!parsed || !Array.isArray(parsed.preguntas) || parsed.preguntas.length !== FINAL_EXAM.length) return null;
-    return parsed;
+    return {
+      ...parsed,
+      aprobado: Number(parsed.porcentaje) >= EXAM_PASS_PERCENTAGE
+    };
   } catch {
     return null;
   }

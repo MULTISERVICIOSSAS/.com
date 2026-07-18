@@ -288,7 +288,7 @@ async function createAdminResource(resource, request, env) {
     const slug = slugify(data.slug || name);
     await env.DB.prepare(`INSERT INTO courses (nombre,slug,descripcion,duracion,modalidad,puntaje_minimo,intentos_maximos,estado,fecha_creacion,fecha_actualizacion)
       VALUES (?,?,?,?,?,?,?,?,?,?) ON CONFLICT(slug) DO UPDATE SET nombre=excluded.nombre,descripcion=excluded.descripcion,duracion=excluded.duracion,modalidad=excluded.modalidad,puntaje_minimo=excluded.puntaje_minimo,intentos_maximos=excluded.intentos_maximos,estado=excluded.estado,fecha_actualizacion=excluded.fecha_actualizacion`)
-      .bind(name, slug, cleanText(data.descripcion, 1000), cleanText(data.duracion, 80), cleanText(data.modalidad, 80), integer(data.puntaje_minimo, 70), integer(data.intentos_maximos, 2), cleanText(data.estado || "Activo", 40), now, now).run();
+      .bind(name, slug, cleanText(data.descripcion, 1000), cleanText(data.duracion, 80), cleanText(data.modalidad, 80), integer(data.puntaje_minimo, 80), integer(data.intentos_maximos, 2), cleanText(data.estado || "Activo", 40), now, now).run();
   } else if (resource === "preguntas") {
     const question = cleanText(data.pregunta, 600);
     const options = Array.isArray(data.opciones) ? data.opciones : cleanText(data.opciones, 1000).split("|").map((x) => cleanText(x, 180)).filter(Boolean);

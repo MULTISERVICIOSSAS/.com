@@ -232,19 +232,15 @@
     target.innerHTML = `
       <h3>${title}</h3>
       <p>${sourceText}</p>
-      <div class="table-wrap">
-        <table>
-          <tbody>
-            <tr><th>Codigo</th><td>${escapeHtml(cert.codigo)}</td></tr>
-            <tr><th>Titular</th><td>${escapeHtml(cert.nombre)}</td></tr>
-            <tr><th>Documento</th><td>${escapeHtml(cert.documento_parcial || "No publicado")}</td></tr>
-            <tr><th>Curso</th><td>${escapeHtml(cert.curso)}</td></tr>
-            <tr><th>Fecha de emision</th><td>${escapeHtml(cert.fecha_emision)}</td></tr>
-            <tr><th>Fecha de vencimiento</th><td>${escapeHtml(cert.fecha_vencimiento || "No publicada")}</td></tr>
-            <tr><th>Estado</th><td><span class="badge ${statusClass}">${escapeHtml(cert.estado)}</span></td></tr>
-          </tbody>
-        </table>
-      </div>
+      <dl class="validation-details">
+        <div class="validation-detail"><dt>Codigo</dt><dd>${escapeHtml(cert.codigo)}</dd></div>
+        <div class="validation-detail"><dt>Titular</dt><dd>${escapeHtml(cert.nombre)}</dd></div>
+        <div class="validation-detail"><dt>Documento</dt><dd>${escapeHtml(cert.documento_parcial || "No publicado")}</dd></div>
+        <div class="validation-detail"><dt>Curso</dt><dd>${escapeHtml(cert.curso)}</dd></div>
+        <div class="validation-detail"><dt>Fecha de emision</dt><dd>${escapeHtml(cert.fecha_emision)}</dd></div>
+        <div class="validation-detail"><dt>Fecha de vencimiento</dt><dd>${escapeHtml(cert.fecha_vencimiento || "No publicada")}</dd></div>
+        <div class="validation-detail"><dt>Estado</dt><dd><span class="badge ${statusClass}">${escapeHtml(cert.estado)}</span></dd></div>
+      </dl>
       <p>${documentNote}</p>
       <p><strong>Privacidad:</strong> la consulta publica muestra datos minimos y no expone documentos completos.</p>
     `;

@@ -289,7 +289,7 @@ def init_db() -> None:
               descripcion TEXT,
               duracion TEXT,
               modalidad TEXT,
-              puntaje_minimo INTEGER NOT NULL DEFAULT 70,
+              puntaje_minimo INTEGER NOT NULL DEFAULT 80,
               intentos_maximos INTEGER NOT NULL DEFAULT 2,
               estado TEXT NOT NULL DEFAULT 'Activo',
               fecha_creacion TEXT NOT NULL,
@@ -323,7 +323,7 @@ def init_db() -> None:
               id INTEGER PRIMARY KEY AUTOINCREMENT,
               course_id INTEGER REFERENCES courses(id) ON DELETE CASCADE,
               nombre TEXT NOT NULL,
-              puntaje_minimo INTEGER NOT NULL DEFAULT 70,
+              puntaje_minimo INTEGER NOT NULL DEFAULT 80,
               intentos_maximos INTEGER NOT NULL DEFAULT 2,
               estado TEXT NOT NULL DEFAULT 'Activo',
               fecha_creacion TEXT NOT NULL,
@@ -503,6 +503,11 @@ def init_db() -> None:
         if cert_count == 0:
             seed_certificates(conn)
         seed_business_tables(conn)
+        conn.execute("UPDATE courses SET puntaje_minimo = 80 WHERE puntaje_minimo <> 80")
+        conn.execute("UPDATE exams SET puntaje_minimo = 80 WHERE puntaje_minimo <> 80")
+        conn.execute(
+            "UPDATE course_results SET estado = CASE WHEN porcentaje >= 80 THEN 'Aprobado' ELSE 'No aprobado' END"
+        )
 
 
 def seed_certificates(conn: sqlite3.Connection) -> None:
@@ -1561,7 +1566,7 @@ class MultiserviciosHandler(BaseHTTPRequestHandler):
                     clean_text(payload.get("descripcion"), 900),
                     clean_text(payload.get("duracion"), 80),
                     clean_text(payload.get("modalidad"), 80),
-                    int(payload.get("puntaje_minimo") or 70),
+                    int(payload.get("puntaje_minimo") or 80),
                     int(payload.get("intentos_maximos") or 2),
                     clean_text(payload.get("estado") or "Activo", 40),
                     utc_now(),
@@ -1576,7 +1581,7 @@ class MultiserviciosHandler(BaseHTTPRequestHandler):
                     (course_id, nombre, puntaje_minimo, intentos_maximos, estado, fecha_creacion, fecha_actualizacion)
                     VALUES (?, ?, ?, ?, 'Activo', ?, ?)
                     """,
-                    (course["id"], "Examen " + nombre, int(payload.get("puntaje_minimo") or 70), int(payload.get("intentos_maximos") or 2), utc_now(), utc_now()),
+                    (course["id"], "Examen " + nombre, int(payload.get("puntaje_minimo") or 80), int(payload.get("intentos_maximos") or 2), utc_now(), utc_now()),
                 )
             log_action(conn, admin["id"], "curso_guardado", nombre, self.client_address[0])
         self.send_json({"ok": True}, 201)
@@ -1873,7 +1878,7 @@ class MultiserviciosHandler(BaseHTTPRequestHandler):
         puntaje = int(payload.get("puntaje") or 0)
         total = int(payload.get("total") or 0)
         porcentaje = int(payload.get("porcentaje") or (round((puntaje / total) * 100) if total else 0))
-        estado = clean_text(payload.get("estado") or ("Aprobado" if porcentaje >= 70 else "No aprobado"), 40)
+        estado = "Aprobado" if porcentaje >= 80 else "No aprobado"
         with db() as conn:
             conn.execute(
                 """

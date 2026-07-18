@@ -785,6 +785,44 @@ h1 {
   background: #fff5f4;
 }
 
+.validation-details {
+  margin: 18px 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+}
+
+.validation-detail {
+  display: grid;
+  grid-template-columns: minmax(140px, 0.8fr) minmax(0, 1.4fr);
+  border-bottom: 1px solid var(--line);
+}
+
+.validation-detail:last-child {
+  border-bottom: 0;
+}
+
+.validation-detail dt,
+.validation-detail dd {
+  min-width: 0;
+  margin: 0;
+  padding: 13px 14px;
+  overflow-wrap: anywhere;
+}
+
+.validation-detail dt {
+  background: #f2f5f8;
+  font-size: 0.82rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.validation-detail dd {
+  color: var(--ink);
+  font-weight: 700;
+}
+
 .table-wrap {
   max-width: 100%;
   overflow-x: auto;
@@ -1094,6 +1132,23 @@ th {
 
   .field-grid {
     grid-template-columns: 1fr;
+  }
+
+  .validation-result {
+    padding: 16px;
+  }
+
+  .validation-detail {
+    display: block;
+  }
+
+  .validation-detail dt {
+    padding-bottom: 5px;
+    background: #f7f9fb;
+  }
+
+  .validation-detail dd {
+    padding-top: 5px;
   }
 
   .section {
