@@ -698,7 +698,7 @@
                     <h2 class="text-2xl text-blue-600 font-semibold">Manipulación de Alimentos Multiservicios</h2>
                 </div>
                 <p class="text-gray-600 mb-8 text-lg max-w-2xl mx-auto">
-                    Capacítate con 27 módulos en video, presenta el examen y envía el resultado a RRHH para solicitar tu certificado verificable.
+                    Capacítate con 27 módulos en video, presenta el examen y envía el resultado a RRHH para solicitar tu carnet y certificación.
                     Aprenderás desde la higiene básica hasta el control de plagas y temperaturas.
                 </p>
                 
@@ -919,7 +919,7 @@
                 <h2 class="text-3xl font-bold text-gray-800 mb-4">Examen Final</h2>
                 <p class="text-gray-600 mb-8 text-lg leading-relaxed">
                     ¡Felicidades! Has completado los 27 módulos de aprendizaje.
-                    Ahora puedes consultar la biblioteca de repaso del lado izquierdo, aprobar el examen final y enviar el resultado a RRHH. El certificado oficial lo genera el administrador después de verificar el pago.
+                    Ahora puedes consultar la biblioteca de repaso del lado izquierdo, aprobar el examen final y enviar el resultado a RRHH. El administrador genera el carnet y el certificado oficiales después de verificar el pago.
                 </p>
                 <div class="bg-gray-50 p-6 rounded-xl text-left mb-8 text-gray-700 border border-gray-200 shadow-inner">
                     <h3 class="font-bold mb-3 text-purple-800 flex items-center"><i class="fas fa-info-circle mr-2"></i> Detalles del Examen:</h3>
@@ -1045,12 +1045,12 @@
                         </div>
                     </div>
                     <div class="bg-white border border-gray-200 p-7 rounded-xl shadow-md mb-6 text-left">
-                        <h3 class="text-xl font-bold text-blue-900 mb-2"><i class="fas fa-user-shield mr-2"></i>El certificado lo emite el administrador</h3>
-                        <p class="text-gray-700 leading-relaxed">Tu aprobación ya quedó registrada. Envía el resultado a RRHH por WhatsApp para realizar el pago y solicitar tu certificado oficial. RRHH verificará la información antes de que el administrador lo genere.</p>
+                        <h3 class="text-xl font-bold text-blue-900 mb-2"><i class="fas fa-user-shield mr-2"></i>El administrador emite el carnet y el certificado</h3>
+                        <p class="text-gray-700 leading-relaxed">Tu aprobación ya quedó registrada. Envía el resultado a RRHH por WhatsApp para realizar el pago y solicitar tu carnet y certificación. RRHH verificará la información antes de que el administrador los genere.</p>
                     </div>
                     <div class="flex justify-center mb-10">
                         <button onclick="sendToWhatsApp()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-8 rounded-lg shadow-lg transition flex items-center justify-center text-lg max-w-xl">
-                            <i class="fab fa-whatsapp mr-3 text-2xl"></i> Enviar tus resultados a RRHH para pagar y recibir tu certificado
+                            <i class="fab fa-whatsapp mr-3 text-2xl"></i> Enviar resultados para recibir carnet y certificación
                         </button>
                     </div>
                     <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-10">
@@ -1268,7 +1268,7 @@
             const review = incorrectQuestions.length
                 ? `Preguntas corregidas: ${incorrectQuestions.join(', ')}`
                 : 'Todas las respuestas fueron correctas';
-            const message = `Hola, soy *${state.userName}*. Aprobé el examen del Curso de Manipulación de Alimentos Multiservicios y deseo realizar el pago para recibir mi certificado oficial.\n\nDocumento: ${state.userDocument}\nCorreo: ${state.userEmail || 'No registrado'}\nTeléfono: ${state.userPhone}\nResultado: APROBADO\nNota: ${state.score}/${courseData.finalExam.length}\n${review}\nFecha: ${new Date().toLocaleDateString()}\n\nPor favor, RRHH, verifique mi resultado y envíeme las instrucciones de pago.`;
+            const message = `Hola, soy *${state.userName}*. Aprobé el examen del Curso de Manipulación de Alimentos Multiservicios y deseo realizar el pago para recibir mi carnet y certificación.\n\nDocumento: ${state.userDocument}\nCorreo: ${state.userEmail || 'No registrado'}\nTeléfono: ${state.userPhone}\nResultado: APROBADO\nNota: ${state.score}/${courseData.finalExam.length}\n${review}\nFecha: ${new Date().toLocaleDateString()}\n\nPor favor, RRHH, verifique mi resultado y envíeme las instrucciones de pago.`;
             const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
             window.open(url, '_blank', 'noopener');
         }

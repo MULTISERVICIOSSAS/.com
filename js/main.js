@@ -73,7 +73,7 @@
               <p>Soluciones digitales y presenciales para formación, certificación y apoyo empresarial.</p>
             </div>
             <div>
-              <strong>Certificación</strong>
+              <strong>Carnet y certificación</strong>
               <ul>
                 <li><a href="cursos.html">Manipulación de alimentos</a></li>
                 <li><a href="registro.html">Registro / solicitud</a></li>

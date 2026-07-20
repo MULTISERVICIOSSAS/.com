@@ -1,7 +1,7 @@
 window.MULTISERVICIOS_CONFIG = {
   empresa: "Multiservicios",
   lema: "Formación, certificación y soluciones empresariales digitales y presenciales",
-  servicioPrincipal: "Certificación en Manipulación de Alimentos",
+  servicioPrincipal: "Carnet y certificación",
   whatsapp: "3222166831",
   telefonoVisible: "3222166831",
   telefonoSecundario: "3222166831",
@@ -20,5 +20,5 @@ window.MULTISERVICIOS_CONFIG = {
   githubCertificatePaths: ["data/certificados.json", "public/data/certificados.json"],
   horario: "Atención por WhatsApp y agenda comercial",
   mensajeWhatsApp:
-    "Hola, quiero información sobre el certificado de manipulación de alimentos con Multiservicios."
+    "Hola, quiero información sobre el carnet y certificación con Multiservicios."
 };
